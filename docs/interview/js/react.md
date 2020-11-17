@@ -105,7 +105,7 @@ createdocumentfragment()方法创建了一虚拟的节点对象，节点对象�
   <button id="expire1">过期设置（暴力法）</button>
   <button id="expire2">过期设置（innerHtml)</button>
   <ul id="wrap"></ul>
-  <script>
+  <script type="text/javascript">
     //生成大量dom
     let start = new Date().getTime();
     let $ul = document.getElementById('wrap');
@@ -511,11 +511,10 @@ Vue => weex
 
 在`react diff`算法中，react 会借助元素的 key 值来判断元素是新建创建还是被移动而来的元素，减少不必要的渲染
 
-:::warning 注意
+>
 
 1. key 值一定要和具体的元素一一对应
 2. 尽量不要用数组的 index 来作为唯一的 key 值
 3. 永远不要在 render 的时候用随机数或者其他操作给元素加上不稳定的 key,这样会造成性能开销比不加 key 的情况下更糟糕
-   :::
 
 ## 14、

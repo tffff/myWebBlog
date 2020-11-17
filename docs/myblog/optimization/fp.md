@@ -49,23 +49,21 @@ Time To Interactive, 可交互 时间，推荐的响应时间是 100ms 以内否
 
 Largest Contentful Paint，用于记录视窗内最大的元素绘制的时间，该时间会随着⻚面渲染变化而变化，因为⻚面中的最大元素在渲染过程中可能会发生改变，另外该指标会在用户第一次交互后停止记录。
 
-::: warning 值的区间：
+> 值的区间：
 
 - 小于 2.5sec,不需要优化
 - 2.5sec ~ 4.0sec,需要优化
 - 大于 4.0sec,很需要优化
-  :::
 
 **2. FID 首次输入延迟**
 
 First Input Delay，记录在 FCP 和 TTI 质检用户首次与页面交互响应的延迟。
 
-::: warning 值的区间：
+> 值的区间：
 
 - 小于 100ms,不需要优化
 - 100ms ~ 300ms,需要优化
 - 大于 300ms,很需要优化
-  :::
 
 **3. TBT 阻塞总时间**
 
@@ -75,12 +73,11 @@ Total Blocking Time，记录在 FCP 和 TTI 之间所有长任务的阻塞时间
 
 Cumulative Layout Shift，记录了⻚面上非预期的位移波动。使用按钮动态添加了某个元素，导致⻚面上其他位置的代码发生了偏移，造成了⻚面。
 
-::: warning 值的区间：
+> 值的区间：
 
 - 小于 0.1,不需要优化
 - 0.1 ~ 0.25,需要优化
 - 大于 0.25,很需要优化
-  :::
 
 ### 举个例子 ①
 
@@ -92,6 +89,7 @@ Cumulative Layout Shift，记录了⻚面上非预期的位移波动。使用按
 在这个过程中主要是经历了 FP->FCP->FMP->TTI 的过程
 
 **为什么会有白屏的产生呢？**
+
 主要是 FP 主要做了以下工作：
 
 - css、js 文件获取加载
@@ -126,115 +124,126 @@ CLS 推荐值为低于 0.1，越低说明⻚面跳来跳去的情况就越少，
 ## css 会堵塞 DOM 渲染吗？
 
 - js 会影响 DOM 渲染吗？
+
   DOM 解析不影响 渲染依旧等待
 
-```js
+```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <h1>你好</h1>
-  <script>
-    //DOM解析不影响 渲染依旧等待
-    prompt('等待')
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>你好</h1>
+    <script type="text/javascript">
+      //DOM解析不影响 渲染依旧等待
+      prompt('等待');
+    </script>
+  </body>
 </html>
 ```
 
 - css 会影响 DOM 的渲染和解析吗？
+
   css 影响 DOM 渲染 不影响 DOM 解析
 
-```js
+```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
 
-  <style type='text/css'>
-    h1{
-      color: red;
-    }
-  </style>
-  <script>
-    function getDom(){
-      console.log(document.querySelectorAll('h1'))
-    }
-    setTimeout(getDom,0)
-  </script>
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/5.0.0-alpha1/css/bootstrap-grid.css">
-</head>
-<body>
-  <!--
+    <style type="text/css">
+      h1 {
+        color: red;
+      }
+    </style>
+    <script type="type/javascript">
+      function getDom(){
+        console.log(document.querySelectorAll('h1'))
+      }
+      setTimeout(getDom,0)
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.staticfile.org/twitter-bootstrap/5.0.0-alpha1/css/bootstrap-grid.css"
+    />
+  </head>
+  <body>
+    <!--
     1.css没回来之前 h1展示了 css不影响DOM渲染
     2.css没回来之前 h1没能拿到 css影响DOM解析
     css 影响DOM渲染 不影响DOM解析
    -->
-  <h1>111</h1>
-</body>
+    <h1>111</h1>
+  </body>
 </html>
 ```
 
 - 同时存在 css 和 js 的时候，CSS 会影响 js 吗？
   会影响
 
-```js
+```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
 
-  <style type='text/css'>
-    h1{
-      color: red;
-    }
-  </style>
+    <style type="text/css">
+      h1 {
+        color: red;
+      }
+    </style>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/5.0.0-alpha1/css/bootstrap-utilities.min.css">
-</head>
-<body>
-  <!--
+    <link
+      rel="stylesheet"
+      href="https://cdn.staticfile.org/twitter-bootstrap/5.0.0-alpha1/css/bootstrap-utilities.min.css"
+    />
+  </head>
+  <body>
+    <!--
     出现空白页面就是css阻塞了js
    -->
-  <h1>111</h1>
-  <script>
-    console.log(1)
-  </script>
-</body>
+    <h1>111</h1>
+    <script type="type/javascript">
+      console.log(1)
+    </script>
+  </body>
 </html>
 ```
 
--css 会影响 DOMContentLoaded 吗？
-有时影响，有时不影响，如果 link 下面还有脚本的话 则会影响
+- css 会影响 DOMContentLoaded 吗？
+  有时影响，有时不影响，如果 link 下面还有脚本的话 则会影响
 
-```js
+```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script>
-    document.addEventListener('DOMContentLoaded',function(){
-      console.log('DOMContentLoaded')
-    })
-  </script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOMContentLoaded');
+      });
+    </script>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/5.0.0-alpha1/css/bootstrap-utilities.css">
-  <script>
-    console.log('nih')
-  </script>
-</head>
-<body>
-  <h1>111</h1>
-</body>
+    <link
+      rel="stylesheet"
+      href="https://cdn.staticfile.org/twitter-bootstrap/5.0.0-alpha1/css/bootstrap-utilities.css"
+    />
+    <script type="text/javascript">
+      console.log('nih');
+    </script>
+  </head>
+  <body>
+    <h1>111</h1>
+  </body>
 </html>
 ```

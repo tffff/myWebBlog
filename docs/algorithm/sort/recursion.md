@@ -77,7 +77,8 @@ var fib = function(n) {
 
 以斐波那契数列性质 f(n + 1) = f(n) + f(n - 1)f(n+1)=f(n)+f(n−1) 为转移方程
 
-![斐波那契数列](/datasrouce/斐波那契数列.png)
+<!-- ![斐波那契数列](/datasrouce/斐波那契数列.png) -->
+<img src='../../assets/datasrouce/斐波那契数列.png'/>
 
 **动态规划解析：**
 

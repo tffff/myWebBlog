@@ -24,7 +24,7 @@ entry:__dirname+'/src/scripts/app.js',
 
 - output 配置编译后的资源
 
-```javascript
+```bash
 output:{
   path:__dirname+'/build/scripts',
   public:'./',
@@ -222,7 +222,7 @@ yarn add babel-preset-env --save-dev
 
 管理本地的依赖（包管理器）,[官网](https://bower.io/)
 
-```js
+```bash
 //全局可用
 yarn add -g bower
 

@@ -46,7 +46,8 @@ svn 流程
 
 ## 自动化编译流程
 
-![自动化编译流程](/engineering/自动化编译流程.png)
+<!-- ![自动化编译流程](/engineering/自动化编译流程.png) -->
+<img src='../../assets/engineering/自动化编译流程.png'>
 
 ```json
 -> 读入foo.es的文件内容，编译成js内容

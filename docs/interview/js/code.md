@@ -86,7 +86,53 @@ myObject.func();
 var a = { n: 1 };
 var b = a;
 a.x = a = { n: 2 };
-console.log(a.x); //undefined
+console.log(a); //{n:2}
+console.log(b); //{n:1,x:{n:2}}
 ```
 
-根据 v8 引擎来解释，`a`是存储在`栈`里面,`{n:1}`是存储在`堆`里面，所以`b=a`导致`a`和`b`同时指向`{n:1}`
+根据 v8 引擎来解释，`a`是存储在`栈`里面,`{n:1}`是存储在`堆`里面，所以`b=a`导致`a`和`b`同时指向`{n:1}`,因为点的运算优先等于的运算，所以`a.x`先执行即现在 a 和 b 都是`{n:1,x:undefined}`,又因为等于运算是从右到左执行的，所以`a={n:2}`
+
+再执行`a.x=a`,这里要注意，因为`a.x`之前已经先执行了,所以`a.x`已经是`{n:1,x:undefined}`这个地址了，但是里面的 x 指向了新的地址,所以最终`a.x`可以看成是`{n:1,x:undefined}.x={n:2}`
+
+## 5、写出下面代码的执行结果，并说明为什么？
+
+```js
+function out() {
+  console.log(1);
+}
+(function() {
+  if (false) {
+    function out() {
+      console.log(2);
+    }
+  }
+  console.log(typeof out); //undefined
+  out(); //out is not a function
+})();
+```
+
+直接在函数体内定义的函数声明，整个都会提前，但是在块中定义的函数声明，只会提升其声明部分，不分配实际的内存空间,所以`out`被提升的只有函数变量名称，并未实际赋值
+
+- 变量提升
+  - 全局作用域中的声明的变量会提升到至全局最顶层
+  - 函数内声明的变量只会提升到函数作用域顶层
+- 函数提升
+
+  - 函数表达式不会声明提升
+  - 函数声明会覆盖变量声明，如果存在函数名和变量名是相同的，都会被提升，但是函数的优先级更高，所以变量的值会被覆盖掉
+
+  ```js
+  //赋值的情况
+  var company = '123';
+  function company() {
+    console.log('456');
+  }
+  console.log(typeof company); //string
+
+  //未赋值的情况
+  var company;
+  function company() {
+    console.log('456');
+  }
+  console.log(typeof company); //function
+  ```

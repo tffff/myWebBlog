@@ -5,18 +5,18 @@ date: 2020-08-24 10:47:10
 
 ## 1、css3 新特性：
 
-- 1. CSS3 实现圆角（border-radius），阴影（box-shadow）， border-image
+- 1. CSS3 实现圆角（`border-radius`），阴影（`box-shadow`）， `border-image`
 - 2. 对文字加特效（text-shadow、），线性渐变（gradient），旋转（transform）
-- 3.transform:rotate(9deg) scale(0.85,0.90) translate(0px,-30px) skew(-9deg,0deg);// 旋转,缩放,定位,倾斜
+- 3. `transform:rotate(9deg) scale(0.85,0.90)` `translate(0px,-30px) skew(-9deg,0deg);`// 旋转,缩放,定位,倾斜
 - 4. 增加了更多的 CSS 选择器 多背景 rgba
-- 5. 在 CSS3 中唯一引入的伪元素是 ::selection.
+- 5. 在 CSS3 中唯一引入的伪元素是 `::selection.`
 - 6. 媒体查询，多栏布局
 
 ## 2、css 选择器的优先级
 
 1. 不同级别
 
-!important(10000)>内联样式 style(1000) > #id(100) > class(10) > tag(1)>通配符选择器
+`!important(10000)>内联样式 style(1000) > #id(100) > class(10) > tag(1)>通配符选择器`
 
 2. 同一级别
 

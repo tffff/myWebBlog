@@ -34,7 +34,8 @@ date: 2020-09-01 16:37:10
 
 看下面的一个二叉树的图，写出前中后序的排列
 
-![二叉树](/datasrouce/二叉树.png)
+<!-- ![二叉树](/datasrouce/二叉树.png) -->
+<img src="../../assets/datasrouce/二叉树.png"/>
 
 - 深度优先遍历
   - 前序 A BDGH CEIF

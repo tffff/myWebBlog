@@ -14,7 +14,8 @@
 
 **数据基本概念**
 
-![数据](/datasrouce/数据.png)
+<!-- ![数据](/datasrouce/数据.png) -->
+<img src="../assets/datasrouce/数据.png"/>
 
 数据元素是**基本单位** (比如列表的某一条)
 
@@ -99,7 +100,8 @@
 
 随着问题规模 n 的不断增大，时间复杂度不断增大，算法的执行效率越 低。
 
-![时间复杂度](/datasrouce/时间复杂度.jpg)
+<!-- ![时间复杂度](/datasrouce/时间复杂度.jpg) -->
+<img src="../assets/datasrouce/时间复杂度.jpg"/>
 
 一般做算法复杂度分析的时候，遵循下面的技巧:
 

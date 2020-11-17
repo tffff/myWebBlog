@@ -3,10 +3,10 @@ title: js面试汇总
 date: 2020-08-24 10:47:10
 ---
 
-### 1、基本数据类型有哪些？基本数据类型和引用数据类型的区别？
+## 1、基本数据类型有哪些？基本数据类型和引用数据类型的区别？
 
 - 基本数据类型：`Number`、`String`、`Boolean`、`undefined`、`null`、`Symbol`
-- 两者之间的区别：基本数据类型是存在`栈`中的简单的数据段，数据大小确定，内存空间大小可以分配，是直接按值存放的，所以可以直接按值访问。引用类型是存在`堆`中的对象，变量保存的是在栈内存中的一个指针，该指针指向堆内存，也就是说变量是存在栈中的一个地址，地址是该引用数据在堆中的地址。通过这个地址可以找到保存在堆内存中的对象
+- 两者之间的区别：基本数据类型是存在`栈`中的简单的数据段，数据大小确定，内存空间大小可以分配，是直接按值存放的，所以可以直接按值访问。引用类型是同时存在`栈`和`堆`中的对象，变量保存的是在栈内存中的一个指针，该指针指向堆内存，也就是说变量是存在栈中的一个地址，地址是该引用数据在堆中的地址。通过这个地址可以找到保存在堆内存中的对象
 
 ```js
 var a = { key: 1 };
@@ -15,11 +15,47 @@ b.key = 2;
 console.log(a.key); //2，因为a和b都指向同一个地址
 ```
 
-### 2、判断是否是数组的几种方法？
+## 2、判断是否是数组的几种方法？
 
--
+- `Array.isArray`
 
-### 3、typeof 是否能正确判断类型？instanceof 能正确判断对象的原理是什么？
+```js
+var a = [1, 2];
+console.log(Array.isArray(a)); //true
+```
+
+- `instanceof Array` 运算符用于检验构造函数的`prototype`属性是否出现在对象的原型链中的任何位置，返回一个布尔值
+
+```js
+var a = [1, 2];
+d instanceof Array;
+```
+
+- `constructor` 实例的构造函数属性`constructor`指向实例本身，那么通过`constructor`属性也可以判断是否为一个数组
+
+```js
+let a = [1, 3, 4];
+a.constructor === Array; //true
+```
+
+- `Object.prototype.String.call()`
+
+```js
+//检验是否为数组
+let a = [1, 2, 3];
+Object.prototype.toString.call(a) === '[object Array]'; //true
+//检验是否是函数
+let b = function() {};
+Object.prototype.toString.call(b) === '[object Function]'; //true
+//检验是否是数字
+let c = 1;
+Object.prototype.toString.call(c) === '[object Number]'; //true
+//检验是否为对象
+let d = {};
+Object.prototype.toString.call(d) === '[object Object]'; //true
+```
+
+## 3、typeof 是否能正确判断类型？instanceof 能正确判断对象的原理是什么？
 
 `typeof` 对于原始类型来说，除了 `null` 都可以显示正确的类型
 
@@ -39,9 +75,9 @@ typeof {}; // 'object'
 typeof console.log; // 'function'
 ```
 
-### 3、ES6 常用的一些方法？
+## 3、ES6 常用的一些方法？
 
-### 4、对闭包的看法？为什么要用闭包？说一下闭包的原理和应用场景
+## 4、对闭包的看法？为什么要用闭包？说一下闭包的原理和应用场景
 
 1. 什么是闭包？
    函数内部返回结果是一个内部函数，并被外部变量所引用，如果内部函数持有被指向函数作用域的变量，就行了闭包
@@ -73,14 +109,14 @@ typeof console.log; // 'function'
 - 模块封装，在各模块规范出现之前，都使用这样的方式防止变量污染全局
 
 ```js
-var foo = function() {
+var foo = (function() {
   var a = 0;
   function inner() {}
   inner.prototype.bar = function bar() {
     return a;
   };
   return inner;
-};
+})();
 ```
 
 - 在循环中创建闭包，防止取到意外的值
@@ -92,9 +128,26 @@ for (var i = 0; i < 4; i++) {
     console.log(i);
   };
 }
+//用闭包解决
+for (var i = 0; i < 4; i++) {
+  document.getElementByTd('id' + i).onFocus = function(i) {
+    return function() {
+      console.log(i);
+    };
+  };
+}
+//闭包实现按钮点击加1
+var add1 = function() {
+  let index = 1;
+  return function inner() {
+    index += 1;
+    console.log(index);
+  };
+};
+let add = add1();
 ```
 
-### 5、下面代码结果是什么？怎么修改成我们想要的值？
+## 5、下面代码结果是什么？怎么修改成我们想要的值？
 
 ```js
 for (var i = 1; i <= 5; i++) {
@@ -131,9 +184,9 @@ for (var i = 1; i <= 5; i++) {
 }
 ```
 
-### 5、防抖和节流的原理与实现？
+## 5、防抖和节流的原理与实现？
 
-#### 防抖的原理
+### 防抖的原理
 
 - 原理
 
@@ -216,7 +269,7 @@ function debounce(func, wait, immediate) {
 }
 ```
 
-#### 节流的原理
+### 节流的原理
 
 - 原理
 
@@ -305,7 +358,7 @@ function throttle(func, wait, type) {
 }
 ```
 
-### 6、介绍箭头函数的 this?
+## 6、介绍箭头函数的 this?
 
 - 函数体内的 this 对象，就是定义时所在的对象，而不是使用时所在的对象
 - 箭头函数不能用作构造函数，因为箭头函数里面没有 this
@@ -313,7 +366,7 @@ function throttle(func, wait, type) {
 - 箭头函数中所使用的 this 都是来自函数作用域链
 - 不可以使用 yield 命令，因此箭头函数不能用作 Generator 函数
 
-### 7、js 的数组的方法
+## 7、js 的数组的方法
 
 1. some
    此方法为参数传递的函数测试数组。如果有一个元素与测试元素匹配，则返回 true，否则返回 false
@@ -443,7 +496,7 @@ arr9.flatMap(arr => arr * 10); //[10,20,30,40,50]
 map,filter,flat,concat,flatMap
 :::
 
-### 8、js 中 Object 的方法有哪些？
+## 8、js 中 Object 的方法有哪些？
 
 1. startWidth
    返回布尔值，表示是否找到了参数字符串。
@@ -458,11 +511,13 @@ map,filter,flat,concat,flatMap
 6. padEnd
    用于尾部补全
 
-### 8、for 和 forEach 有什么区别？
+## 9、for、for in、 for of、forEach 有什么区别？
 
 - for 循环实际上是可以使用 break 和 continue 去终止循环的，但是 forEach 不行
 - 一般来说，for 多数时候都可以使用，当然一般我们需要知道循环次数；而 forEach 更适合于集合对象的遍历和操作
 - for 循环在最开始执行循环的时候，会建立一个循环变量 i，之后每次循环都是操作这个变量，也就是说它是对一个循环变量在重复的赋值，因此 i 在最后只会存储一个值；而 forEach()虽然变量名没变，但是实际上每次循环都会创建一个独立不同的变量，而存储的数值自然也是不同的数值，因此相互之间不会影响
+- `for...in`可以直接遍历对象，
+- `for...of`不能直接遍历对象，遍历数组
 
 ```js
 <ul>
@@ -486,7 +541,7 @@ map,filter,flat,concat,flatMap
   </script>
 ```
 
-### 9、let 和 const 的区别？
+## 10、let 和 const 的区别？
 
 - let 声明的变量不会提升，var 声明的会提升
   ```js
@@ -501,15 +556,17 @@ map,filter,flat,concat,flatMap
 - 在非严格模式下：var 声明的变量是挂在 window 上面的，let 不是挂在 window
 - let 不允许在相同作用域内，重复声明同一个变量
 
-### 10、什么是浅拷贝？如何实现浅拷贝？什么是深拷贝？如何实现深拷贝？
+## 11、什么是浅拷贝？如何实现浅拷贝？什么是深拷贝？如何实现深拷贝？
 
-### 11、如何理解原型？如何理解原型链？
-
-### 12、如何获取一个 DOM 元素的绝对宽高，绝对位置？
+## 12、如何获取一个 DOM 元素的绝对宽高，绝对位置？
 
 原生 JS 提供了一个`getBoundingClientRect()`方法，用于获取左，上，右和下分别相对浏览器视窗的位置。
 
-### 13、数组去重的各种方法?
+```js
+document.getElementById('main').getBoundingClientRect();
+```
+
+## 13、数组去重的各种方法?
 
 ```js
 //var arr=[1,2,3,4,3,3,6,5]
@@ -529,7 +586,7 @@ function duplicate(arr) {
 }
 ```
 
-### 14、js 内置对象有哪些？
+## 14、js 内置对象有哪些？
 
 JS 内置对象分为**数据封装类对象**和**其他对象**
 
@@ -538,3 +595,36 @@ JS 内置对象分为**数据封装类对象**和**其他对象**
 - 其他对象：`Function`，`Arguments`，`Math`，`Date`，`RegExp`，`Error`
 
 `window`对象是一个虚拟的对象，你可以把它看作是你所使用的浏览器的窗口
+
+## 15、Promise 和 async 分别解决了什么问题？
+
+- `Promise`解决了回调地狱的问题，`Promise`构造函数是同步执行的，`then`是异步执行的
+- `async`是异步的终极解决方案
+
+## 16、if([]==0),[1,2]=='1.2',if([]),[]==0,具体是怎么对比的？
+
+1. `if`的判断原理
+   `if`的判断原理和`Boolean()`这个函数有关的，所以`if(***)` 就相当于`Boolean(***)`
+
+   **Boolean 的判断规则：**
+
+   - 数字类型：`NAN`、`0`的结果为`false,`其他情况为`true`
+   - 字符串类型：空字符串是`false`,其他情况为`true`
+   - Boolean 类型：`false`为`false`,`true`为`true`
+   - 对象类型`undefined`、`null`为`false`,其他为`true`
+
+![比较值](/js/compare.png)
+
+## 17、call、apply、bind 的区别？
+
+- `call`和`apply`都是立即执行，`call`的参数是一个一个的传，`apply`的参数是一个数组
+- `bind`绑定`this`之后返回一个新数组
+
+## 18、EventLoop 浏览器机制和 node 机制？
+
+- 在浏览器中
+  分为**宏任务**和**微任务**，宏任务有：`script代码`,`setTimeout`，`setInterval`
+  微任务有：`promise.then`
+  执行顺序：`宏任务`->`微任务队列`->`循环`
+- node 环境中
+  执行顺序：`宏任务`->`process.nextTick队列`->`微任务队列`->`setTimeout`->`setImemediate`

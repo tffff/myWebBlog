@@ -113,7 +113,8 @@ console.log('快排', quickSort([1, 3, 6, 2, 8, 9]));
 
 把一系列排好序的子序列合并成一个大的完整有序序列，主要是分治思想，**时间复杂度是 O(nlog(n))**
 
-![分治思想](/datasrouce/归并排序.png)
+<!-- ![分治思想](/datasrouce/归并排序.png) -->
+<img src="../../assets/datasrouce/归并排序.png">
 
 ### 代码实现
 

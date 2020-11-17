@@ -5,8 +5,8 @@ date: 2020-07-13 20:20:31
 
 ## 主机远程连接服务器
 
-::: tip 服务器用户
-root :当前登录⽤用户
+> 服务器用户
+> root :当前登录⽤用户
 
 localhost :主机名~ 当前⼯工作⽬目录,默认是当前⽤用户的家⽬目录，
 
@@ -15,7 +15,6 @@ root 就是/root,
 普通⽤用户是: /home/⽤用户名
 
 提示符: 超级⽤用户是 #,普通⽤用户是\$
-:::
 
 连接命令
 
@@ -53,7 +52,7 @@ mnt 接移动硬盘这类 ，srv 是服务程序 ，usr 是用户的命令，boo
 
 配置 nginx.conf，`/usr/local/webserver/nginx/conf/nginx.conf`
 
-```js
+```bash
 #user  nobody;
 worker_processes  1; #工作进程：数目。根据硬件调整，通常等于cpu数量或者2倍cpu数量。
 
@@ -227,7 +226,7 @@ ssh -i 私钥名称 用户名@Ip
 
 免密登录模板
 
-```js
+```bash
 # 多主机配置
 Host gateway-produce  //host是服务器别名
 HostName IP或绑定的域名
