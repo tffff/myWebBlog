@@ -17,13 +17,12 @@ date: 2020-08-24 10:47:10
 - 8. 表单控件，calendar、date、time、email、url、search
 - 9. 新的技术 webworker, websocket, Geolocation
 
-:::tip 语义化的理解(优点):
+> 语义化的理解(优点):
 
 - html 语义化就是让页面的内容结构化，便于对浏览器、搜索引擎解析；
 - 在没有样式 CCS 情况下也以一种文档格式显示，并且是容易阅读的。
 - 搜索引擎的爬虫依赖于标记来确定上下文和各个关键字的权重，利于 SEO。
 - 使阅读源代码的人对网站更容易将网站分块，便于阅读维护理解。
-  :::
 
 **如何区分 html 和 html5**
 
@@ -43,41 +42,40 @@ html5:在语义上有很大优势，提供了一些新的 html5 标签，比如�
 - 两个相邻的外边距都是负数时，折叠结果是两者绝对值的较大值。
 - 两个外边距一正一负时，折叠结果是两者的相加的和
 
-:::tip 解决方法
-父元素添加：overflow: hidden
-:::
+> 解决方法
+> 父元素添加：`overflow: hidden`
 
 ## 3、垂直居中一个 div(至少三种方法)
 
-- 1、flex 布局
+- 1、`flex` 布局
 - 2、绝对定位方法：不确定当前 div 的宽度和高度，采用 transform: translate(-50%,-50%); 当前 div 的父级添加相对定位（position: relative;）
 - 3、绝对定位方法：确定了当前 div 的宽度，margin 值为当前 div 宽度一半的负值
 - 4、绝对定位方法：绝对定位下 top left right bottom 都设置 0，margin:auto
 
 ## 5、position 的几个值说一下
 
-- absolute
+- `absolute`
 
   生成绝对定位的元素，相对于 static 定位以外的第一个父元素进行定位。
 
-- fixed （老 IE 不支持）
+- `fixed` （老 IE 不支持）
 
   生成绝对定位的元素，相对于浏览器窗口进行定位。
 
-- relative
+- `relative`
 
   生成相对定位的元素，相对于其正常位置进行定位。
 
-- static 默认值。没有定位，元素出现在正常的流中
+- `static` 默认值。没有定位，元素出现在正常的流中
 
   （忽略 top, bottom, left, right z-index 声明）。
 
-- inherit 规定从父元素继承 position 属性的值。
-- sticky ：粘性定位 sticky 相当于相对定位 relative 和固定定位 fixed 的结合（用于吸顶效果）
+- `inherit` 规定从父元素继承 position 属性的值。
+- `sticky` ：粘性定位 sticky 相当于相对定位 relative 和固定定位 fixed 的结合（用于吸顶效果）
 
 ## 6、css 实现多列等高布局，要求元素实际占用的高度以多列中较高的为准！
 
-1. 第一种使用 flex 布局，flex-direction 默认为 row,align-items 默认为 stretch，该参数就是元素被拉伸适应容器
+1. 第一种使用 `flex` 布局，`flex-direction` 默认为 row,align-items 默认为 stretch，该参数就是元素被拉伸适应容器
 
 ```html
 <!DOCTYPE html>
@@ -90,7 +88,7 @@ html5:在语义上有很大优势，提供了一些新的 html5 标签，比如�
       .wrap {
         display: flex;
         /* flex-direction: row;
-      align-items: stretch; */
+        align-items: stretch; */
       }
       .item {
         width: 0;
@@ -116,7 +114,7 @@ html5:在语义上有很大优势，提供了一些新的 html5 标签，比如�
 </html>
 ```
 
-2. table-cell 布局
+2. `table-cell` 布局
 
 ```html
 <!DOCTYPE html>
@@ -221,7 +219,7 @@ html5:在语义上有很大优势，提供了一些新的 html5 标签，比如�
 </html>
 ```
 
-4. grid 布局
+4. `grid` 布局
    grid-template-columns 设置列宽， grid-auto-flow 自动布局算法，设置优先填充列，具体教程参考[网格布局](http://www.ruanyifeng.com/blog/2019/03/grid-layout-tutorial.html)
 
 ```html
@@ -270,9 +268,9 @@ html5:在语义上有很大优势，提供了一些新的 html5 标签，比如�
 </html>
 ```
 
-## 7、居中为什么要用 transfrom,而不是使用 marginLeft、marginTop?
+## 7、居中为什么要用 `transfrom`,而不是使用 `marginLeft、marginTop`?
 
-因为 margin 会导致页面重排和重绘，但是 transfrom 却不是，tranfrom 是创建一个独立的层。
+因为 `margin` 会导致页面重排和重绘，但是 `transfrom` 却不是，tranfrom 是创建一个独立的层。
 
 **浏览器渲染过程**
 

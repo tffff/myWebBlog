@@ -10,6 +10,7 @@ const menus = {
         'myblog/devneeds/ios',
         'myblog/devneeds/reactnativepit',
         'myblog/devneeds/iosinstall',
+        'myblog/devneeds/regular',
       ],
     },
     {
@@ -24,7 +25,15 @@ const menus = {
         'myblog/css/cssmatrix',
       ],
     },
-    { title: 'JS', children: ['myblog/js/01', 'myblog/js/02', 'myblog/js/03'] },
+    {
+      title: 'JS',
+      children: [
+        'myblog/js/01',
+        'myblog/js/02',
+        'myblog/js/03',
+        'myblog/js/04',
+      ],
+    },
     {
       title: 'React',
       children: [
@@ -35,6 +44,10 @@ const menus = {
         'myblog/react/reactcode',
         'myblog/react/reacthooks.md',
       ],
+    },
+    {
+      title: '微信小程序',
+      children: ['myblog/wechat/index'],
     },
     // { title: 'Vue', collapsable: true, children: ['vue/vuesource.md'] },
     {

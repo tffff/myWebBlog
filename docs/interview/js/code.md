@@ -58,7 +58,51 @@ console.log(p2); // -> {name: "yyy", age: 30}
 
 `{} == ! {}` -> `{} == false` -> `{} == 0` -> `NaN == 0` -> false
 
-## 3、写出输出结果？
+## 3、代码判断题?
+
+```js
+//1、多了括号，所以是表达式
+console.log({}+[]) //[object Object]
+
+//2、前面是代码块 所以直接执行+[]
+{}+[]   // 0
+
+//3、因为[]会被强制转换为"", 然后+运算符 链接一个{ }, { }强制转换为字符串就是"[object Object]"
+[]+{}   //[object Object]
+
+//4、不同浏览器不同，默认按谷歌,同等类型求值
+{}+{}  //[object Object][object Object]
+
+//5、[]=='0' -> 0=='0' -> 0==false
+console.log([]==false) //true
+
+//6、没有可比性 {}肯定是有值的
+console.log({}==false) //false
+
+//7、数组是真实存在的，所以进入if
+if([]){
+  console.log([]==false) //true
+}
+
+//8、+'a'强制转number
+('b'+'a'+ +'a'+'a').toLocaleLowerCase() //banana
+
+//9、直接拿原始值比
+0=='0' //true
+
+//10、Boolean('0')是有真实的字符串，所以是true
+Boolean(0)==Boolean('0')  //false
+
+//11、NaN与任何值都不相等
+NaN==0   //false
+NaN<=0  //false
+
+//12、Number(0,10)==0  null 尝试转为number
+null<=0 //true
+
+```
+
+## 4、写出输出结果？
 
 ```js
 var myObject = {
@@ -80,7 +124,7 @@ myObject.func();
 
 因为是`myObject.func()`所以`func`函数里面的`this`指向`myObject`,所以第一行`console.log(this.foo)`的 this 执行`myObject`，因为`self=this`，所以第二行的`console.log(self.foo)`里面的 self 指向的也是`myObject`，但是下面一行`console.log(this.foo)`是在一个闭包里面，所以这个`this`指向 window,`console.log(self.foo)`里面的`self`指向的是上面获取的`self`,所以指向的是`myObject`
 
-## 4、写出下面代码结果？
+## 5、写出下面代码结果？
 
 ```js
 var a = { n: 1 };
@@ -94,7 +138,7 @@ console.log(b); //{n:1,x:{n:2}}
 
 再执行`a.x=a`,这里要注意，因为`a.x`之前已经先执行了,所以`a.x`已经是`{n:1,x:undefined}`这个地址了，但是里面的 x 指向了新的地址,所以最终`a.x`可以看成是`{n:1,x:undefined}.x={n:2}`
 
-## 5、写出下面代码的执行结果，并说明为什么？
+## 6、写出下面代码的执行结果，并说明为什么？
 
 ```js
 function out() {
@@ -136,3 +180,85 @@ function out() {
   }
   console.log(typeof company); //function
   ```
+
+## 7、请写出下面代码的结果？
+
+```js
+function fn() {
+  console.log(this.length);
+}
+var yideng = {
+  length: 5,
+  method: function() {
+    'use strict';
+    fn();
+    arguments[0]();
+  },
+};
+const result = yideng.method.bind(null);
+result(fn, 1);
+```
+
+结果是`0 2`,`fn()`执行的时候不依赖任何对象，所以`fn()`中的`this`指向的是`window`,`arguments[0]()`函数执行里面的`this`指向的`argument`对象,所以`arguments[0]()`的结果是 2
+
+## 8、请写出下面代码的结果？
+
+```js
+function bar() {
+  console.log(myName);
+}
+function foo() {
+  var myName = '内部变量';
+  bar();
+}
+var myName = '外部变量';
+foo(); //外部变量
+```
+
+为什么不是`内部变量`呢？，因为函数在定义的时候里面的变量已经存在了
+
+## 9、请问变量 a 会被 GC 回收吗，为什么？
+
+```js
+function test() {
+  var a = 'yideng';
+  return function() {
+    eval('');
+  };
+}
+test()();
+```
+
+变量 a 不会被回收，因为里面有`eval()`，`eval()`函数可计算某个字符串，并执行其中的的 `JavaScript` 代码，所以 js 引擎不知道`eval`里面会执行什么程序会不会用到这个变量 a，所以变量`a`不会被回收
+
+## 10、原型和原型链代码面试题，输出下面代码的值？
+
+```js
+Object.prototype.a = 'a';
+Function.prototype.a = 'a1';
+function Person(){};
+var yideng = new Person();
+
+console.log(Person.a);
+console.log(yideng.a);
+console.log(1..a)
+console.log(1.a)
+console.log(yideng.__proto__.__proto__.constructor.constructor.constructor)
+```
+
+## 11、写出下面代码的结果（关于运行机制）?
+
+```js
+async function async1() {
+  console.log(1);
+  await async2();
+  console.log(3);
+}
+async function async2() {
+  console.log(2);
+}
+async1();
+console.log(4);
+```
+
+最终结果是`1243`，`async1`先执行所以是`12`,因为里面有`await`,`await`相当于`Promise.then()`属于微任务，所以 3 先不执行，然后继续，执行宏任务`4`,在执行微任务`3`,所以最终就是`1243`

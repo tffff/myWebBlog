@@ -3,6 +3,8 @@ title: Redux初探
 date: 2020-08-09 21:00:10
 ---
 
+# Redux 初探
+
 ## 什么是 Redux?
 
 因为 react 里面 props 是一级一级传的，state 是组件内部状态管理，而且 react 是单向数据流，如果出现一个数据状态非常复杂就很难让两个组件共享数据，这时候就需要一个所有的 state 数据集中在组件的顶部然后分发给其他组件，这就是集中状态管理 redux。redux 就是一个 js 状态容器，提供可预测化的状态管理。
@@ -50,3 +52,11 @@ store：公共数据源
 1. 单一数据源
 2. state 只读，只能通过出发 action 改变 state,只能表达想要修改的意图，修改的动作在 reducer 里面执行
 3. reducre 使用纯函数进行修改，为了描述 action 如何改变 state
+
+## redux 解析
+
+- store -> container
+- currentState -> value
+- action -> f 变形关系
+- reducer -> map
+- middleware -> IO functor(解决异步和脏操作)

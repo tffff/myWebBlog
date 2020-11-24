@@ -1,17 +1,46 @@
 ---
-title: webpack性能优化
+title: webpack性能优化与与原理分析
 date: 2020-08-13 09:31:31
 ---
 
-## 性能分析
+# webpack 性能优化与与原理分析
 
-- 深度 treeshaking
+## 性能优化
 
-  - webpack-deep-scope-plugin 深度范围分析的 webpack 插件
-  - webpack-parallel-uglify-plugin 该插件可帮助具有多个入口点的项目加快其构建速度
-  - purifycss-webpack 该插件使用 PurifyCSS 从 CSS 中删除未使用的选择器
+### 深度 `treeshaking`
 
-- 开启多核压缩 happypack(比较慢，慎用) 多线程编译 webpack 不支持的情况下使用`thread-loader` ， JavaScript 的多核压缩可以开启`terser-webpack-plugin` (官方维护 多核压缩`uglifyjs-webpack-plugin` ,非官方维护`webpack-parallel-uglify-plugin`)
+- `webpack-deep-scope-plugin` 深度范围分析的 webpack 插件
+- `webpack-parallel-uglify-plugin` 该插件可帮助具有多个入口点的项目加快其构建速度
+- `purifycss-webpack` 该插件使用 PurifyCSS 从 CSS 中删除未使用的选择器
+
+### css 压缩
+
+CSS 的多核压缩: `optimize-css-assets-webpack-plugin`
+
+[cssnano](https://cssnano.co/): cssnano 会采用格式良好的 CSS 并通过许多有针对性的优化来运行它
+
+```js
+  //提取css
+  // contenthash 自己负责自己的内容
+  new MiniCssExtractPlugin({
+    filename: 'static/css/[name].[contenthash:8].css',
+    chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+  }),
+  new OptimizeCssAssetsPlugin({ //压缩css
+    assetNameRegExp: /\.css$/g,
+    cssProcessor: require('cssnano'),
+    cssProcessorPluginOptions: {
+      preset: ['default', { discardComments: { removeAll: true } }],
+    },
+    canPrint: true,
+  }),
+```
+
+### 开启多核压缩(js)
+
+happypack(比较慢，慎用) 多线程编译 webpack 不支持的情况下使用`thread-loader`(一般情况下不建议使用) ，
+
+JavaScript 的多核压缩可以开启`terser-webpack-plugin` (官方维护 多核压缩`uglifyjs-webpack-plugin` ,非官方维护`webpack-parallel-uglify-plugin`)
 
 ```js
 const TerserJSPlugin = require('terser-webpack-plugin');
@@ -19,8 +48,8 @@ module.exports = {
   optimization: {
     minimizer: [
       new TerserJSPlugin({
-        cache: true, // 是否缓存
-        parallel: true, // 是否并行打包
+        cache: true, // 是否缓存(比较有效，但是要谨慎使用)
+        parallel: true, // 是否并行打包 目前默认值是true
         sourceMap: true,
       }),
     ],
@@ -28,15 +57,20 @@ module.exports = {
 };
 ```
 
-CSS 的多核压缩: `optimize-css-assets-webpack-plugin`
+### speed-measure-webpack-plugin 打包速度分析
 
-- speed-measure-webpack-plugin 打包速度分析
+```js
+//分析完了 哪个比较慢就解决哪个
+const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
+const smp = new SpeedMeasurePlugin();
+module.exports = smp.wrap(merge(webpackConfig, _mergeConfig));
+```
 
-- progress-bar-webpack-plugin 打包进度展示
+### progress-bar-webpack-plugin 打包进度展示
 
-- hard-source-webpack-plugin 对整个工程开启缓存
+### hard-source-webpack-plugin 对整个工程开启缓存
 
-- webpack-dashboard 增强了 webpack 的输出，包含依赖的大小、进度和其他细节。
+- `webpack-dashboard` 增强了 webpack 的输出，包含依赖的大小、进度和其他细节。
 
   webpack-bundle-analyzer 打包结果分析
 
@@ -46,23 +80,30 @@ CSS 的多核压缩: `optimize-css-assets-webpack-plugin`
 
   14-2 http://webpack.github.io/analyse/
 
-- inline-manifest-webpack-plugin 把 runtime 放到 html 里
+- `inline-manifest-webpack-plugin` 把 runtime 放到 html 里
 
   html-inline-css-webpack-plugin 把一些核心的 CSS 放到⻚面内部
 
   html-webpack-inline-source-plugin 内部资源引入
 
-- cache-loader loader 的缓存 => 'babel-loader?cacheDirectory=true'
+- `cache-loader` loader 的缓存 => 'babel-loader?cacheDirectory=true'
+  哪里慢就往哪里塞
 
-  exclude: /node_modules/, // 排除不处理的目录
+  `exclude: /node_modules/,` // 排除不处理的目录
 
-  include: path.resolve(\_\_dirname, 'src') // 精确指定要处理的目录
+  `include: path.resolve(\_\_dirname, 'src')` // 精确指定要处理的目录
 
-- hard-source-webpack-plugin 开启全局的编译缓存
+### 开启全局的项目缓存
 
-- image-webpack-loader 压缩图片
+`hard-source-webpack-plugin`
 
-- HtmlWebpackPlugins 压缩推荐选项
+### 压缩图片
+
+`image-webpack-loader`
+
+### 压缩推荐选项
+
+[HtmlWebpackPlugins](https://www.npmjs.com/package/html-webpack-plugin)
 
 ```js
 new HtmlWebpackPlugin({
@@ -82,11 +123,52 @@ new HtmlWebpackPlugin({
 });
 ```
 
-- prepack-webpack-plugin 代码求值
+### webpack 外部扩展
 
-- @babel/plugin-syntax-dynamic-import 动态引入
+index.html
 
-- Webpack5 不间断进程(continuous processes)和缓存
+```html
+<script
+  src="https://code.jquery.com/jquery-3.1.0.js"
+  integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk="
+  crossorigin="anonymous"
+></script>
+```
+
+webconfig.config.js
+
+```js
+module.exports = {
+  //...
+  externals: {
+    jquery: 'jQuery',
+  },
+};
+```
+
+这样就剥离了那些不需要改动的依赖模块，换句话，下面展示的代码还可以正常运行：
+
+```js
+import $ from 'jquery';
+
+$('.my-element').animate(/* ... */);
+```
+
+这样不仅之前对第三方库的用法方式不变，还把第三方库剥离出 webpack 的打包中，从而加速 webpack 的打包速度
+
+### webpack 集群编译
+
+wenpack 打包比较慢的终极解决方案，三台机器一起编译，最后送回主机解压合在一起
+
+### 代码求值
+
+`prepack-webpack-plugin`
+
+### 动态引入
+
+`@babel/plugin-syntax-dynamic-import`
+
+Webpack5 不间断进程(continuous processes)和缓存
 
 对于大型复杂项目应用，在开发阶段，开发者一般习惯使用 Webpack --watch 选项或者 webpack- dev-server 启动一个不间断的进程(continuous processes)以达到最佳的构建速度和效率。 Webpack --watch 选项和 webpack-dev-server 都会监听文件系统，进而在必要时，触发持续编译 构建动作。 原理其实就是轮询判断文件的最后编辑时间是否变化，某个文件发生了变化，并不会立刻告诉监听 者，而是先缓存起来，等待 aggregateTimeout(Webpack 的 --watch 选项内置的类似 batching 的 能力)
 

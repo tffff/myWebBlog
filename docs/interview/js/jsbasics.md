@@ -492,9 +492,8 @@ const arr9 = [[1], [2], [3], [4], [5]];
 arr9.flatMap(arr => arr * 10); //[10,20,30,40,50]
 ```
 
-:::tips 会生成新数组的方法
-map,filter,flat,concat,flatMap
-:::
+> 会生成新数组的方法
+> map,filter,flat,concat,flatMap
 
 ## 8、js 中 Object 的方法有哪些？
 
@@ -613,7 +612,8 @@ JS 内置对象分为**数据封装类对象**和**其他对象**
    - Boolean 类型：`false`为`false`,`true`为`true`
    - 对象类型`undefined`、`null`为`false`,其他为`true`
 
-![比较值](/js/compare.png)
+<!-- ![比较值](/js/compare.png) -->
+<img src="../../assets/js/compare.png"/>
 
 ## 17、call、apply、bind 的区别？
 
@@ -628,3 +628,10 @@ JS 内置对象分为**数据封装类对象**和**其他对象**
   执行顺序：`宏任务`->`微任务队列`->`循环`
 - node 环境中
   执行顺序：`宏任务`->`process.nextTick队列`->`微任务队列`->`setTimeout`->`setImemediate`
+
+## 19、map、reducer 和 filter 等高阶函数
+
+## 20、object.create 和 object.assign
+
+- `Object.create`
+  `Object.create(arg, pro)`创建的对象的原型取决于`arg`，`arg`为`null`，新对象是空对象，没有原型，不继承任何对象；`arg`为指定对象，新对象的原型指向指定对象，继承指定对象
