@@ -8,12 +8,12 @@ date: 2020-08-24 10:47:10
 - 基本数据类型：`Number`、`String`、`Boolean`、`undefined`、`null`、`Symbol`
 - 两者之间的区别：基本数据类型是存在`栈`中的简单的数据段，数据大小确定，内存空间大小可以分配，是直接按值存放的，所以可以直接按值访问。引用类型是同时存在`栈`和`堆`中的对象，变量保存的是在栈内存中的一个指针，该指针指向堆内存，也就是说变量是存在栈中的一个地址，地址是该引用数据在堆中的地址。通过这个地址可以找到保存在堆内存中的对象
 
-```js
-var a = { key: 1 };
-var b = a;
-b.key = 2;
-console.log(a.key); //2，因为a和b都指向同一个地址
-```
+  ```js
+  var a = { key: 1 };
+  var b = a;
+  b.key = 2;
+  console.log(a.key); //2，因为a和b都指向同一个地址
+  ```
 
 ## 2、判断是否是数组的几种方法？
 
@@ -82,7 +82,7 @@ typeof console.log; // 'function'
 1. 什么是闭包？
    函数内部返回结果是一个内部函数，并被外部变量所引用，如果内部函数持有被指向函数作用域的变量，就行了闭包
 
-可以在内部函数访问外部函数作用域，使用闭包，一是可以读取函数中的变量，二是可以将函数中的变量存在内存中，保护变量不会被污染，而正因为闭包会把函数中的变量值存储在内存中，会对内存有消耗，所以不能滥用闭包，而则会造成网页性能，造成内存泄漏，当不需要使用闭包时，药剂师释放内存可将内层函数对象的变量赋值成 null
+可以在内部函数访问外部函数作用域，使用闭包，一是可以读取函数中的变量，二是可以将函数中的变量存在内存中，保护变量不会被污染，而正因为闭包会把函数中的变量值存储在内存中，会对内存有消耗，所以不能滥用闭包，而则会造成网页性能，造成内存泄漏，当不需要使用闭包时，要及时释放内存可将内层函数对象的变量赋值成 `null`
 
 2. 闭包原理
 
@@ -515,7 +515,7 @@ arr9.flatMap(arr => arr * 10); //[10,20,30,40,50]
 - for 循环实际上是可以使用 break 和 continue 去终止循环的，但是 forEach 不行
 - 一般来说，for 多数时候都可以使用，当然一般我们需要知道循环次数；而 forEach 更适合于集合对象的遍历和操作
 - for 循环在最开始执行循环的时候，会建立一个循环变量 i，之后每次循环都是操作这个变量，也就是说它是对一个循环变量在重复的赋值，因此 i 在最后只会存储一个值；而 forEach()虽然变量名没变，但是实际上每次循环都会创建一个独立不同的变量，而存储的数值自然也是不同的数值，因此相互之间不会影响
-- `for...in`可以直接遍历对象，
+- `for...in`可以直接遍历对象，可枚举属性，包括自有属性、继承自原型的属性
 - `for...of`不能直接遍历对象，遍历数组
 
 ```js
@@ -556,6 +556,120 @@ arr9.flatMap(arr => arr * 10); //[10,20,30,40,50]
 - let 不允许在相同作用域内，重复声明同一个变量
 
 ## 11、什么是浅拷贝？如何实现浅拷贝？什么是深拷贝？如何实现深拷贝？
+
+- 浅拷贝
+
+  只复制指向某个对象的指针，而不复制对象本身，新旧对象还是共享同一块内存
+
+  **赋值和浅拷贝的区别**
+
+  当我们把一个对象赋值给一个新的变量时，赋的其实是该对象的在栈中的地址，而不是堆中的数据。也就是两个对象指向的是同一个存储空间，无论哪个对象发生改变，其实都是改变的存储空间的内容，因此，两个对象是联动的
+
+  浅拷贝是按位拷贝对象，**它会创建一个新对象**，这个对象有着原始对象属性值的一份精确拷贝。如果属性是基本类型，拷贝的就是基本类型的值；如果属性是内存地址（引用类型），拷贝的就是内存地址 ，因此如果其中一个对象改变了这个地址，就会影响到另一个对象。即默认拷贝构造函数只是对对象进行浅拷贝复制(逐个成员依次拷贝)，**即只复制对象空间而不复制资源**
+
+  下面看一个浅拷贝和赋值的例子：
+
+  ```js
+  // 对象赋值
+  var obj1 = {
+    name: 'zhangsan',
+    age: '18',
+    language: [1, [2, 3], [4, 5]],
+  };
+  var obj2 = obj1;
+  obj2.name = 'lisi';
+  obj2.language[1] = ['二', '三'];
+  console.log('obj1', obj1); //{name:'lisi','age' :  '18','language' : [1,["二","三"],[4,5]],}
+  console.log('obj2', obj2); //{name:'lisi','age' :  '18','language' : [1,["二","三"],[4,5]],}
+  ```
+
+  ```js
+  // 浅拷贝
+  var obj1 = {
+    name: 'zhangsan',
+    age: '18',
+    language: [1, [2, 3], [4, 5]],
+  };
+  var obj3 = shallowCopy(obj1);
+  obj3.name = 'lisi';
+  obj3.language[1] = ['二', '三'];
+  function shallowCopy(src) {
+    var dst = {};
+    for (var prop in src) {
+      if (src.hasOwnProperty(prop)) {
+        dst[prop] = src[prop];
+      }
+    }
+    return dst;
+  }
+  console.log('obj1', obj1); //{name:'zhangsan','age' :  '18','language' : [1,["二","三"],[4,5]],}
+  console.log('obj3', obj3); //{name:'lisi','age' :  '18','language' : [1,["二","三"],[4,5]],}
+  ```
+
+  **浅拷贝实现方式**
+
+  - `Object.assign()`
+    `Object.assign()` 进行的是浅拷贝，拷贝的是对象的属性的引用，而不是对象本身，拷贝对象只有一层数据结构的时候是深拷贝
+  - `Array.prototype.concat()`、`Array.prototype.slice()`
+    如果改变的是基本类型的则不会改变原数组，如果是引用类型就会改变原数组
+
+- 深拷贝
+
+  但深拷贝会另外创造一个一模一样的对象，新对象跟原对象不共享内存，修改新对象不会改到原对象
+
+  **深拷贝实现方式**
+
+  - `JSON.parse(JSON.stringify())`
+    这种方法虽然可以实现数组或对象深拷贝，但不能处理函数。会忽略 `undefined` 、 `symbol`、不能序列化函数、不能解决循环引用的对象
+
+  - 手写递归方法
+
+    ```js
+    //简单版
+    function deepClone(obj) {
+      function isObject(o) {
+        return (typeof o === 'object' || typeof o === 'function') && o !== null;
+      }
+
+      if (!isObject(obj)) {
+        throw new Error('非对象');
+      }
+
+      let isArray = Array.isArray(obj);
+      let newObj = isArray ? [...obj] : { ...obj };
+      Reflect.ownKeys(newObj).forEach(key => {
+        newObj[key] = isObject(obj[key]) ? deepClone(obj[key]) : obj[key];
+      });
+
+      return newObj;
+    }
+
+    let obj = {
+      a: [1, 2, 3],
+      b: {
+        c: 2,
+        d: 3,
+      },
+    };
+    let newObj = deepClone(obj);
+    newObj.b.c = 1;
+    console.log(obj.b.c); // 2
+    ```
+
+  - 函数库`lodash`
+    该函数库也有提供 `_.cloneDeep` 用来做深拷贝
+
+赋值、浅拷贝、深拷贝的区别？
+
+---
+
+|        | 和原数据是否指向同一对象 | 第一层数据为基本数据类型 | 原数据中包含子对象       |
+| ------ | ------------------------ | ------------------------ | ------------------------ |
+| 赋值   | 是                       | 改变会使原数据一同改变   | 改变会使原数据一同改变   |
+| 浅拷贝 | 否                       | 改变不会使原数据一同改变 | 改变会使原数据一同改变   |
+| 深拷贝 | 否                       | 改变不会使原数据一同改变 | 改变不会使原数据一同改变 |
+
+---
 
 ## 12、如何获取一个 DOM 元素的绝对宽高，绝对位置？
 
@@ -618,7 +732,7 @@ JS 内置对象分为**数据封装类对象**和**其他对象**
 ## 17、call、apply、bind 的区别？
 
 - `call`和`apply`都是立即执行，`call`的参数是一个一个的传，`apply`的参数是一个数组
-- `bind`绑定`this`之后返回一个新数组
+- `bind`绑定`this`之后返回一个新数组,不管我们给函数 `bind` 几次，函数中的 `this` 永远由`第一次 bind`决定
 
 ## 18、EventLoop 浏览器机制和 node 机制？
 
@@ -635,3 +749,32 @@ JS 内置对象分为**数据封装类对象**和**其他对象**
 
 - `Object.create`
   `Object.create(arg, pro)`创建的对象的原型取决于`arg`，`arg`为`null`，新对象是空对象，没有原型，不继承任何对象；`arg`为指定对象，新对象的原型指向指定对象，继承指定对象
+
+## 21、请求头部 content-type 的几种类型
+
+之前一直分不清楚`post`请求里`Content-Type`方式，如`application/x-www-form-urlencoded`、`multipart/form-data`。
+
+下面会介绍`Content-Type`有哪几种、插件 Postman 和 RESTClient 使用示例。文末还会介绍在 PHP 中 CURL 里需要注意的细节。
+
+Http Header 里的 Content-Type 一般有这三种：
+
+1. `application/x-www-form-urlencoded`：数据被编码为名称/值对。这是标准的编码格式。
+2. `multipart/form-data`： 数据被编码为一条消息，页上的每个控件对应消息中的一个部分。
+3. `text/plain`： 数据以纯文本形式(text/json/xml/html)进行编码，其中不含任何控件或格式字符。postman 软件里标的是 RAW。
+
+`form`的`enctype`属性为编码方式，常用有两种：application/x-www-form-urlencoded 和 multipart/form-data，默认为 application/x-www-form-urlencoded。
+
+当`action`为`get`时候，浏览器用 x-www-form-urlencoded 的编码方式把 form 数据转换成一个字串（name1=value1&name2=value2...），然后把这个字串追加到 url 后面，用?分割，加载这个新的 url。
+
+当`action`为`post`时候，浏览器把 form 数据封装到 http body 中，然后发送到 server。 如果没有 type=file 的控件，用默认的 application/x-www-form-urlencoded 就可以了。 但是如果有 type=file 的话，就要用到 multipart/form-data 了。
+
+当`action`为`post`且`Content-Type`类型是`multipart/form-data`，浏览器会把整个表单以控件为单位分割，并为每个部分加上 Content-Disposition(form-data 或者 file),Content-Type(默认为 text/plain),name(控件 name)等信息，并加上分割符(boundary)
+
+[参考该网站](https://www.cnblogs.com/52fhy/p/5436673.html)
+
+## 22、Object.keys()和 Reflect.ownKeys()的区别?
+
+- `Object.keys()`主要用于遍历对象自有的可枚举属性，不包括继承自原型的属性和不可枚举的属性。
+- `Reflect.ownKeys()`返回**所有自有**属性`key`，不管是否可枚举，但不包括继承自原型的属性
+- `Object.getOwnPropertyNames()`用于返回对象的自有属性，包括可枚举和不可枚举的
+- `Object.defineProperty(obj, prop, descriptor)`方法会直接在一个对象上定义一个新属性，或者修改一个对象的现有属性，并返回此对象

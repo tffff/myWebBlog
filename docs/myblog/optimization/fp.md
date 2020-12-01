@@ -1,5 +1,5 @@
 ---
-title: 首屏性能优化相关
+title: 性能优化②
 date: 2020-07-31 09:25:10
 ---
 
@@ -13,33 +13,29 @@ Time To First Byte,首字节时间
 
 **2. FP**
 
-First Paint，首次绘制
+First Paint，**首次绘制**，它代表浏览器第一次向屏幕传输像素的时间，就是页面在屏幕上首次发生视觉变化的时间
 
 **3. FCP**
 
-First Contentful Paint ,首次有内容的绘制
+First Contentful Paint ,**首次有内容的绘制**，代表浏览器第一次向屏幕绘制 “内容” (只有首次绘制文本、图片（包含背景图）、非白色的 canvas 或 SVG 时才被算作 FCP)
 
 **4. FMP**
 
-First Meaningful Paint ,首次有意义的绘制
+First Meaningful Paint ,**首次有意义的绘制**，主要内容”开始出现在屏幕上的时间点。它是我们测量用户加载体验的主要指标
 
-**5. FMP**
+**5. TTI**
 
-First Meaningful Paint ,首次有意义的绘制
+Time To Interactive, 可交互时间，推荐的响应时间是 `100ms` 以内否则有延迟感，网页第一次 完全达到可交互状态 的时间点
 
-**6. TTI**
-
-Time To Interactive, 可交互 时间，推荐的响应时间是 100ms 以内否则有延迟感
-
-**7. Long tasks**
+**6. Long tasks**
 
 超过了 50ms 的任务
 
-**8. SSR&&CSR**
+**7. SSR&&CSR**
 
 服务端渲染和客户端渲染
 
-**9. Isomorphic JavaScript**
+**8. Isomorphic JavaScript**
 
 同构化
 
@@ -125,7 +121,7 @@ CLS 推荐值为低于 0.1，越低说明⻚面跳来跳去的情况就越少，
 
 - js 会影响 DOM 渲染吗？
 
-  DOM 解析不影响 渲染依旧等待
+  `js`不影响`DOM`解析，影响`DOM`渲染
 
 ```html
 <!DOCTYPE html>
@@ -147,7 +143,7 @@ CLS 推荐值为低于 0.1，越低说明⻚面跳来跳去的情况就越少，
 
 - css 会影响 DOM 的渲染和解析吗？
 
-  css 影响 DOM 渲染 不影响 DOM 解析
+  `css` 不影响 `DOM` 解析，影响`DOM`渲染
 
 ```html
 <!DOCTYPE html>
@@ -185,6 +181,7 @@ CLS 推荐值为低于 0.1，越低说明⻚面跳来跳去的情况就越少，
 ```
 
 - 同时存在 css 和 js 的时候，CSS 会影响 js 吗？
+
   会影响
 
 ```html
@@ -219,7 +216,8 @@ CLS 推荐值为低于 0.1，越低说明⻚面跳来跳去的情况就越少，
 ```
 
 - css 会影响 DOMContentLoaded 吗？
-  有时影响，有时不影响，如果 link 下面还有脚本的话 则会影响
+
+  有时影响，有时不影响，如果 `link` 下面还有脚本的话，则会影响
 
 ```html
 <!DOCTYPE html>

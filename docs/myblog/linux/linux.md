@@ -8,7 +8,7 @@ date: 2020-07-13 20:20:31
 > 服务器用户
 > root :当前登录⽤用户
 
-localhost :主机名~ 当前⼯工作⽬目录,默认是当前⽤用户的家⽬目录，
+`localhost` :主机名~ 当前⼯工作⽬目录,默认是当前⽤用户的家⽬目录，
 
 root 就是/root,
 
@@ -216,7 +216,7 @@ ssh-keygen -t rsa -C "你的名字" -f "你自己的名字_rsa”（不要输入
 上传到服务器的登录用户的 home 目录下面 ,在下面的 .ssh
 指定私钥登录
 
-```js
+```bash
 ssh -i 私钥名称 用户名@Ip
 ```
 
@@ -271,4 +271,4 @@ LogLevel INFO
 
 ### 免密登录功能的本地配置文件
 
-编辑自己 home 目录的`cd .ssh/` 路径下的 config 文件,没有就新建一个 config
+编辑自己 `home` 目录的`cd .ssh/` 路径下的 `config` 文件,没有就新建一个 `config`

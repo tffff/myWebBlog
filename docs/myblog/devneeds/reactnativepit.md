@@ -27,7 +27,7 @@ date: 2020-11-09 16:14
 
 `cd ~/Library/Android/sdk/tools/ && ./emulator @Nexus_6P_API_28`
 
-## 1、native-echats 的使用
+## 2、native-echats 的使用
 
 使用`native-echats`的时候会出现打包在`android`下面是空白页的情况，则需要修改里面的代码
 
@@ -79,7 +79,7 @@ export default class App extends Component {
 }
 ```
 
-## 2、修改 android 的包名
+## 3、修改 android 的包名
 
 假设原包名为`com.pushTets`，修改后包名为`com.spd9.dpb`，以下地方需要修改
 
@@ -93,7 +93,7 @@ export default class App extends Component {
 把`android/app/src/main/java/com/PROJECT_NAME/MainActivity.java`和  
 `/MainApplication.java`两个文件移入新创建的目录,新创建的目录要和包名相对应
 
-## 3、react native 启动页的尺寸
+## 4、react native 启动页的尺寸
 
 ### ios 的启动页尺寸
 

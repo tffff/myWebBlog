@@ -8,7 +8,7 @@ export default defineConfig({
   favicon: 'https://img.alicdn.com/tfs/TB1YHEpwUT1gK0jSZFhXXaAtVXa-28-27.svg',
   dynamicImport: {},
   // ssr: {},
-  // exportStatic: { },// htmlSuffix: true
+  exportStatic: {}, // htmlSuffix: true
   menus,
   navs,
   theme: {

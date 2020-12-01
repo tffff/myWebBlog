@@ -3,6 +3,8 @@ title: 项目持续集成
 date: 2020-07-10 10:21:38
 ---
 
+# 项目持续集成
+
 <!-- ![工程化和持续集成](/engineering/ci.png) -->
 <img src='../../assets/engineering/ci.png'>
 
@@ -74,8 +76,8 @@ svn 流程
 
 ## 自动化部署
 
-Travis CI 是部署到 github,不能部署到自己电脑
+`Travis CI`是部署到 github,不能部署到自己电脑
 
-Circle CI 收费，界面美观
+`Circle CI` 收费，界面美观
 
-Jenkins 可以部署到自己电脑(服务器)
+`Jenkin`s 可以部署到自己电脑(服务器)

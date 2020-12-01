@@ -11,7 +11,27 @@ date: 2020-08-13 09:31:31
 
 - `webpack-deep-scope-plugin` 深度范围分析的 webpack 插件
 - `webpack-parallel-uglify-plugin` 该插件可帮助具有多个入口点的项目加快其构建速度
-- `purifycss-webpack` 该插件使用 PurifyCSS 从 CSS 中删除未使用的选择器
+- [purifycss-webpack](https://www.npmjs.com/package/purifycss-webpack) 该插件使用 PurifyCSS 从 CSS 中删除未使用的选择器
+
+  ```js
+  //extract-text-webpack-plugin和purifycss-webpack配合使用
+  const path = require(' path ');
+  const glob = require(' glob ')
+  const ExtractTextPlugin = require(' extract-text-webpack-plugin ');
+  const PurifyCSSPlugin = require('purifycss-webpack');
+
+  module.exports={
+    ...
+    plugins: [
+      new ExtractTextPlugin('[name].[contenthash].css'),
+      // Make sure this is after ExtractTextPlugin!
+      new PurifyCSSPlugin({
+        // Give paths to parse for rules. These should be absolute!
+        paths: glob.sync(path.join(__dirname, 'app/*.html')),
+      })
+    ]
+  }
+  ```
 
 ### css 压缩
 
@@ -21,6 +41,7 @@ CSS 的多核压缩: `optimize-css-assets-webpack-plugin`
 
 ```js
   //提取css
+  var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
   // contenthash 自己负责自己的内容
   new MiniCssExtractPlugin({
     filename: 'static/css/[name].[contenthash:8].css',
@@ -40,7 +61,7 @@ CSS 的多核压缩: `optimize-css-assets-webpack-plugin`
 
 happypack(比较慢，慎用) 多线程编译 webpack 不支持的情况下使用`thread-loader`(一般情况下不建议使用) ，
 
-JavaScript 的多核压缩可以开启`terser-webpack-plugin` (官方维护 多核压缩`uglifyjs-webpack-plugin` ,非官方维护`webpack-parallel-uglify-plugin`)
+JavaScript 的多核压缩可以开启`terser-webpack-plugin`，`terser-webpack-plugin`可以代替`uglifyjs-webpack-plugin`解决 uglifyjs 不支持`es6`语法问题
 
 ```js
 const TerserJSPlugin = require('terser-webpack-plugin');
@@ -53,6 +74,21 @@ module.exports = {
         sourceMap: true,
       }),
     ],
+  },
+};
+```
+
+官方维护：多核压缩[uglifyjs-webpack-plugin](https://github.com/webpack-contrib/uglifyjs-webpack-plugin)
+
+非官方维护：`webpack-parallel-uglify-plugin`
+
+```js
+//uglifyjs-webpack-plugin
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
+module.exports = {
+  optimization: {
+    minimizer: [new UglifyJsPlugin()],
   },
 };
 ```
@@ -93,13 +129,27 @@ module.exports = smp.wrap(merge(webpackConfig, _mergeConfig));
 
   `include: path.resolve(\_\_dirname, 'src')` // 精确指定要处理的目录
 
-### 开启全局的项目缓存
-
-`hard-source-webpack-plugin`
-
 ### 压缩图片
 
-`image-webpack-loader`
+[image-webpack-loader](https://www.npmjs.com/package/image-webpack-loader)
+
+```js
+rules: [
+  {
+    test: /\.(gif|png|jpe?g|svg)$/i,
+    use: [
+      'file-loader',
+      {
+        loader: 'image-webpack-loader',
+        options: {
+          bypassOnDebug: true, // webpack@1.x
+          disable: true, // webpack@2.x and newer
+        },
+      },
+    ],
+  },
+];
+```
 
 ### 压缩推荐选项
 
@@ -211,6 +261,8 @@ function() {
 
 ## 实战
 
+### 打包优化
+
 对自己公司的项目打包进行优化的步骤，项目使用 react 脚手架初始化的构建的项目，但是打包时间是`257`秒,现在对打包速度进行优化
 
 1. `terser-webpack-plugin` 默认在脚手架里面，所以只是配置了缓存和并行打包参数
@@ -252,3 +304,15 @@ plugins: [
 
 <!-- ![进度条效果](/webpack/progress.png) -->
 <img src='../../assets/webpack/progress.png'/>
+
+### 首页性能优化
+
+#### 1、检测性能
+
+首先使用`Lighthouse`对首页进行检测，需要在`chrome`浏览器里面安装`Lighthouse`安装插件，检测网站必须是`https`域名，最后出来结果如下图：
+
+<img src='../../assets/webpack/性能.png'/>
+
+发现性能太低了，`FCP`和`LCP`都是花费时间很长的，接下来就需要对上面慢的地方进行优化。
+
+#### 2、

@@ -5,7 +5,6 @@ const menus = {
       children: [
         'myblog/devneeds/jquerymodule',
         'myblog/devneeds/svn',
-        'myblog/devneeds/git',
         'myblog/devneeds/macinstall',
         'myblog/devneeds/ios',
         'myblog/devneeds/reactnativepit',
@@ -32,6 +31,7 @@ const menus = {
         'myblog/js/02',
         'myblog/js/03',
         'myblog/js/04',
+        'myblog/js/05',
       ],
     },
     {
