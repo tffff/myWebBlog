@@ -52,7 +52,11 @@ const menus = {
     // { title: 'Vue', collapsable: true, children: ['vue/vuesource.md'] },
     {
       title: 'Webpack',
-      children: ['myblog/webpack/webpack', 'myblog/webpack/optimize'],
+      children: [
+        'myblog/webpack/webpack',
+        'myblog/webpack/optimize',
+        'myblog/webpack/01.md',
+      ],
     },
     {
       title: 'Linux',
@@ -115,16 +119,18 @@ const menus = {
   ],
   '/interview': [
     {
-      title: 'HTML和CSS相关',
-      children: ['interview/htmlcss/html', 'interview/htmlcss/css'],
+      title: '基础',
+      children: [
+        'interview/htmlcss/html',
+        'interview/htmlcss/css',
+        'interview/js/jsbasics',
+      ],
     },
     {
-      title: 'JS相关',
+      title: '框架',
       children: [
-        'interview/js/jsbasics',
         'interview/js/http.md',
         'interview/js/react',
-        'interview/js/code',
         'interview/js/programming',
       ],
     },

@@ -269,6 +269,10 @@ ServerAliveCountMax 20
 LogLevel INFO
 ```
 
+### 打开 nginx 具体安装目录 查看配置文件
+
+`/usr/local/var/www` 静态资源文件
+
 ### 免密登录功能的本地配置文件
 
 编辑自己 `home` 目录的`cd .ssh/` 路径下的 `config` 文件,没有就新建一个 `config`

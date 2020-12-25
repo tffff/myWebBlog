@@ -45,14 +45,7 @@ html5:在语义上有很大优势，提供了一些新的 html5 标签，比如�
 > 解决方法
 > 父元素添加：`overflow: hidden`
 
-## 3、垂直居中一个 div(至少三种方法)
-
-- 1、`flex` 布局
-- 2、绝对定位方法：不确定当前 div 的宽度和高度，采用 transform: translate(-50%,-50%); 当前 div 的父级添加相对定位（position: relative;）
-- 3、绝对定位方法：确定了当前 div 的宽度，margin 值为当前 div 宽度一半的负值
-- 4、绝对定位方法：绝对定位下 top left right bottom 都设置 0，margin:auto
-
-## 5、position 的几个值说一下
+## 3、position 的几个值说一下
 
 - `absolute`
 
@@ -73,7 +66,7 @@ html5:在语义上有很大优势，提供了一些新的 html5 标签，比如�
 - `inherit` 规定从父元素继承 position 属性的值。
 - `sticky` ：粘性定位 sticky 相当于相对定位 relative 和固定定位 fixed 的结合（用于吸顶效果）
 
-## 6、css 实现多列等高布局，要求元素实际占用的高度以多列中较高的为准！
+## 4、css 实现多列等高布局，要求元素实际占用的高度以多列中较高的为准！
 
 1. 第一种使用 `flex` 布局，`flex-direction` 默认为 row,align-items 默认为 stretch，该参数就是元素被拉伸适应容器
 
@@ -268,7 +261,7 @@ html5:在语义上有很大优势，提供了一些新的 html5 标签，比如�
 </html>
 ```
 
-## 7、居中为什么要用 `transfrom`,而不是使用 `marginLeft、marginTop`?
+## 5、居中为什么要用 `transfrom`,而不是使用 `marginLeft、marginTop`?
 
 因为 `margin` 会导致页面重排和重绘，但是 `transfrom` 却不是，tranfrom 是创建一个独立的层。
 
@@ -308,7 +301,7 @@ transform 实际上是用到了 GPU 加速，也就是说占用了内存，由�
 - 有合成后代的层
 - 同合成层重叠，且在该合成层上面(z-index)的渲染
 
-## 8、flex 布局实现把 9 个元素分三行排列?
+## 6、flex 布局实现把 9 个元素分三行排列?
 
 ```html
 <!DOCTYPE html>
@@ -348,4 +341,99 @@ transform 实际上是用到了 GPU 加速，也就是说占用了内存，由�
     </div>
   </body>
 </html>
+```
+
+## 7、实现一个固定宽度为 200px 的 div 在页面水平垂直居中（至少一种）?
+
+### flex 方法
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style type="text/css">
+      .main {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+      .box {
+        background: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="box">xdadsadsadasdasd</div>
+    </div>
+  </body>
+</html>
+```
+
+### 绝对定位方法
+
+不确定当前 `div` 的宽度和高度，采用 `transform: translate(-50%,-50%);`当前 `div` 的父级添加相对定位`（position: relative;）`
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style type="text/css">
+      .main {
+        position: relative;
+        height: 100vh;
+      }
+      .box {
+        background: red;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="box">sdasdsawdddddddddddd</div>
+    </div>
+  </body>
+</html>
+```
+
+### 绝对定位
+
+确定`div`的宽高
+
+```css
+//第一种
+.box {
+  background: red;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  width: 100px;
+  height: 100px;
+}
+//第二种
+.box {
+  background: red;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -50px;
+  margin-top: -50px;
+}
 ```

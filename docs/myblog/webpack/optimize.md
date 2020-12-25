@@ -285,9 +285,74 @@ const webpackConfig = smp.wrap({
 <!-- ![webpack分析结果](/webpack/webpack分析.png) -->
 <img src='../../assets/webpack/webpack分析.png'/>
 
-3. 也可以使用`cache-loader`,但是要注意：这个使用多了会造成电脑卡顿
+3. 也可以使用`cache-loader`,但是要注意：这个使用多了会造成电脑卡顿，可以使用`hard-source-webpack-plugin`进行全局缓存
 
-4. 因为打包速度太慢，为了提高打包的体验，我加了一个进度条`progress-bar-webpack-plugin`,这样可以知道打包的进度，给开发者一个明确的提示
+4. `webpack-bundle-analyzer`分析打包出来的文件大小
+
+5. 使用`external+CDN`外部引入的方式可以减少打包体积
+
+```js
+//webpack.config.js
+module.exports ={
+  ...
+  externals:{
+    'react': 'React',
+    'react-dom': 'ReactDOM',
+    'antd':'antd',
+    'moment':'moment',
+    'axios':'axios',
+    'redux':'Redux',
+    'react-redux':'ReactRedux'
+  }
+}
+//index.html里面引入
+<script rel="preload" src="https://cdn.staticfile.org/react/16.12.0/umd/react.production.min.js"></script>
+<script rel="preload" src="https://cdn.staticfile.org/react-dom/16.12.0/umd/react-dom.production.min.js"></script>
+<script rel="preload" src='https://cdn.staticfile.org/redux/4.0.5/redux.min.js'></script>
+```
+
+6. 提取公共代码
+
+```js
+optimization: {
+  splitChunks: {
+    chunks: 'all',
+    name: false,
+    minSize: 30000,
+    cacheGroups: {
+      // 提取 node_modules 中代码
+      vendors: {
+        test: /[\\/]node_modules[\\/]/,
+        name: "vendor",
+        chunks: "initial", //all表示所有模块，async代表只管异步加载的, initial代表初始化时就能获取的模块
+        minChunks: 2, //模块被引用2次以上的才抽离
+        priority: -10
+      },
+      commons: {
+        // async 设置提取异步代码中的公用代码
+        chunks: "async",
+        name: "commons-async",
+        /**
+         * minSize 默认为 30000
+         * 想要使代码拆分真的按照我们的设置来
+         * 需要减小 minSize
+         */
+        minSize: 30000,
+        // 至少为两个 chunks 的公用代码
+        minChunks: 2,
+      },
+      // styles: {
+      //   name: "index",
+      //   test: /\.(css|less)$/,
+      //   chunks: "all",
+      //   enforce: true,
+      // },
+    },
+  },
+}
+```
+
+7. 因为打包速度太慢，为了提高打包的体验，我加了一个进度条`progress-bar-webpack-plugin`,这样可以知道打包的进度，给开发者一个明确的提示
 
 ```js
 //安装
@@ -299,6 +364,10 @@ plugins: [
   new ProgressBarPlugin()
 ]
 ```
+
+8. 压缩图片、js、css
+
+9. 给服务器添加`gzip`压缩减少传输体积
 
 效果如下：
 

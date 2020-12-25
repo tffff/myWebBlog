@@ -177,6 +177,24 @@ render(){
     }
   </div>
 }
+
+//正确写法
+render(){
+  return <div>
+    {React.Children.map(['a'], () => {
+        return <p>11</p>
+    })}
+  </div>
+}
+
+//错误写法 会报错
+render(){
+  return <div>
+    {React.Children.map([{a:1}], () => {
+        return <p>11</p>
+    })}
+  </div>
+}
 ```
 
 **React.children.map 源码解析**
@@ -304,9 +322,9 @@ function mapIntoWithKeyPrefixInternal(children, array, prefix, func, context) {
 
    1.
 
-   2) 设置`expirationTime`
-   3) 封装`callback`
-   4) 新建一个`update`，添加到`fiber`的`updateQuene`里
+   2. 设置`expirationTime`
+   3. 封装`callback`
+   4. 新建一个`update`，添加到`fiber`的`updateQuene`里
 
    ```js
    {

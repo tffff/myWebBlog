@@ -217,7 +217,7 @@ date: 2020-08-26 16:30:10
 
 **虚拟 DOM 是什么？**
 
-本质上来说：虚拟 DOM 是一个 javascript 对象，通过对象的方式来表示 DOM 结构，将页面的状态抽象为 js 对象的形式，配合不同想渲染工具，是跨平台渲染成为可能。通过事务处理机制，将多次 DOM 修改的结果一次性更新到页面上，从而**有效的减少页面渲染的次数，减少修改 DOM 重绘和重拍次数，提高渲染性能**
+本质上来说：虚拟 `DOM` 是一个 javascript 对象，通过对象的方式来表示 DOM 结构，将页面的状态抽象为 js 对象的形式，配合不同想渲染工具，是跨平台渲染成为可能。通过事务处理机制，将多次 DOM 修改的结果一次性更新到页面上，从而**有效的减少页面渲染的次数，减少修改 DOM 重绘和重排次数，提高渲染性能**
 
 **为什么要用虚拟 DOM？**
 
@@ -246,7 +246,7 @@ date: 2020-08-26 16:30:10
 **重新渲染做了什么**
 
 - 会对比新旧 Vnode 进行对比，也就是我们所说的 DOMdiff
-- 对新旧两棵树进行一个深度优先遍历，这样没一个节点都会有一个标记，在遍历的时候，每遍历一个节点，就会对比这个节点树，如果有差异就放到这个对象里面
+- 对新旧两棵树进行一个深度优先遍历，这样每一个节点都会有一个标记，在遍历的时候，每遍历一个节点，就会对比这个节点树，如果有差异就放到这个对象里面
 - 遍历差异对象，根据差异的类型，根据对应规则更新 VNode
 
 react 的处理 render 的基本思想就是每一次有变动就会重新渲染整个应用，在 Virtual DOM 没有出现之前，最简单的方法就是调用 innerHtml 直接替换里面的内容，Virtual DOM 厉害的地方并不是说他比直接操作 DOM 快，而是说不管数据怎么变，都会尽量以最小的代价去更新 DOM。react 将 render 函数返回的虚拟 DOM 树与老的比较从而确定 DOM 要不要更新，应该怎么更新，当 DOM 树很大的时候，遍历两颗树进行对比差异还是很耗性能的，特别是顶层的 setState 有一个微小改变的时候，就会默认去遍历整棵树，尽管 react 使用高度优化的 Diff 算法，但其实还是很耗性能的
@@ -269,93 +269,93 @@ react 的处理 render 的基本思想就是每一次有变动就会重新渲染
 - 合理拆分组件
   以更轻，更小的粒度来纵向拆分组件
 
-  ## 7、setState 是异步还是同步？
+## 7、setState 是异步还是同步？
 
-  `setState` 默认是异步的，因为异步就可以把一个同步代码中的多个 setState 合并成一个组件更新，而不是 setState 执行一次就更新一次，优化了性能
+`setState` 默认是异步的，因为异步就可以把一个同步代码中的多个 setState 合并成一个组件更新，而不是 setState 执行一次就更新一次，优化了性能
 
-  `setState` 在 setTimeout、原生事件里面是同步的
+`setState` 在 setTimeout、原生事件里面是同步的
 
-  ## 8、react 的优缺点？
+## 8、react 的优缺点？
 
-  - 优点
+- 优点
 
-    - react 速度快
-    - 跨浏览器兼容
-    - 模块化
-    - 单向数据流
-    - 同构的 javascript
-      单页面应用最大的缺陷就是对 SEO 不友好，所以 react 有了解决方案，react 可以在服务端预渲染再发送到客户端，可以从预渲染的静态内容中恢复一样的记录到动态应用中，
+  - react 速度快
+  - 跨浏览器兼容
+  - 模块化
+  - 单向数据流
+  - 同构的 javascript
+    单页面应用最大的缺陷就是对 SEO 不友好，所以 react 有了解决方案，react 可以在服务端预渲染再发送到客户端，可以从预渲染的静态内容中恢复一样的记录到动态应用中，
 
-      搜索引擎爬虫程序依赖的是服务端响应而不是 javascript 的执行，预渲染有助于搜索引擎的优化
+    搜索引擎爬虫程序依赖的是服务端响应而不是 javascript 的执行，预渲染有助于搜索引擎的优化
 
-  - 缺点
+- 缺点
 
-    - 只是 view 层
-      react 本身只是一个 view 层，不是完整的 mvc 框架，大型项目需要加上 reactRouter、redux 才行
-    - 状态不同步
-      函数的运行时独立的，每个函数都有一份独立的作用域，**函数的变量是保存在运行时的作用域里面**，当我们有异步操作的时候京吹遇到异步回调的变量引用是之前的，也就是旧的没有更新过的(可以理解为闭包)
+  - 只是 view 层
+    react 本身只是一个 view 层，不是完整的 mvc 框架，大型项目需要加上 reactRouter、redux 才行
+  - 状态不同步
+    函数的运行时独立的，每个函数都有一份独立的作用域，**函数的变量是保存在运行时的作用域里面**，当我们有异步操作的时候京吹遇到异步回调的变量引用是之前的，也就是旧的没有更新过的(可以理解为闭包)
 
-      ```js
-      import React, { useState } from 'react';
+    ```js
+    import React, { useState } from 'react';
 
-      const App1 = () => {
-        const [counter, setCounter] = useState(0);
-        const add1 = () => {
-          setTimeout(() => {
-            console.log(counter);
-          }, 3000);
-        };
-        return (
-          <div>
-            <p>{counter}</p>
-            <button onClick={() => setCounter(counter + 1)}>点击加1</button>
-            <button onClick={add1}>点击</button>
-          </div>
-        );
+    const App1 = () => {
+      const [counter, setCounter] = useState(0);
+      const add1 = () => {
+        setTimeout(() => {
+          console.log(counter);
+        }, 3000);
       };
+      return (
+        <div>
+          <p>{counter}</p>
+          <button onClick={() => setCounter(counter + 1)}>点击加1</button>
+          <button onClick={add1}>点击</button>
+        </div>
+      );
+    };
 
-      export default App1;
-      ```
+    export default App1;
+    ```
 
-      上面的代码，当点击第二个按钮之后立马点击第一个按钮，虽然执行加一的操作，但是 3 秒后打印的还是 0，为什么呢？为什么不是 1 呢？这是因为第一个函数执行的是 counter 是 0，`add1`执行的时候 counter 是 0，虽然是 3 秒后执行的，但是初始的值已经保存在这个闭包里面了，
+    上面的代码，当点击第二个按钮之后立马点击第一个按钮，虽然执行加一的操作，但是 3 秒后打印的还是 0，为什么呢？为什么不是 1 呢？这是因为第一个函数执行的是 counter 是 0，`add1`执行的时候 counter 是 0，虽然是 3 秒后执行的，但是初始的值已经保存在这个闭包里面了，
 
-      这个问题 class component 不会先，因为 class component 的属性和方法都存在不变的`instance`上取值，所以不存在引用是旧的问题
+    这个问题 class component 不会先，因为 class component 的属性和方法都存在不变的`instance`上取值，所以不存在引用是旧的问题
 
-      **解决方法**
+    **解决方法**
 
-      解决这个 hooks 的问题就是参照类的 instance,用 useRef 返回的 immutable RefObject(current 属性是可变的)来保存 state
+    解决这个 hooks 的问题就是参照类的 instance,用 useRef 返回的 immutable RefObject(current 属性是可变的)来保存 state
 
-      ```js
-      import React, { useState, useRef, useEffect } from 'react';
+    ```js
+    import React, { useState, useRef, useEffect } from 'react';
 
-      const App1 = () => {
-        const [counter, setCounter] = useState(0);
-        const counterRef = useRef(counter);
-        const add1 = () => {
-          setTimeout(() => {
-            console.log(counterRef.current);
-          }, 3000);
-        };
-        useEffect(() => {
-          counterRef.current = counter;
-        });
-        return (
-          <div>
-            <p>{counter}</p>
-            <button onClick={() => setCounter(counter + 1)}>点击加1</button>
-            <button onClick={add1}>点击</button>
-          </div>
-        );
+    const App1 = () => {
+      const [counter, setCounter] = useState(0);
+      const counterRef = useRef(counter);
+      const add1 = () => {
+        setTimeout(() => {
+          console.log(counterRef.current);
+        }, 3000);
       };
+      useEffect(() => {
+        counterRef.current = counter;
+      });
+      return (
+        <div>
+          <p>{counter}</p>
+          <button onClick={() => setCounter(counter + 1)}>点击加1</button>
+          <button onClick={add1}>点击</button>
+        </div>
+      );
+    };
 
-      export default App1;
-      ```
+    export default App1;
+    ```
 
-    **hooks 常见问题**
+  **hooks 常见问题**
 
-    1. 不要在`useEffect`里面写太多的依赖，可以划分成多个单一的`useEffect`
-    2. 重视`eslint-plugin-react-hooks`的警告
-    3. 复杂业务使用`Component`代替`hooks`
+  1. 不要在`useEffect`里面写太多的依赖，可以划分成多个单一的`useEffect`
+  2. 重视`eslint-plugin-react-hooks`的警告
+  3. 复杂业务使用`Component`代替`hooks`
 
 ## 9、高阶组件和普通组件有什么区别？适用什么场景？
 
@@ -493,7 +493,7 @@ view 发出 action 之后不是修改原来的 state,而是返回了一个新的
   react 默认是通过比较引用的方式进行的，如果不优化就会导致大量的不必要的 VDOM 渲染，造成性能不好
 
 - **高阶组件**
-  react 可以使用高阶组件来扩展，vue 则是通过 mixins 来扩展
+  `react` 可以使用高阶组件来扩展，`vue` 则是通过 `mixins` 来扩展
 - **构建工具**
 
   react => create-react-app
@@ -518,4 +518,163 @@ view 发出 action 之后不是修改原来的 state,而是返回了一个新的
 2. 尽量不要用数组的 index 来作为唯一的 key 值
 3. 永远不要在 render 的时候用随机数或者其他操作给元素加上不稳定的 key,这样会造成性能开销比不加 key 的情况下更糟糕
 
-## 14、
+## 14、函数组件和类组件的区别？
+
+1. 函数组件是无状态组件，相比类组件无法使用许多特性，例如生命周期钩子、状态 state 等，随着 hooks 出现，类组件也同样可以实现相应的功能
+
+2. 函数组件中没有 this。所以你再也不需要考虑 this。
+
+3. 函数组件的性能比类组件的性能要高，因为类组件使用的时候要实例化，而函数组件直接执行函数取返回结果即可
+
+## 15、容器组件和展示组件分别是什么？
+
+- 展示组件
+  - 关注页面的展示效果（外观）
+  - 内部可以包含展示组件和容器组件，通常会包含一些自己的 DOM 标记和样式(style)
+  - 通常允许通过`this.props.children`方式来包含其他组件。
+  - 对应用程序的其他部分没有依赖关系，例如 Flux 操作或 store。
+  - 不用关心数据是怎么加载和变动的。
+  - 只能通过`props`的方式接收数据和进行回调`(callback)`操作。
+  - 很少拥有自己的状态，即使有也是用于展示`UI`状态的。
+  - 会被写成函数式组件除非该组件需要自己的状态，生命周期或者做一些性能优化
+- 容器组件
+  - 关注应用的是如何工作的
+  - 内部可以包含容器组件和展示组件，但通常没有任何自己的 DOM 标记，除了一些包装 divs，并且从不具有任何样式。
+  - 提供数据和行为给其他的展示组件或容器组件。
+  - 调用 Flux 操作并将它们作为回调函数提供给展示组件。
+  - 往往是有状态的，因为它们倾向于作为数据源
+  - 通常使用高阶组件生成，例如`React Redux的connect()`，`Relay的createContainer()`或`Flux Utils的Container.create()`，而不是手工编写。
+
+示例：
+
+```js
+  //展示组件
+  class TodoList extends React.Component{
+      constructor(props){
+        super(props);
+      }
+      render(){
+        const {todos} = this.props;
+        return (<div>
+          <ul>
+              {todos.map((item,index)=>{
+                  return <li key={item.id}>{item.name}</li>
+              })}
+          </ul>
+        </div>)
+      }
+
+  //容器组件
+  class TodoListContainer extends React.Component{
+      constructor(props){
+        super(props);
+        this.state = {
+            todos:[]
+        }
+        this.fetchData = this.fetchData.bind(this);
+      }
+      componentDidMount(){
+        this.fetchData();
+      }
+      fetchData(){
+        fetch('/api/todos').then(data =>{
+          this.setState({
+            todos:data
+          })
+        })
+      }
+      render(){
+        return (<div>
+            <TodoList todos={this.state.todos} />
+        </div>)
+      }
+  }
+```
+
+## 16、受控组件和非受控组件？
+
+- 受控组件
+
+  - `HTML`中的表单元素是可输入的，也就是有自己的可变状态
+  - 而`React`中可变状态通常保存在`state`中，并且只能通过`setState()` 方法来修改
+  - `React`将`state`与表单元素值`value`绑定在一起，有`state`的值来控制表单元素的值
+  - 受控组件：值受到`react`控制的表单元素
+
+  ```js
+  <input type="text" value={this.state.txt} onChange={this.inputChange} />
+  ```
+
+- 非受控组件
+  - 调用 `React.createRef()` 方法创建 ref 对象
+  - 将创建好的 `ref` 对象添加到文本框中
+  - 通过`ref`对象获取到文本框的值
+  - 非受控组件： 表单组件没有`value prop`就可以称为非受控组件
+  ```js
+  class App extends React.Component {
+    constructor() {
+      super();
+      //创建 ref
+      this.txtRef = React.createRef();
+    }
+    // 获取文本框的值
+    getTxt = () => {
+      console.log(this.txtRef.current.value);
+    };
+    render() {
+      return (
+        <div>
+          <input type="text" ref={this.txtRef} />
+          <button onClick={this.getTxt}>获取值</button>
+        </div>
+      );
+    }
+  }
+  ```
+
+````
+## 17、简述react的diff算法？
+
+## 18、MVVM是什么？
+`MVVM`是 `Model-View-ViewModel`的缩写，即模型-视图-视图模型。`MVVM` 是一种设计思想。
+
+模型`（Model）`： 数据保存—存放着各种数据，有的是固定写死的，大多数是从后端返回的数据
+视图 `（View）`：用户界面，也就是DOM
+视图模型`（View-Model）`:连接`View`和`Model`的桥梁，当数据变化时，`ViewModel`够监听到数据的变化（通过`Data Bindings`），自动更新视图，而当用户操作视图，`ViewModel`也能监听到视图的变化（通过`DOM Listeners`），然后通知数据做改动，这就实现了数据的双向绑定
+
+**MVVM和 MVC 区别？**
+
+都是一种设计思想
+`MVC` 后台用的多，`MVC`是`Model-View-Controller`的简写，即模型-视图-控制器。
+`MVC`的目的就是将`M`和`V`的代码分离
+`MVC`是单向通信，也就是`View`和`Model`，必须通过`Controller`来承上启下
+`MVVM`实现了`View`和`Model`的自动同步，当`Model`的属性改变时，不用再自己手动操作`DOM`元素，提高了页面渲染性能
+
+
+## 19、useMemo和react.mome的区别？
+`react hooks`提供的两个API，用于缓存数据，优化性能
+
+- `useMemo`
+
+用来缓存数据，当组件内部某一个渲染的数据，需要通过计算而来，这个计算是依赖与特定的`state、props`数据，我们就用`useMemo`来缓存这个数据，以至于我们在修改她们没有依赖的数据源的情况下，多次调用这个计算函数，浪费计算资源
+
+也可以把`useMemo`替换成`useCallback`,使用`useCallback`就不用写`return`函数了
+
+```js
+const onClickChild=useMemo(()=>{
+  return ()=>{
+    console.log(m)
+  }
+},[m])
+
+ //等价于
+
+const onClickChild=useCallback(()=>{
+    console.log(m)
+},[m])
+````
+
+- `react.mome`
+
+使用 memoAPI 来缓存组件
+
+## 20、

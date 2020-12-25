@@ -28,3 +28,11 @@ var reges = /^1[3-9]\d{9}/g;
 ```js
 var reges = /^[a-zA-Z\$][a-zA-Z0-9_\$]{4,16}/g;
 ```
+
+### 获取 URL 中 ？后的携带参数
+
+```js
+let params = {};
+location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => (params[k] = v));
+console.log(params);
+```

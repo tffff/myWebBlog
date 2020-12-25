@@ -175,5 +175,5 @@ date: 2020-08-24 10:47:10
 
 ## 6、`display:none`和`visibility:hidden的区别？`
 
-- `display:none`,是不占据空间，操作这个会导致**重绘和回流**
+- `display:none`,是不占据空间，操作这个会导致**重绘和回流(重排)**
 - `visibility:hidden`,占据空间只是隐藏起来了，操作这个会导致**重绘**

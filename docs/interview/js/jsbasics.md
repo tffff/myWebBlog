@@ -3,7 +3,9 @@ title: js面试汇总
 date: 2020-08-24 10:47:10
 ---
 
-## 1、基本数据类型有哪些？基本数据类型和引用数据类型的区别？
+## 基本数据类型
+
+### 1、基本数据类型有哪些？基本数据类型和引用数据类型的区别？
 
 - 基本数据类型：`Number`、`String`、`Boolean`、`undefined`、`null`、`Symbol`
 - 两者之间的区别：基本数据类型是存在`栈`中的简单的数据段，数据大小确定，内存空间大小可以分配，是直接按值存放的，所以可以直接按值访问。引用类型是同时存在`栈`和`堆`中的对象，变量保存的是在栈内存中的一个指针，该指针指向堆内存，也就是说变量是存在栈中的一个地址，地址是该引用数据在堆中的地址。通过这个地址可以找到保存在堆内存中的对象
@@ -15,30 +17,30 @@ date: 2020-08-24 10:47:10
   console.log(a.key); //2，因为a和b都指向同一个地址
   ```
 
-## 2、判断是否是数组的几种方法？
+### 2、判断是否是数组的几种方法？
 
 - `Array.isArray`
 
-```js
-var a = [1, 2];
-console.log(Array.isArray(a)); //true
-```
+  ```js
+  var a = [1, 2];
+  console.log(Array.isArray(a)); //true
+  ```
 
-- `instanceof Array` 运算符用于检验构造函数的`prototype`属性是否出现在对象的原型链中的任何位置，返回一个布尔值
+- `instanceof Array` 运算符用于检验构造函数的`prototype`属性是否出现在对象的原型链中的任何位置，返回一个布尔值，`instanceof` 只能用来判断对象类型，原始类型不可以
 
-```js
-var a = [1, 2];
-d instanceof Array;
-```
+  ```js
+  var a = [1, 2];
+  d instanceof Array;
+  ```
 
 - `constructor` 实例的构造函数属性`constructor`指向实例本身，那么通过`constructor`属性也可以判断是否为一个数组
 
-```js
-let a = [1, 3, 4];
-a.constructor === Array; //true
-```
+  ```js
+  let a = [1, 3, 4];
+  a.constructor === Array; //true
+  ```
 
-- `Object.prototype.String.call()`
+- `Object.prototype.String.call()`,这种方法对于所有基本的数据类型都能进行判断，即使是 `null` 和 `undefined`
 
 ```js
 //检验是否为数组
@@ -53,9 +55,13 @@ Object.prototype.toString.call(c) === '[object Number]'; //true
 //检验是否为对象
 let d = {};
 Object.prototype.toString.call(d) === '[object Object]'; //true
+
+Object.prototype.toString.call(null); // "[object Null]
+
+Object.prototype.toString.call(undefined); // "[object Undefined]"
 ```
 
-## 3、typeof 是否能正确判断类型？instanceof 能正确判断对象的原理是什么？
+### 3、typeof 是否能正确判断类型？instanceof 能正确判断对象的原理是什么？
 
 `typeof` 对于原始类型来说，除了 `null` 都可以显示正确的类型
 
@@ -75,298 +81,34 @@ typeof {}; // 'object'
 typeof console.log; // 'function'
 ```
 
-## 3、ES6 常用的一些方法？
-
-## 4、对闭包的看法？为什么要用闭包？说一下闭包的原理和应用场景
-
-1. 什么是闭包？
-   函数内部返回结果是一个内部函数，并被外部变量所引用，如果内部函数持有被指向函数作用域的变量，就行了闭包
-
-可以在内部函数访问外部函数作用域，使用闭包，一是可以读取函数中的变量，二是可以将函数中的变量存在内存中，保护变量不会被污染，而正因为闭包会把函数中的变量值存储在内存中，会对内存有消耗，所以不能滥用闭包，而则会造成网页性能，造成内存泄漏，当不需要使用闭包时，要及时释放内存可将内层函数对象的变量赋值成 `null`
-
-2. 闭包原理
-
-函数执行分为两个阶段(预编译和执行阶段)
-
-- 在预编译阶段，如果发现内部函数使用了外部函数的变量，则会在内存中创建一个“闭包”对象并保存对应变量值，如果已经存在“闭包”，则字需要增加对应属性值就行，
-- 执行完后，函数执行上下文会被销毁，函数对闭包对象的引用也会被销毁，但其内部函数还吃用该闭包的引用，所以内部函数可以继续使用“外部函数”中的变量
-  利用了函数租用玉莲的特性，一个函数内部定义的函数讲话饱含外部函数的活动对象添加到他的作用域链中，函数执行完毕，其执行作用域链销毁，但因内部的函数作用域连仍然在引用这个活动对象，所以其活动对象不会被销毁，知道内部函数被烧毁后才被销毁，
-
-3. 优点
-
-- 可以从内部函数范文外部函数的作用域中的变量，且访问到的变量长期驻扎在内存中，可供之后使用
-- 避免污染全局
-- 把变量存在独立的作用域中，作为私有成员存在
-
-4. 缺点
-
-- 对内存的消耗有负面影响，因内部函数保存了对外部变量的引用，导致无法被垃圾回收，增大内存使用量，所以使用不当会导致内存泄漏
-- 对处理速度有负面影响，闭包的层级决定了引用的外部变量在查找时经过的作用域链长度
-- 可以获取到意外的值
-
-5. 应用场景
-
-- 模块封装，在各模块规范出现之前，都使用这样的方式防止变量污染全局
+如果我们想判断一个对象的正确类型，这时候可以考虑使用`instanceof`，因为内部机制是通过原型链来判断的
 
 ```js
-var foo = (function() {
-  var a = 0;
-  function inner() {}
-  inner.prototype.bar = function bar() {
-    return a;
-  };
-  return inner;
-})();
+const Person = function() {};
+const p1 = new Person();
+p1 instanceof Person; // true
+
+var str = 'hello world';
+str instanceof String; // false
+
+var str1 = new String('hello world');
+str1 instanceof String; // true
 ```
 
-- 在循环中创建闭包，防止取到意外的值
-  下面的代码，无论哪个元素触发时间都是弹出 4，因为函数执行引用的 i 是同一个，而在 i 循环结束后就是 3
+对于原始类型来说，你想直接通过 instanceof 来判断类型是不行的，当然我们还是有办法让 instanceof 判断原始类型的
 
 ```js
-for (var i = 0; i < 4; i++) {
-  document.getElementByTd('id' + i).onFocus = function() {
-    console.log(i);
-  };
-}
-//用闭包解决
-for (var i = 0; i < 4; i++) {
-  document.getElementByTd('id' + i).onFocus = function(i) {
-    return function() {
-      console.log(i);
-    };
-  };
-}
-//闭包实现按钮点击加1
-var add1 = function() {
-  let index = 1;
-  return function inner() {
-    index += 1;
-    console.log(index);
-  };
-};
-let add = add1();
-```
-
-## 5、下面代码结果是什么？怎么修改成我们想要的值？
-
-```js
-for (var i = 1; i <= 5; i++) {
-  setTimeout(function timer() {
-    console.log(i);
-  }, i * 1000);
-}
-//结果是 66666
-//怎么得到结果是 1 2 3 4 5呢
-//第一种 闭包
-for (var i = 1; i <= 5; i++) {
-  (function(j) {
-    setTimeout(function timer() {
-      console.log(j);
-    }, j * 1000);
-  })(i);
-}
-//第二种是 把var改成let
-for (let i = 1; i <= 5; i++) {
-  setTimeout(function timer() {
-    console.log(i);
-  }, i * 1000);
-}
-
-//第三种是 使用setTimeout的第三个参数
-for (var i = 1; i <= 5; i++) {
-  setTimeout(
-    function timer(j) {
-      console.log(j);
-    },
-    i * 1000,
-    i,
-  );
-}
-```
-
-## 5、防抖和节流的原理与实现？
-
-### 防抖的原理
-
-- 原理
-
-  所谓防抖，就是指触发事件后在 n 秒内函数只能执行一次，如果在 n 秒内又触发了事件，则会重新计算函数执行时间
-
-- 适用场景
-
-  - 按钮提交场景：防止按钮多次提交，只执行最后一次的提交
-  - 搜索框联想场景： 只发送最后一次输入
-
-**非立即执行版**
-
-非立即执行版的意思是触发事件后函数不会立即执行，而是在 n 秒后执行，如果在 n 秒内又触发了事件，则会重新计算函数执行时间
-
-```js
-function debounce(func, wait) {
-  let timeout;
-  return function() {
-    const context = this;
-    let args = arguments;
-    if (timeout) clearTimeout(timeout);
-
-    timeout = setTimeout(() => {
-      func.apply(context, args);
-    }, wait);
-  };
-}
-```
-
-**立即执行版**
-
-立即执行版的意思是触发事件后函数会立即执行，然后 n 秒内不触发事件才能继续执行函数的效果
-
-```js
-function debounce(func, wait) {
-  let timeout;
-  return function() {
-    const context = this;
-    let args = arguments;
-    if (timeout) clearTimeout(timeout);
-
-    let callNow = !timeout;
-    timeout = setTimeout(() => {
-      timeout = null;
-    }, wait);
-
-    if (callNow) func.apply(context, args);
-  };
-}
-```
-
-**双剑合璧版**
-
-```js
-/**
- * @desc 函数防抖
- * @param {*} func 函数
- * @param {*} wait 延迟执行毫秒数
- * @param {*} immediate  是否立即执行
- */
-function debounce(func, wait, immediate) {
-  let timeout;
-  return function() {
-    const context = this;
-    let args = arguments;
-    if (timeout) clearTimeout(timeout);
-
-    if (immediate) {
-      let callNow = !timeout;
-      timeout = setTimeout(() => {
-        timeout = null;
-      }, wait);
-      if (callNow) func.apply(context, args);
-    } else {
-      timeout = setTimeout(() => {
-        func.apply(context, args);
-      }, wait);
-    }
-  };
-}
-```
-
-### 节流的原理
-
-- 原理
-
-就是指连续触发事件但是在 n 秒中只执行一次函数，节流会稀释函数的执行频率
-
-- 适用场景
-
-  - 拖拽场景：固定时间内执行一次，防止超高频次位置发生变动
-  - 缩放场景：监控浏览器的 resize
-
-**时间戳版**
-
-当触发事件的时候，我们取当前的时间戳然后减去之前的时间戳(第一次设置 0)，如果大于设置的周期，就执行函数，然后更新 prev 为当前的时间戳，如果小于就不执行
-
-```js
-function throttle(func, wait) {
-  let prev = 0;
-  return function() {
-    let now = Date.now();
-    let context = this;
-    let args = arguments;
-    if (now - prev > wait) {
-      func.apply(context, args);
-      prev = now;
-    }
-  };
-}
-```
-
-**定时器版**
-
-当触发事件的时候,我们设置了一个定时器，再触发事件的时候，如果定时器存在就不执行，直到事件执行清空定时器，这样就可以设置下一个定时器
-
-```js
-function throttle(func, wait) {
-  let timeout;
-  return function() {
-    let context = this;
-    let args = arguments;
-    if (!timeout) {
-      timeout = setTimeout(() => {
-        time = null;
-        func.apply(context, args);
-      }, wait);
-    }
-  };
-}
-```
-
-**双剑合璧版**
-
-```js
-/**
- * #desc 节流双剑合璧版
- * @param {*} func
- * @param {*} wait
- * @param {*} type type=1表示时间戳，type=2表示定时器
- */
-function throttle(func, wait, type) {
-  if (type === 1) {
-    let previous = 0;
-  } else if (type === 2) {
-    let timeout;
+class PrimitiveString {
+  static [Symbol.hasInstance](x) {
+    return typeof x === 'string';
   }
-  return function() {
-    let context = this;
-    let args = arguments;
-    switch (type) {
-      case 1:
-        let now = Date.now();
-        if (now - prev > wait) {
-          func.apply(context, args);
-          prev = now;
-        }
-        break;
-      case 2:
-        if (!timeout) {
-          timeout = setTimeout(() => {
-            time = null;
-            func.apply(context, args);
-          }, wait);
-        }
-        break;
-    }
-  };
 }
+console.log('hello world' instanceof PrimitiveString); // true
 ```
 
-## 6、介绍箭头函数的 this?
+你可能不知道`Symbol.hasInstance`是什么东西，其实就是一个能让我们自定义`instanceof`行为的东西，以上代码等同于`typeof 'hello world' === 'string'`，所以结果自然是`true`了。这其实也侧面反映了一个问题，`instanceof`也不是百分之百可信的。
 
-- 函数体内的 this 对象，就是定义时所在的对象，而不是使用时所在的对象
-- 箭头函数不能用作构造函数，因为箭头函数里面没有 this
-- 箭头函数也没有 arguments,该对象在函数体内不存在。如果要用，可以用 Rest 参数代替
-- 箭头函数中所使用的 this 都是来自函数作用域链
-- 不可以使用 yield 命令，因此箭头函数不能用作 Generator 函数
-
-## 7、js 的数组的方法
+### 4、数组的方法
 
 1. some
    此方法为参数传递的函数测试数组。如果有一个元素与测试元素匹配，则返回 true，否则返回 false
@@ -495,52 +237,23 @@ arr9.flatMap(arr => arr * 10); //[10,20,30,40,50]
 > 会生成新数组的方法
 > map,filter,flat,concat,flatMap
 
-## 8、js 中 Object 的方法有哪些？
+### 5、Object 的方法有哪些？
 
-1. startWidth
+1. `startWidth`
    返回布尔值，表示是否找到了参数字符串。
-2. endsWith
+
+2. `endsWith`
    返回布尔值，表示参数字符串是否在源字符串的尾部
-3. includes
+3. `includes`
    返回布尔值，表示是否找到了参数字符串。
-4. repeat
+4. `repeat`
    repeat 方法返回一个新字符串，表示将原字符串重复 n 次
-5. padStart
+5. `padStart`
    用于头部补全,如果某个字符串不够指定长度，会在头部补全
-6. padEnd
+6. `padEnd`
    用于尾部补全
 
-## 9、for、for in、 for of、forEach 有什么区别？
-
-- for 循环实际上是可以使用 break 和 continue 去终止循环的，但是 forEach 不行
-- 一般来说，for 多数时候都可以使用，当然一般我们需要知道循环次数；而 forEach 更适合于集合对象的遍历和操作
-- for 循环在最开始执行循环的时候，会建立一个循环变量 i，之后每次循环都是操作这个变量，也就是说它是对一个循环变量在重复的赋值，因此 i 在最后只会存储一个值；而 forEach()虽然变量名没变，但是实际上每次循环都会创建一个独立不同的变量，而存储的数值自然也是不同的数值，因此相互之间不会影响
-- `for...in`可以直接遍历对象，可枚举属性，包括自有属性、继承自原型的属性
-- `for...of`不能直接遍历对象，遍历数组
-
-```js
-<ul>
-    <li>1</li>
-    <li>2</li>
-    <li>3</li>
-  </ul>
-  <script>
-    var eles=document.querySelectorAll('li')
-    console.log(eles)
-    for(var i=0;i<eles.length;i++){
-      eles[i].onclick=function(){
-        console.log(i) //结果是每次点击都是3
-      }
-    }
-    eles.forEach((item,index)=>{
-      item.onclick=function(){
-        console.log(index) //结果是0 1 2
-      }
-    })
-  </script>
-```
-
-## 10、let 和 const 的区别？
+### 6、let 和 const 的区别？
 
 - let 声明的变量不会提升，var 声明的会提升
   ```js
@@ -555,7 +268,598 @@ arr9.flatMap(arr => arr * 10); //[10,20,30,40,50]
 - 在非严格模式下：var 声明的变量是挂在 window 上面的，let 不是挂在 window
 - let 不允许在相同作用域内，重复声明同一个变量
 
-## 11、什么是浅拷贝？如何实现浅拷贝？什么是深拷贝？如何实现深拷贝？
+### 7、数组去重的各种方法?
+
+```js
+//var arr=[1,2,3,4,3,3,6,5]
+
+// 1、Es6 Set去重
+Array.from(new Set(arr));
+
+// 2、for去重 时间复杂度O(n)  也可以使用map存储
+function duplicate(arr) {
+  let result = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (result.indexOf(arr[i]) == -1) {
+      result.push(arr[i]);
+    }
+  }
+  return result;
+}
+
+//3、for+set
+let set = new Set();
+arr.forEach(item => set.add(item));
+let a = Array.from(set);
+console.log(a);
+//4、两重for循环 时间复杂度0(n2)
+```
+
+### 8、js 内置对象有哪些？
+
+JS 内置对象分为**数据封装类对象**和**其他对象**
+
+- 数据封装类对象：`String`，`Boolean`，`Number`，`Array`，`Object`;
+
+- 其他对象：`Function`，`Arguments`，`Math`，`Date`，`RegExp`，`Error`
+
+`window`对象是一个虚拟的对象，你可以把它看作是你所使用的浏览器的窗口
+
+### 9、Object 对象内置方法
+
+- `Object.create`
+
+  `Object.create(arg, pro)`创建的对象的原型取决于`arg`，`arg`为`null`，新对象是空对象，没有原型，不继承任何对象；`arg`为指定对象，新对象的原型指向指定对象，继承指定对象
+
+- `Object.keys()`主要用于遍历对象自有的可枚举属性，不包括继承自原型的属性和不可枚举的属性。
+- `Reflect.ownKeys()`返回**所有自有**属性`key`，不管是否可枚举，但不包括继承自原型的属性
+- `Object.getOwnPropertyNames()`用于返回对象的自有属性，包括可枚举和不可枚举的
+- `Object.defineProperty(obj, prop, descriptor)`方法会直接在一个对象上定义一个新属性，或者修改一个对象的现有属性，并返回此对象
+
+## 闭包
+
+### 1、对闭包的看法？为什么要用闭包？说一下闭包的原理和应用场景
+
+1. 什么是闭包？
+   函数内部返回结果是一个内部函数，并被外部变量所引用，如果内部函数持有被指向函数作用域的变量，就行成了闭包
+
+可以在内部函数访问外部函数作用域，使用闭包，一是可以读取函数中的变量，二是可以将函数中的变量存在内存中，保护变量不会被污染，而正因为闭包会把函数中的变量值存储在内存中，会对内存有消耗，所以不能滥用闭包，而则会造成网页性能，造成内存泄漏，当不需要使用闭包时，要及时释放内存可将内层函数对象的变量赋值成 `null`
+
+2. 闭包原理
+
+函数执行分为两个阶段(预编译和执行阶段)
+
+- 在预编译阶段，如果发现内部函数使用了外部函数的变量，则会在内存中创建一个“闭包”对象并保存对应变量值，如果已经存在“闭包”，则字需要增加对应属性值就行，
+- 执行完后，函数执行上下文会被销毁，函数对闭包对象的引用也会被销毁，但其内部函数还使用该闭包的引用，所以内部函数可以继续使用“外部函数”中的变量
+  利用了函数作用域链的特性，一个函数内部定义的函数讲话包含外部函数的活动对象添加到他的作用域链中，函数执行完毕，其执行作用域链销毁，但因内部的函数作用域连仍然在引用这个活动对象，所以其活动对象不会被销毁，直到内部函数被销毁后才被销毁，
+
+3. 优点
+
+- 可以从内部函数 fang 外部函数的作用域中的变量，且访问到的变量长期驻扎在内存中，可供之后使用
+- 避免污染全局
+- 把变量存在独立的作用域中，作为私有成员存在
+
+4. 缺点
+
+- 对内存的消耗有负面影响，因内部函数保存了对外部变量的引用，导致无法被垃圾回收，增大内存使用量，所以使用不当会导致内存泄漏
+- 对处理速度有负面影响，闭包的层级决定了引用的外部变量在查找时经过的作用域链长度
+- 可以获取到意外的值
+
+5. 应用场景
+
+- 模块封装，在各模块规范出现之前，都使用这样的方式防止变量污染全局
+
+```js
+var foo = (function() {
+  var a = 0;
+  function inner() {}
+  inner.prototype.bar = function bar() {
+    return a;
+  };
+  return inner;
+})();
+```
+
+- 在循环中创建闭包，防止取到意外的值
+  下面的代码，无论哪个元素触发时间都是弹出 4，因为函数执行引用的 i 是同一个，而在 i 循环结束后就是 3
+
+  ```js
+  for (var i = 0; i < 4; i++) {
+    document.getElementByTd('id' + i).onFocus = function() {
+      console.log(i);
+    };
+  }
+  //用闭包解决
+  for (var i = 0; i < 4; i++) {
+    document.getElementByTd('id' + i).onFocus = function(i) {
+      return function() {
+        console.log(i);
+      };
+    };
+  }
+  //闭包实现按钮点击加1
+  var add1 = function() {
+    let index = 1;
+    return function inner() {
+      index += 1;
+      console.log(index);
+    };
+  };
+  let add = add1();
+  ```
+
+### 2、下面代码结果是什么？怎么修改成我们想要的值？
+
+```js
+for (var i = 1; i <= 5; i++) {
+  setTimeout(function timer() {
+    console.log(i);
+  }, i * 1000);
+}
+//结果是 66666
+//怎么得到结果是 1 2 3 4 5呢
+//第一种 闭包
+for (var i = 1; i <= 5; i++) {
+  (function(j) {
+    setTimeout(function timer() {
+      console.log(j);
+    }, j * 1000);
+  })(i);
+}
+//第二种是 把var改成let
+for (let i = 1; i <= 5; i++) {
+  setTimeout(function timer() {
+    console.log(i);
+  }, i * 1000);
+}
+
+//第三种是 使用setTimeout的第三个参数
+for (var i = 1; i <= 5; i++) {
+  setTimeout(
+    function timer(j) {
+      console.log(j);
+    },
+    i * 1000,
+    i,
+  );
+}
+```
+
+## this、作用域
+
+### 1、请写出下面如下代码的结果？
+
+```js
+function test(person) {
+  //函数传参是传递对象指针的副本
+  person.age = 26; //这一行代码修改的是传过来的person
+  person = {
+    //这一行是创建了一个新的对象的地址
+    name: 'yyy',
+    age: 30,
+  };
+
+  return person;
+}
+const p1 = {
+  name: 'yck',
+  age: 25,
+};
+const p2 = test(p1);
+console.log(p1); // -> {name: "yck", age: 26}
+console.log(p2); // -> {name: "yyy", age: 30}
+```
+
+### 2、写出输出结果？
+
+```js
+var myObject = {
+  foo: 'bar',
+  func: function() {
+    var self = this;
+    console.log(this.foo); //bar
+    console.log(self.foo)(
+      //bar
+      (function() {
+        console.log(this.foo); //undefined
+        console.log(self.foo); //bar
+      })(),
+    );
+  },
+};
+myObject.func();
+```
+
+因为是`myObject.func()`所以`func`函数里面的`this`指向`myObject`,所以第一行`console.log(this.foo)`的 this 执行`myObject`，因为`self=this`，所以第二行的`console.log(self.foo)`里面的 self 指向的也是`myObject`，但是下面一行`console.log(this.foo)`是在一个闭包里面，所以这个`this`指向 window,`console.log(self.foo)`里面的`self`指向的是上面获取的`self`,所以指向的是`myObject`
+
+### 5、写出下面代码结果？
+
+```js
+var a = { n: 1 };
+var b = a;
+a.x = a = { n: 2 };
+console.log(a); //{n:2}
+console.log(b); //{n:1,x:{n:2}}
+```
+
+根据 v8 引擎来解释，`a`是存储在`栈`里面,`{n:1}`是存储在`堆`里面，所以`b=a`导致`a`和`b`同时指向`{n:1}`,因为点的运算优先等于的运算，所以`a.x`先执行即现在 a 和 b 都是`{n:1,x:undefined}`,又因为等于运算是从右到左执行的，所以`a={n:2}`
+
+再执行`a.x=a`,这里要注意，因为`a.x`之前已经先执行了,所以`a.x`已经是`{n:1,x:undefined}`这个地址了，但是里面的 x 指向了新的地址,所以最终`a.x`可以看成是`{n:1,x:undefined}.x={n:2}`
+
+### 6、写出下面代码的执行结果，并说明为什么？(变量提升)
+
+```js
+function out() {
+  console.log(1);
+}
+(function() {
+  if (false) {
+    function out() {
+      console.log(2);
+    }
+  }
+  console.log(typeof out); //undefined
+  out(); //out is not a function
+})();
+```
+
+直接在函数体内定义的函数声明，整个都会提前，但是在块中定义的函数声明，只会提升其声明部分，不分配实际的内存空间,所以`out`被提升的只有函数变量名称，并未实际赋值
+
+- 变量提升
+  - 全局作用域中的声明的变量会提升到至全局最顶层
+  - 函数内声明的变量只会提升到函数作用域顶层
+- 函数提升
+
+  - 函数表达式不会声明提升
+  - 函数声明会覆盖变量声明，如果存在函数名和变量名是相同的，都会被提升，但是函数的优先级更高，所以变量的值会被覆盖掉
+
+  ```js
+  //赋值的情况
+  var company = '123';
+  function company() {
+    console.log('456');
+  }
+  console.log(typeof company); //string
+
+  //未赋值的情况
+  var company;
+  function company() {
+    console.log('456');
+  }
+  console.log(typeof company); //function
+  ```
+
+### 7、请写出下面代码的结果？
+
+```js
+function fn() {
+  console.log(this.length);
+}
+var yideng = {
+  length: 5,
+  method: function() {
+    'use strict';
+    fn();
+    arguments[0]();
+  },
+};
+const result = yideng.method.bind(null);
+result(fn, 1);
+```
+
+结果是`0 2`,`fn()`执行的时候不依赖任何对象，所以`fn()`中的`this`指向的是`window`,`arguments[0]()`函数执行里面的`this`指向的`argument`对象,所以`arguments[0]()`的结果是 2
+
+### 8、请写出下面代码的结果？
+
+```js
+function bar() {
+  console.log(myName);
+}
+function foo() {
+  var myName = '内部变量';
+  bar();
+}
+var myName = '外部变量';
+foo(); //外部变量
+```
+
+为什么不是`内部变量`呢？，因为函数在定义的时候里面的变量已经存在了
+
+### 9、请问变量 a 会被 GC 回收吗，为什么？
+
+```js
+function test() {
+  var a = 'yideng';
+  return function() {
+    eval('');
+  };
+}
+test()();
+```
+
+变量 a 不会被回收，因为里面有`eval()`，`eval()`函数可计算某个字符串，并执行其中的的 `JavaScript` 代码，所以 js 引擎不知道`eval`里面会执行什么程序会不会用到这个变量 a，所以变量`a`不会被回收
+
+### 10、写出下面代码的结果？
+
+```js
+function foo() {
+  a = 5;
+  console.log(window.a); //undefined
+  console.log(a); //5
+  var a = 10;
+  console.log(a); //s10
+}
+foo();
+
+//等价于
+
+function foo() {
+  var a;
+  a = 5;
+  console.log(window.a); //undefined
+  console.log(a); //5
+  a = 10;
+  console.log(a); //s10
+}
+foo();
+```
+
+因为`a`变量在全局里面没有声明，函数里面的变量属于函数作用域，所以`window.a`是`undefined`，下面的变量 a 就根据作用域的顺序来取就行了
+
+### 11、写出下面代码的结果？
+
+```js
+var name = 'a';
+function outter() {
+  var name = 'b';
+  function inner() {
+    console.log(name); // b
+    console.log(this.name); // a
+  }
+  inner();
+}
+outter();
+```
+
+按照作用域的顺序，`inner`执行的时候没有依赖于任何对象，所以它的`this`是`window`,`name`直接向上查找找到函数作用于里面有`name`，所以`console.log(name)=='b'`, `console.log(this.name)`取的是`window`里面的`name`
+
+## 原型和原型链
+
+### 1、原型和原型链代码面试题，输出下面代码的值？
+
+```js
+Object.prototype.a = 'a';
+Function.prototype.a = 'a1';
+function Person(){};
+var yideng = new Person();
+
+console.log(Person.a);
+console.log(yideng.a);
+console.log(1..a)
+console.log(1.a)
+console.log(yideng.__proto__.__proto__.constructor.constructor.constructor)
+```
+
+## 其他
+
+### 1、防抖和节流的原理与实现？
+
+#### 防抖的原理
+
+- 原理
+
+  所谓防抖，就是指触发事件后在 n 秒内函数只能执行一次，如果在 n 秒内又触发了事件，则会重新计算函数执行时间
+
+- 适用场景
+
+  - 按钮提交场景：防止按钮多次提交，只执行最后一次的提交
+  - 搜索框联想场景： 只发送最后一次输入
+
+**非立即执行版**
+
+非立即执行版的意思是触发事件后函数不会立即执行，而是在 n 秒后执行，如果在 n 秒内又触发了事件，则会重新计算函数执行时间
+
+```js
+function debounce(func, wait) {
+  let timeout;
+  return function() {
+    const context = this;
+    let args = arguments;
+    if (timeout) clearTimeout(timeout);
+
+    timeout = setTimeout(() => {
+      func.apply(context, args);
+    }, wait);
+  };
+}
+```
+
+**立即执行版**
+
+立即执行版的意思是触发事件后函数会立即执行，然后 n 秒内不触发事件才能继续执行函数的效果
+
+```js
+function debounce(func, wait) {
+  let timeout;
+  return function() {
+    const context = this;
+    let args = arguments;
+    if (timeout) clearTimeout(timeout);
+
+    let callNow = !timeout;
+    timeout = setTimeout(() => {
+      timeout = null;
+    }, wait);
+
+    if (callNow) func.apply(context, args);
+  };
+}
+```
+
+**双剑合璧版**
+
+```js
+/**
+ * @desc 函数防抖
+ * @param {*} func 函数
+ * @param {*} wait 延迟执行毫秒数
+ * @param {*} immediate  是否立即执行
+ */
+function debounce(func, wait, immediate) {
+  let timeout;
+  return function() {
+    const context = this;
+    let args = arguments;
+    if (timeout) clearTimeout(timeout);
+
+    if (immediate) {
+      let callNow = !timeout;
+      timeout = setTimeout(() => {
+        timeout = null;
+      }, wait);
+      if (callNow) func.apply(context, args);
+    } else {
+      timeout = setTimeout(() => {
+        func.apply(context, args);
+      }, wait);
+    }
+  };
+}
+```
+
+#### 节流的原理
+
+- 原理
+
+就是指连续触发事件但是在 n 秒中只执行一次函数，节流会稀释函数的执行频率
+
+- 适用场景
+
+  - 拖拽场景：固定时间内执行一次，防止超高频次位置发生变动
+  - 缩放场景：监控浏览器的 resize
+
+**时间戳版**
+
+当触发事件的时候，我们取当前的时间戳然后减去之前的时间戳(第一次设置 0)，如果大于设置的周期，就执行函数，然后更新 prev 为当前的时间戳，如果小于就不执行
+
+```js
+function throttle(func, wait) {
+  let prev = 0;
+  return function() {
+    let now = Date.now();
+    let context = this;
+    let args = arguments;
+    if (now - prev > wait) {
+      func.apply(context, args);
+      prev = now;
+    }
+  };
+}
+```
+
+**定时器版**
+
+当触发事件的时候,我们设置了一个定时器，再触发事件的时候，如果定时器存在就不执行，直到事件执行清空定时器，这样就可以设置下一个定时器
+
+```js
+function throttle(func, wait) {
+  let timeout;
+  return function() {
+    let context = this;
+    let args = arguments;
+    if (!timeout) {
+      timeout = setTimeout(() => {
+        time = null;
+        func.apply(context, args);
+      }, wait);
+    }
+  };
+}
+```
+
+**双剑合璧版**
+
+```js
+/**
+ * #desc 节流双剑合璧版
+ * @param {*} func
+ * @param {*} wait
+ * @param {*} type type=1表示时间戳，type=2表示定时器
+ */
+function throttle(func, wait, type) {
+  if (type === 1) {
+    let previous = 0;
+  } else if (type === 2) {
+    let timeout;
+  }
+  return function() {
+    let context = this;
+    let args = arguments;
+    switch (type) {
+      case 1:
+        let now = Date.now();
+        if (now - prev > wait) {
+          func.apply(context, args);
+          prev = now;
+        }
+        break;
+      case 2:
+        if (!timeout) {
+          timeout = setTimeout(() => {
+            time = null;
+            func.apply(context, args);
+          }, wait);
+        }
+        break;
+    }
+  };
+}
+```
+
+### 2、介绍箭头函数的 this?
+
+- 函数体内的 this 对象，就是定义时所在的对象，而不是使用时所在的对象
+- 箭头函数不能用作构造函数，因为箭头函数里面没有 this
+- 箭头函数也没有 arguments,该对象在函数体内不存在。如果要用，可以用 Rest 参数代替
+- 箭头函数中所使用的 this 都是来自函数作用域链
+- 不可以使用 yield 命令，因此箭头函数不能用作 Generator 函数
+
+### 3、for、for in、 for of、forEach 有什么区别？
+
+- `for` 循环实际上是可以使用 break 和 continue 去终止循环的，但是 forEach 不行
+
+  一般来说，for 多数时候都可以使用，当然一般我们需要知道循环次数；而 forEach 更适合于集合对象的遍历和操作
+
+  for 循环在最开始执行循环的时候，会建立一个循环变量 i，之后每次循环都是操作这个变量，也就是说它是对一个循环变量在重复的赋值，因此 i 在最后只会存储一个值；而 forEach()虽然变量名没变，但是实际上每次循环都会创建一个独立不同的变量，而存储的数值自然也是不同的数值，因此相互之间不会影响
+
+- `for...in`可以直接遍历对象和数组(数组遍历的是下标)，可枚举属性，包括自有属性、继承自原型的属性，**for in 特别适合遍历对象**
+- `for...of`不能直接遍历对象，可以遍历数组，可以和 break、continue、和 return 配合使用
+
+```html
+<body>
+  <ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+  </ul>
+  <script type="text/javascript">
+    var eles = document.querySelectorAll('li');
+    console.log(eles);
+    for (var i = 0; i < eles.length; i++) {
+      eles[i].onclick = function() {
+        console.log(i); //结果是每次点击都是3
+      };
+    }
+    eles.forEach((item, index) => {
+      item.onclick = function() {
+        console.log(index); //结果是0 1 2
+      };
+    });
+  </script>
+</body>
+```
+
+### 4、什么是浅拷贝？如何实现浅拷贝？什么是深拷贝？如何实现深拷贝？
 
 - 浅拷贝
 
@@ -671,7 +975,7 @@ arr9.flatMap(arr => arr * 10); //[10,20,30,40,50]
 
 ---
 
-## 12、如何获取一个 DOM 元素的绝对宽高，绝对位置？
+### 5、如何获取一个 DOM 元素的绝对宽高，绝对位置？
 
 原生 JS 提供了一个`getBoundingClientRect()`方法，用于获取左，上，右和下分别相对浏览器视窗的位置。
 
@@ -679,78 +983,19 @@ arr9.flatMap(arr => arr * 10); //[10,20,30,40,50]
 document.getElementById('main').getBoundingClientRect();
 ```
 
-## 13、数组去重的各种方法?
-
-```js
-//var arr=[1,2,3,4,3,3,6,5]
-
-// 1、Es6 Set去重
-Array.from(new Set(arr));
-
-// 2、for去重 时间复杂度O(n)  也可以使用map存储
-function duplicate(arr) {
-  let result = [];
-  for (let i = 0; i < arr.length; i++) {
-    if (result.indexOf(arr[i]) == -1) {
-      result.push(arr[i]);
-    }
-  }
-  return result;
-}
-```
-
-## 14、js 内置对象有哪些？
-
-JS 内置对象分为**数据封装类对象**和**其他对象**
-
-- 数据封装类对象：`String`，`Boolean`，`Number`，`Array`，`Object`;
-
-- 其他对象：`Function`，`Arguments`，`Math`，`Date`，`RegExp`，`Error`
-
-`window`对象是一个虚拟的对象，你可以把它看作是你所使用的浏览器的窗口
-
-## 15、Promise 和 async 分别解决了什么问题？
+### 6、Promise 和 async 分别解决了什么问题？
 
 - `Promise`解决了回调地狱的问题，`Promise`构造函数是同步执行的，`then`是异步执行的
 - `async`是异步的终极解决方案
 
-## 16、if([]==0),[1,2]=='1.2',if([]),[]==0,具体是怎么对比的？
-
-1. `if`的判断原理
-   `if`的判断原理和`Boolean()`这个函数有关的，所以`if(***)` 就相当于`Boolean(***)`
-
-   **Boolean 的判断规则：**
-
-   - 数字类型：`NAN`、`0`的结果为`false,`其他情况为`true`
-   - 字符串类型：空字符串是`false`,其他情况为`true`
-   - Boolean 类型：`false`为`false`,`true`为`true`
-   - 对象类型`undefined`、`null`为`false`,其他为`true`
-
-<!-- ![比较值](/js/compare.png) -->
-<img src="../../assets/js/compare.png"/>
-
-## 17、call、apply、bind 的区别？
+### 7、call、apply、bind 的区别？
 
 - `call`和`apply`都是立即执行，`call`的参数是一个一个的传，`apply`的参数是一个数组
 - `bind`绑定`this`之后返回一个新数组,不管我们给函数 `bind` 几次，函数中的 `this` 永远由`第一次 bind`决定
 
-## 18、EventLoop 浏览器机制和 node 机制？
+### 8、map、reducer 和 filter 等高阶函数
 
-- 在浏览器中
-  分为**宏任务**和**微任务**，宏任务有：`script代码`,`setTimeout`，`setInterval`
-  微任务有：`promise.then`
-  执行顺序：`宏任务`->`微任务队列`->`循环`
-- node 环境中
-  执行顺序：`宏任务`->`process.nextTick队列`->`微任务队列`->`setTimeout`->`setImemediate`
-
-## 19、map、reducer 和 filter 等高阶函数
-
-## 20、object.create 和 object.assign
-
-- `Object.create`
-  `Object.create(arg, pro)`创建的对象的原型取决于`arg`，`arg`为`null`，新对象是空对象，没有原型，不继承任何对象；`arg`为指定对象，新对象的原型指向指定对象，继承指定对象
-
-## 21、请求头部 content-type 的几种类型
+### 9、请求头部 content-type 的几种类型
 
 之前一直分不清楚`post`请求里`Content-Type`方式，如`application/x-www-form-urlencoded`、`multipart/form-data`。
 
@@ -772,9 +1017,81 @@ Http Header 里的 Content-Type 一般有这三种：
 
 [参考该网站](https://www.cnblogs.com/52fhy/p/5436673.html)
 
-## 22、Object.keys()和 Reflect.ownKeys()的区别?
+### 10、从 200K 个数据中选择 10k 个不重复的数据，考虑性能问题？
 
-- `Object.keys()`主要用于遍历对象自有的可枚举属性，不包括继承自原型的属性和不可枚举的属性。
-- `Reflect.ownKeys()`返回**所有自有**属性`key`，不管是否可枚举，但不包括继承自原型的属性
-- `Object.getOwnPropertyNames()`用于返回对象的自有属性，包括可枚举和不可枚举的
-- `Object.defineProperty(obj, prop, descriptor)`方法会直接在一个对象上定义一个新属性，或者修改一个对象的现有属性，并返回此对象
+```js
+let data = [
+  1,
+  2,
+  3,
+  4,
+  5,
+  67,
+  6,
+  8,
+  5,
+  5,
+  4,
+  9,
+  4,
+  14,
+  3,
+  4,
+  5,
+  5,
+  3,
+  4,
+  0,
+  6,
+  7,
+  789,
+  8,
+  87,
+  7,
+  6,
+  6,
+  78,
+  8,
+  8,
+];
+let arr = new Set();
+let i = 0;
+while (i < 10) {
+  arr.add(data[i]);
+  i++;
+}
+console.log(Array.from(arr));
+```
+
+### 11、JS 保留小数: 去尾法 进一法 四舍五入法
+
+```js
+/**
+ * money 原始金额
+ * precision：精度设置 1是精确到分 2是精确到元
+ * precision_type 1是四舍五入 2是去尾法 3是进一法
+ */
+// 去尾法  Math.floor(45.9853 * Math.pow(10, 0)) / Math.pow(10, 0)
+// 进一法  Math.ceil(45.9853 * Math.pow(10, 2)) / Math.pow(10,2)
+// 四舍五入 Math.round(45.9853 * Math.pow(10, 2)) / Math.pow(10, 2)
+function moneySwitch(money, precision, precision_type) {
+  let obj = { 1: 'round', 2: 'floor', 3: 'ceil' };
+  let obj1 = { '1': 2, '2': 0 };
+  let result =
+    Math[obj[precision_type]](money * Math.pow(10, obj1[precision])) /
+    Math.pow(10, obj1[precision]);
+  return result;
+}
+console.log(moneySwitch(45.9853, 1, 2)); //45.98
+console.log(moneySwitch(45.9853, 1, 3)); //45.99
+console.log(moneySwitch(45.9853, 2, 2)); //45
+console.log(moneySwitch(45.9853, 2, 3)); //46
+```
+
+### 12、mouseover 和 mouseenter 的区别是什么？
+
+`mouseover`会冒泡，
+
+`mouseenter`不会冒泡 。
+
+就是当设定了多个`div`的嵌套时；即建立了父子关系，当父`div`与子`div`共同加入了`onclick`事件时，当触发了子`div`的`onclick`事件后，子`div`进行相应的`js`操作。但是父`div`的`onclick`事件同样会被触发。这就造成了事件的多层并发，导致了页面混乱。这就是冒泡事件
