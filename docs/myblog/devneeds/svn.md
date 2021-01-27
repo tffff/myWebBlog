@@ -83,6 +83,9 @@ git commit -m 'first'
 //上面两步合成一步
 git commit -a -m 'first'
 
+//提交忽略eslint检测
+git commit --no-verify -m "commit"
+
 //添加到某个分支 或者主干
 git push origin master
 

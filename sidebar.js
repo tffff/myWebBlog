@@ -22,6 +22,7 @@ const menus = {
         'myblog/css/cssworkflow',
         'myblog/css/csshoudini',
         'myblog/css/cssmatrix',
+        'myblog/css/clippath',
       ],
     },
     {
@@ -56,6 +57,8 @@ const menus = {
         'myblog/webpack/webpack',
         'myblog/webpack/optimize',
         'myblog/webpack/01.md',
+        'myblog/webpack/02.md',
+        'myblog/webpack/03.md',
       ],
     },
     {

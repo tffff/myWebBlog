@@ -677,4 +677,108 @@ const onClickChild=useCallback(()=>{
 
 使用 memoAPI 来缓存组件
 
-## 20、
+## 20、useMemo 和 useCallback 的区别及使用场景
+
+共同作用：
+
+`useMemo` 和 `useCallback` 接收的参数都是一样,第一个参数为回调 第二个参数为要依赖的数据
+
+两者区别：
+
+- `useMemo` 返回结果是 `return` 回来的值, 主要用于缓存计算结果的值 ，应用场景如： 需要计算的状态
+- `useCallback` 返回结果是函数, 主要用于缓存函数的引用，应用场景如: 需要缓存的函数，因为函数式组件每次任何一个 `state` 的变化整个组件都会被重新刷新，一些函数是没有必要被重新刷新的，此时就应该缓存起来，提高性能，和减少资源浪费
+
+`userMemo`下面的代码：
+
+每次更新 count 的时候，`child`子组件都会重新`render`,是因为`data`每次都是重新创建的对象,这样就会导致传到`child`里面的是值永远是不一样的
+
+下面有两种解决方法：
+
+1. 是使用`useMemo`来创建对象的话只会创建一次，所以`count`改变的时候`child`组件是不会重新`render`的
+2. 解析`data`然后传过去，不要传对象过去，使用`es6`解构之后传过去,这样就不存在对象不一致的问题了，因为传过去的都是基本类型的值
+
+```js
+import React, { useState, useMemo, useRef } from 'react';
+
+const Child = React.memo(({ data }) => {
+  console.log('child render...', data.name);
+  return (
+    <div>
+      <div>child</div>
+      <div>{data.name}</div>
+    </div>
+  );
+});
+
+const App = () => {
+  console.log('Hook render...');
+  const [count, setCount] = useState(0);
+  const [name, setName] = useState('rose');
+
+  //不使用useMemo的话，每次创建出来的是一个新的对象
+  const data = { name };
+  //使用useMemo的话每次对象只创建一次，所以当count改变的时候，Child不会render
+  //  const data = useMemo(()=>{
+  //       return {
+  //           name
+  //       }
+  //   },[name])
+
+  return (
+    <div>
+      <div>{count}</div>
+      <button onClick={() => setCount(count + 1)}>更新count </button>
+      <Child data={data} />
+    </div>
+  );
+};
+
+export default App;
+```
+
+`useCallback`下面的代码：
+
+下面的代码是因为`onChange`事件，`count`改变的时候会导致`onChange`事件也会重新被创建，导致传过去的`onChange`，每次都是一个新的函数，所以`child`组件会重新渲染，使用`useCallback`之后因为`useCallback`是有记忆功能的，所以不会被重新创建
+
+```js
+import React, { useState, useMemo, useRef, useCallback } from 'react';
+
+const Child = React.memo(({ data, onChange }) => {
+  console.log('child render...');
+  return (
+    <div>
+      <div>child</div>
+      <div>{data}</div>
+      <input type="text" onChange={onChange} />
+    </div>
+  );
+});
+
+const App = () => {
+  console.log('Hook render...');
+  const [count, setCount] = useState(0);
+  const [name, setName] = useState('rose');
+  const [text, setText] = useState('');
+
+  //useCallback同理，当count改变时，代码执行到这里时，会再次创建一个新的onChange函数，所以Child组件也会再次render
+  //  const onChange=(e)=>{
+  //       setText(e.target.value)
+  //  }
+
+  //使用useCallback后,count改变，Child不会再次render
+  const onChange = useCallback(e => {
+    setText(e.target.value);
+  }, []);
+
+  return (
+    <div>
+      <div>count: {count}</div>
+      <div>text : {text}</div>
+      <button onClick={() => setCount(count + 1)}>count + 1</button>
+      <Child data={name} onChange={onChange} />
+    </div>
+  );
+};
+
+export default App;
+```
