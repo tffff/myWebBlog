@@ -70,17 +70,53 @@ date: 2020-08-26 16:30:10
 
 ## 2、说一下 react-fiber
 
+背景：
+
+> react 进行组件渲染时，从 setState 开始到渲染整个过程是同步的，如果需要渲染的组件比较庞大，js 就会占据主线程时间较长，会导致页面响应的性能变差，使得 react 在动画、手势等应用中效果比较差。
+>
+> 页面卡顿：Stack reconciler 的工作流程很想函数的调用过程。父组件里面调用子组件，可以类比为函数的递归，对于特别庞大的 DOM 树来说，reconciliation 过程会很长，超过 16ms，在这期间，主线程都是被 js 占用的，因此任何交互、布局、渲染都会停止，给用户的感觉就是页面被卡住了
+
+实现原理：
+
+> 旧版 React 采用递归的方式进行渲染，使用的是 js 引擎自身的函数调用栈，他会一直执行到栈空为止，而 Fiber 实现了自己的组件调用栈，他以链表的形式遍历组件树，可以灵活的暂停、继续和丢弃执行的任务，实现方式是使用了浏览器的 requestldleCallback 这一 api。Fiber 其实指的是一种数据结构，他可以用一个纯 js 对象来表示：
+
+```js
+const fiber = {
+  stateNode, //节点实例
+  child, //子节点
+  sibling, //兄弟节点
+  return, //父节点
+};
+```
+
+- react 内部运转分三层
+  - `virtual dom`层，描述页面长什么样
+  - `Reconciler`层，负责调用组件生命周期方法，运用 diff 算法
+  - `Renderer`层，根据不同的平台，渲染出对应的页面，比较常见的是 ReactDOM 和 ReactNative
+- 为了实现不卡顿，就需要一个调度器(`Scheduler`) 来进行任务的分配，优先级高的任务（比如键盘输入）可以打断优先级低的任务（如`diff`）的执行，从而更快的生效，任务的优先级有六种：
+  - `synchronous`，与之前的`Stack Reconciler`操作一样，同步执行
+  - `task` ,在`next tick`之前执行
+  - `animation`，下一帧之前执行
+  - `high`,在不久的将来立即执行
+  - `low`,稍微迟些也没关系
+  - `offscreen`，下一次`render`时或`scroll`时才执行
+- `Fiber Reconciler(react)`执行阶段
+  - 阶段一，生成 Fiber 树，得出需要更新的节点信息，这一步是一个渐进的过程，可以被打断
+  - 阶段二，将需要更新的节点一次批量更新，这个过程不能被打断
+- `Fiber`树：`Fiver Reconciler`在阶段一进行`diff`计算的时候，会基于`Virtual DOM`树生成一颗`Fiber`树，它的本质是链表
+- 从 `Stack Reconciler`到`FiberReconciler`，源码层面其实就是干了一件递归循环的事情
+
 ## 3、react 项目中有哪些细节可以优化？实际开发过程中都做过哪些优化
 
 主要是涉及到开发过程中、上线之后的首屏、运行过程中的优化
 
 - 首屏优化一般涉及到的指标有 `FP、FCP、FMP`，要有一个良好的体验是尽可能的把 FCP 提前，需要做一些工程化的处理，去优化资源的加载方式以及分包策略，资源的减少是最有效的加快首屏打开的方式
-- 对于 CSR 的应用，FCP 的过程一般是首先加载 js 和 css,js 在本地执行完成，然后加载数据回来做内容渲染，所以 CSR 可以考虑骨架屏和预渲染(部分结构渲染)、suspence 与 lazy 做懒加载动态组件的方式
-- 不管对于 CSR 或者 SSR、都建议配合使用 Service worker 来控制资源的调配及骨架屏秒开的体验
-- react 项目上线之后，首先保障的是可用性，所以通过 React.Profiler 分子组件的渲染次数及耗时的任务，但是 Profile 记录的是 commit 阶段的数据，所以对于 react 调和阶段就需要结合 performanceAPI 一起分析
-- 由于 React 父组件 props 改变之后，所有与 props 相关子组件在没有添加条件控制的情况下也会触发 render 渲染，这是没有必要的，可以结合 react 的 PureComponent 以及 React.memo 等浅比较处理，这中间涉及到不可变数据的处理，当然也可以结合 shouldComponentUpdate 做深比较处理
-- 所以运行状态的优化，都减少不必要的 render,React.useMemo 和 React.useCallback 也可以做很多优化的地方
-- 保障应用的可用性，可以使用 componentDidCatch 处理
+- 对于 `CSR` 的应用，FCP 的过程一般是首先加载 js 和 css,js 在本地执行完成，然后加载数据回来做内容渲染，所以 `CSR` 可以考虑骨架屏和预渲染(部分结构渲染)、`suspence` 与 `lazy` 做懒加载动态组件的方式
+- 不管对于 `CSR` 或者 `SSR`、都建议配合使用 `Service worker` 来控制资源的调配及骨架屏秒开的体验
+- react 项目上线之后，首先保障的是可用性，所以通过 `React.Profiler` 分子组件的渲染次数及耗时的任务，但是 Profile 记录的是 commit 阶段的数据，所以对于 react 调和阶段就需要结合 performanceAPI 一起分析
+- 由于 React 父组件 props 改变之后，所有与 props 相关子组件在没有添加条件控制的情况下也会触发 render 渲染，这是没有必要的，可以结合 react 的 `PureComponent` 以及 React.memo 等浅比较处理，这中间涉及到不可变数据的处理，当然也可以结合 `shouldComponentUpdate` 做深比较处理
+- 所以运行状态的优化，都减少不必要的 render,`React.useMemo` 和 `React.useCallback` 也可以做很多优化的地方
+- 保障应用的可用性，可以使用 `componentDidCatch` 处理
 
 **实际开发过程中的优化点**
 
@@ -631,17 +667,40 @@ view 发出 action 之后不是修改原来的 state,而是返回了一个新的
   }
   ```
 
-````
-## 17、简述react的diff算法？
+## 17、简述 react 的 diff 算法
 
-## 18、MVVM是什么？
+React 通过引入`Virtual DOM`的概念，极大的避免无效的 DOM 操作，使我们的页面的构建效率得到了极大的提升，但是如何高效的通过对比新旧`Virtual DOM`来找到真正的 DOM 变化之处同样也决定着页面的性能。
+
+**React DOM-diff 的策略**
+
+<img src='../../assets/react/react-diff.png'>
+
+- `web ui`中`DOM`节点跨层级的移动操作特别少，可以忽略不计
+
+- 拥有相同类的两个组件将会生成相似的树形结构，拥有不同类的两个组件将会生成不同的树形结构
+- 对于同一层级的一组子节点，他们可以通过唯一 `id` 进行区分
+
+基于以上三个前提策略，`React`分别对`tree diff`、`component diff`以及`element diff`进行算法优化
+
+1. `tree diff`
+   基于策略 1，react 对树的算法金项链简洁明了的优化，对树进行分层比较，两棵树只会对同一层次的节点进行比较，当发现节点以及不逊在，则该节点及其子节点后会被完全删除，不会进行进一步的比较，这样只需要对树进行一次遍历，便能完成整个 DOM 树的比较
+2. `component diff`
+
+- 如果是同一类型的组件，按照原策略继续比较 `virtual DOM tree`，如果不是则将该组件下的所有子节点都替换
+- 对于同类的组件，有可能其`virtual DOM`没有任何变化，如果能够确切的知道这点那可以节省大量的 diff 运算事件，因此`react`运行用户通过`shouldComponentUpdate()`来判断该组件是否需要进行`diff`
+
+3. `element diff`
+   通过唯一的`key`值进行增删改
+
+## 18、MVVM 是什么？
+
 `MVVM`是 `Model-View-ViewModel`的缩写，即模型-视图-视图模型。`MVVM` 是一种设计思想。
 
 模型`（Model）`： 数据保存—存放着各种数据，有的是固定写死的，大多数是从后端返回的数据
-视图 `（View）`：用户界面，也就是DOM
+视图 `（View）`：用户界面，也就是 DOM
 视图模型`（View-Model）`:连接`View`和`Model`的桥梁，当数据变化时，`ViewModel`够监听到数据的变化（通过`Data Bindings`），自动更新视图，而当用户操作视图，`ViewModel`也能监听到视图的变化（通过`DOM Listeners`），然后通知数据做改动，这就实现了数据的双向绑定
 
-**MVVM和 MVC 区别？**
+**MVVM 和 MVC 区别？**
 
 都是一种设计思想
 `MVC` 后台用的多，`MVC`是`Model-View-Controller`的简写，即模型-视图-控制器。
@@ -649,9 +708,9 @@ view 发出 action 之后不是修改原来的 state,而是返回了一个新的
 `MVC`是单向通信，也就是`View`和`Model`，必须通过`Controller`来承上启下
 `MVVM`实现了`View`和`Model`的自动同步，当`Model`的属性改变时，不用再自己手动操作`DOM`元素，提高了页面渲染性能
 
+## 19、useMemo 和 react.mome 的区别？
 
-## 19、useMemo和react.mome的区别？
-`react hooks`提供的两个API，用于缓存数据，优化性能
+`react hooks`提供的两个 API，用于缓存数据，优化性能
 
 - `useMemo`
 
@@ -660,22 +719,22 @@ view 发出 action 之后不是修改原来的 state,而是返回了一个新的
 也可以把`useMemo`替换成`useCallback`,使用`useCallback`就不用写`return`函数了
 
 ```js
-const onClickChild=useMemo(()=>{
-  return ()=>{
-    console.log(m)
-  }
-},[m])
+const onClickChild = useMemo(() => {
+  return () => {
+    console.log(m);
+  };
+}, [m]);
 
- //等价于
+//等价于
 
-const onClickChild=useCallback(()=>{
-    console.log(m)
-},[m])
-````
+const onClickChild = useCallback(() => {
+  console.log(m);
+}, [m]);
+```
 
 - `react.mome`
 
-使用 memoAPI 来缓存组件
+使用 react.mome 来缓存组件
 
 ## 20、useMemo 和 useCallback 的区别及使用场景
 
