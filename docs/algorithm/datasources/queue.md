@@ -14,10 +14,31 @@ date: 2020-08-21 15:37:10
 
 **总结**
 
-- 队列就是先进先出的数据结构
+- 队列就是**先进先出**的数据结构
 - 队列只能在队尾插入元素，在队首删除元素
 - 插入新元素叫入队，删除操作叫出队
 - 有一些特殊的情况，在删除的时候不必要遵守先进先出的约定，这种叫做优先队列的数据结构
+
+## 队列的简单代码实现
+
+```js
+var queue = [];
+queue.push('东北大板');
+queue.push('可爱多');
+queue.push('巧乐兹');
+queue.push('光明奶砖');
+
+let i = 0;
+while (queue.length) {
+  console.log('现在取出的是', queue[0]);
+  queue.shift();
+  console.log(queue);
+}
+```
+
+出现的结果如下图：
+
+<img src='../../assets/algorithm/quene.png'/>
 
 ## 队列的实现(javascript)
 

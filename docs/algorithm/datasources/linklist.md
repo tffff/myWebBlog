@@ -30,6 +30,22 @@ date: 2020-09-01 14:37:10
   <!-- ![双向链表](/datasrouce/双向链表.png) -->
   <img src="../../assets/datasrouce/双向链表.png"/>
 
+## 链表的简单代码理解
+
+```js
+function ListNode(val) {
+  this.val = val;
+  this.next = null;
+}
+
+const node = new ListNode(1);
+node.next = new ListNode(2);
+const node3 = new ListNode(3);
+node3.next = node.next;
+node.next = node3;
+console.log(node);
+```
+
 ## 代码实现
 
 1. 单向链表
@@ -192,3 +208,8 @@ console.log('=====');
 
 cities.dispReverse();
 ```
+
+## 链表和数组的优势
+
+对于数组 `for`循环的速度快于`forEach`和`map`
+链表的**插入/删除**效率较高，而**访问**效率较低；数组的**访问**效率较高，而**插入**效率较低

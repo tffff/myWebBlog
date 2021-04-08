@@ -3,9 +3,7 @@ title: 编程题（手写系列）
 date: 2020-09-04 10:47:10
 ---
 
-## 1、代码题
-
-请实现以下函数
+## 1、实现 lodash 的/.get()方法
 
 ```js
 function sageGet(obj, target) {
@@ -198,3 +196,29 @@ let output = {
   ],
 };
 ```
+
+## 14、装饰器：给一个函数添加装饰器，在不改变原函数的基础上添加逻辑
+
+装饰器写法：
+
+```js
+function A() {
+  console.log('A');
+}
+
+const myDecorator = (fn, execute, obj = window) => {
+  let old = obj[fn];
+  obj[fn] = function() {
+    return execute(old.bind(obj));
+  };
+  console.log(obj[fn]);
+};
+
+myDecorator('A', fn => {
+  fn();
+  console.log('hello world');
+});
+A();
+```
+
+## 15、用 promise 实现请求并发个数限制？

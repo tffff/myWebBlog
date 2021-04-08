@@ -5,22 +5,22 @@ date: 2020-08-07 16:51:10
 
 ## 为什么要使用 React hooks?
 
-- 16.8 版本之后可以在函数组件中使用 state,hook 就相当于钩子，
+- 16.8 版本之后可以在函数组件中使用 `state`,`hook` 就相当于钩子，
 
-- 可以使我们在非 class 的情况下，可以使用更多的 react 特性
-- 不用非得把 class 组件改成 hooks 写法
-- hooks 代码更加简洁，上手更加简单
+- 可以使我们在非 `class` 的情况下，可以使用更多的 `react` 特性
+- 不用非得把 `class` 组件改成 hooks 写法
+- `hooks` 代码更加简洁，上手更加简单
 - 生命周期不用学
-- redux 也不是必需品，mobx 上手非常容易
-- 开发体验比较好，可以让函数组件维护内部状态 state
+- `redux` `也不是必需品，mobx` 上手非常容易
+- 开发体验比较好，可以让函数组件维护内部状态 `state`
 
 ## react 为什么难上手？
 
 - 生命周期难以理解，很难熟练应用
 
-- Redux 状态管理，概念非常多，难以理解，
+- `Redux` 状态管理，概念非常多，难以理解，
 - 高阶组件理解起来不容易，必须掌握
-- 优秀的解决方案，都在 react 社区
+- 优秀的解决方案，都在 `react` 社区
 
 ## Hook 核心概念与应用
 
@@ -51,17 +51,17 @@ export default App;
 
 ### useEffect
 
-- 组件总会执行一些副作用操作，函数组件中，纯函数接受 props,固定输入总会得到固定输出
+- 组件总会执行一些副作用操作，函数组件中，纯函数接受 `props`,固定输入总会得到固定输出
 - 副作用：
 
-  只想渲染一个 dom->dom 渲染完了还想执行一段逻辑(副作用)
+  只想渲染一个 `dom->dom` 渲染完了还想执行一段逻辑(副作用)
 
-  hook 之前副作用都是不被允许的，副作用也分需要清除的和不需要清除的
+  `hook`之前副作用都是不被允许的，副作用也分需要清除的和不需要清除的
 
-- useEffect 是`componentDidMount`，`componentDidUpdate` 和 `componentWillUnmount` 这三个函数的组合
-- useEffect(fn)组件渲染到屏幕之后才执行，返回一个清除副作用的函数或者不返回
-- 一般是不需要同步的，如果需要同步则使用 useLayoutEffect
-- 定义第二个参数，告诉 react 不依赖 props,state
+- `useEffect` 是`componentDidMount`，`componentDidUpdate` 和 `componentWillUnmount` 这三个函数的组合
+- `useEffect(fn)`组件渲染到屏幕之后才执行，返回一个清除副作用的函数或者不返回
+- 一般是不需要同步的，如果需要同步则使用 `useLayoutEffect`
+- 定义第二个参数，告诉 `react` 不依赖 `props`,`state`
 
 ```js
 import React,{useState, useEffect} from 'react';
@@ -117,15 +117,15 @@ export default App;
 
 ### useContext
 
-使用了 context 能力，顶层的组件，解决组件之间状态共享的问题
+使用了 `context` 能力，顶层的组件，解决组件之间状态共享的问题
 
 ### useReducer
 
-useState 内部就是靠 useReducer 实现的,接受三个参数，state 和配套的 dispatch
+`useState` 内部就是靠 `useReducer` 实现的,接受三个参数，`state` 和配套的 `dispatch`
 
 ### useRef
 
-创建 ref,访问 dom 节点，操作 dom
+创建 `ref`,访问 `dom` 节点，操作 `dom`
 
 ```js
 let refInput=useRef(null)
@@ -139,24 +139,31 @@ useEffect(()=>{
 
 ### useMemo&&useCallback
 
-`useMemo`是把创建函数和依赖项数组作为参数传入 useMemo
+- 相同点
 
-`useCallback`是接受内联回调函数和一个依赖项数组作为参数传入`useMemo`，计算的缓存，记忆函数
+这两个都是性能优化的手段，类似于组件中的`shouldComponentUpdate`,在子组件中使用`shouldComponentUpdate`,判定该组件的`props`和`state`是否有变化，从而避免每次父组件`render`时都去重新渲染组件
+
+- 不同点
+
+  - `useMemo`返回的是一个值，用于避免在每次渲染时都进行高开销的计算
+  - `useCallback`返回的是一个函数，当把他返回的这个函数作为子组件使用时，可以避免每次父组件更新时重新渲染这个子组件
+
+**如果该函数和变量作为 props 传给组件，请一定要用，避免子组件的非必要渲染**
 
 ### 自定义 Hook
 
-- 逻辑功能相同的片段->冯庄村单独的函数使用
+- 逻辑功能相同的片段->封装成单独的函数使用
 
-- 自定义 hook 可以调用官方提供的 hook
+- 自定义 `hook` 可以调用官方提供的 `hook`
 
 - use 开头，表示只能在函数组件中进行使用
 
-- 抽离公共代码，每次调用都有一个独立的 state
+- 抽离公共代码，每次调用都有一个独立的 `state`
 
 ## hook 使用规则
 
-- 只能在最顶层使用 hook，不要再循环，嵌套函数中调用 hook
-- 只在 REact 函数中调用 hook
+- 只能在最顶层使用 `hook`，不要再循环，嵌套函数中调用 `hook`
+- 只在 `React` 函数中调用 `hook`
 
 ## hooks 的坑
 
@@ -206,7 +213,7 @@ useEffect(() => {
 
 ### 怎么避免子组件不必要的渲染
 
-使用 React.memo 包裹子组件(默认执行浅渲染,功能和 PureComponent 一样),userCallback 包裹执行方法，只用 useCallback 是不行的，最好是两者结合
+使用 `React.memo` 包裹子组件(默认执行浅渲染,功能和 `PureComponent` 一样),`userCallback` 包裹执行方法，只用 `useCallback` 是不行的，最好是两者结合
 
 ```js
 //子组件

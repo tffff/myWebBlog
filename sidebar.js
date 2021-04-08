@@ -10,6 +10,7 @@ const menus = {
         'myblog/devneeds/reactnativepit',
         'myblog/devneeds/iosinstall',
         'myblog/devneeds/regular',
+        'myblog/devneeds/vscode',
       ],
     },
     {
@@ -28,11 +29,14 @@ const menus = {
     {
       title: 'JS',
       children: [
+        'myblog/js/00',
         'myblog/js/01',
         'myblog/js/02',
         'myblog/js/03',
         'myblog/js/04',
         'myblog/js/05',
+        'myblog/js/06',
+        'myblog/js/07',
       ],
     },
     {
@@ -119,6 +123,14 @@ const menus = {
         'algorithm/sort/greedy',
       ],
     },
+    {
+      title: '算法题',
+      children: [
+        'algorithm/算法题/00.md',
+        'algorithm/算法题/01.md',
+        'algorithm/算法题/02.md',
+      ],
+    },
   ],
   '/interview': [
     {
@@ -136,6 +148,10 @@ const menus = {
         'interview/js/react',
         'interview/js/programming',
       ],
+    },
+    {
+      title: '安全',
+      children: ['interview/safe/00.md'],
     },
   ],
 };

@@ -17,7 +17,103 @@ date: 2020-08-24 10:47:10
   console.log(a.key); //2，因为a和b都指向同一个地址
   ```
 
-### 2、判断是否是数组的几种方法？
+  **symbol 和 bigint 讲一讲应用场景？**
+
+- `symbol` : `Symbol` 是一种在 ES6 中新添加的数据类型，本质上是一种唯一标识符，可用作对象的唯一属性名，这样其他人就不会改写或覆盖你设置的属性值
+
+  **特性**
+
+  - 唯一性：即使是用同一个变量生成的值也不相等
+
+  ```js
+  let id1 = Symbol('id');
+  let id2 = Symbol('id');
+  console.log(id1 == id2); //false
+  ```
+
+  - 隐藏性：`for···in`，`object.keys()` 不能访问,但是也有能够访问的方法：`Object.getOwnPropertySymbols`
+
+- `BigInt`: BigInt 数据类型提供了一种方法来表示大于 2^53-1 的整数。BigInt 可以表示任意大的整数
+
+  Number 类型只能安全的支持-9007199254740991(-(2^53-1)) 和 9007199254740991(2^53-1)之间的整数，任何超过这个范围的数值都会失去精度；而 BigInt 可以解决这个问题
+
+  ```js
+  console.log(9007199254740999); //9007199254741000
+  console.log(9007199254740993 === 9007199254740992); //true
+  ```
+
+  **如何使用**
+
+  - 在整数的末尾追加 n `console.log(9007199254740999n)//9007199254740999`
+  - 调用`BigInt()`构造函数 `var bigInt = BigInt("9007199254740999");`
+
+  **注意事项**
+
+  - BigInt 除了不能使用一元加号运算符外，其他的运算符都可以使用
+
+  ```js
+  console.log(+1n); // Uncaught TypeError: Cannot convert a BigInt value to a number
+  console.log(-1n); //ok
+  ```
+
+  - BigInt 和 Number 之间不能进行混合操作
+
+  ```js
+  `console.log(1n+5)
+  ```
+
+### 2、判断数据类型的几种方法？instanceof 能正确判断对象的原理是什么?
+
+**typeof 判断**
+
+`typeof` 对于原始类型来说，除了 `null` 都可以显示正确的类型
+
+```js
+typeof 1; // number
+typeof NaN; //number
+typeof '1'; // string
+typeof undefined; // undefined
+typeof true; // boolean
+typeof Symbol(); // symbol
+typeof bigInt; //bigint
+```
+
+`typeof` 对于复杂类型来说，除了函数都会显示 `object`，所以说 `typeof` 并不能准确判断变量到底是什么类型
+
+```js
+typeof []; // 'object'
+typeof {}; // 'object'
+typeof console.log; // 'function'
+```
+
+如果我们想判断一个对象的正确类型，这时候可以考虑使用`instanceof`，因为内部机制是通过**原型链**来判断的
+
+```js
+const Person = function() {};
+const p1 = new Person();
+p1 instanceof Person; // true
+
+var str = 'hello world';
+str instanceof String; // false
+
+var str1 = new String('hello world');
+str1 instanceof String; // true
+```
+
+对于原始类型来说，你想直接通过 `instanceof` 来判断类型是不行的，当然我们还是有办法让 `instanceof` 判断原始类型的
+
+```js
+class PrimitiveString {
+  static [Symbol.hasInstance](x) {
+    return typeof x === 'string';
+  }
+}
+console.log('hello world' instanceof PrimitiveString); // true
+```
+
+你可能不知道`Symbol.hasInstance`是什么东西，其实就是一个能让我们自定义`instanceof`行为的东西，以上代码等同于`typeof 'hello world' === 'string'`，所以结果自然是`true`了。这其实也侧面反映了一个问题，`instanceof`也不是百分之百可信的。
+
+**判断数组的几种方法**
 
 - `Array.isArray`
 
@@ -42,83 +138,36 @@ date: 2020-08-24 10:47:10
 
 - `Object.prototype.String.call()`,这种方法对于所有基本的数据类型都能进行判断，即使是 `null` 和 `undefined`
 
-```js
-//检验是否为数组
-let a = [1, 2, 3];
-Object.prototype.toString.call(a) === '[object Array]'; //true
-//检验是否是函数
-let b = function() {};
-Object.prototype.toString.call(b) === '[object Function]'; //true
-//检验是否是数字
-let c = 1;
-Object.prototype.toString.call(c) === '[object Number]'; //true
-//检验是否为对象
-let d = {};
-Object.prototype.toString.call(d) === '[object Object]'; //true
+  ```js
+  //检验是否为数组
+  let a = [1, 2, 3];
+  Object.prototype.toString.call(a) === '[object Array]'; //true
+  //检验是否是函数
+  let b = function() {};
+  Object.prototype.toString.call(b) === '[object Function]'; //true
+  //检验是否是数字
+  let c = 1;
+  Object.prototype.toString.call(c) === '[object Number]'; //true
+  //检验是否为对象
+  let d = {};
+  Object.prototype.toString.call(d) === '[object Object]'; //true
 
-Object.prototype.toString.call(null); // "[object Null]
+  Object.prototype.toString.call(null); // "[object Null]
 
-Object.prototype.toString.call(undefined); // "[object Undefined]"
-```
+  Object.prototype.toString.call(undefined); // "[object Undefined]"
+  ```
 
-### 3、typeof 是否能正确判断类型？instanceof 能正确判断对象的原理是什么？
+### 3、数组的方法
 
-`typeof` 对于原始类型来说，除了 `null` 都可以显示正确的类型
-
-```js
-typeof 1; // 'number'
-typeof '1'; // 'string'
-typeof undefined; // 'undefined'
-typeof true; // 'boolean'
-typeof Symbol(); // 'symbol'
-```
-
-`typeof` 对于对象来说，除了函数都会显示 `object`，所以说 `typeof` 并不能准确判断变量到底是什么类型
-
-```js
-typeof []; // 'object'
-typeof {}; // 'object'
-typeof console.log; // 'function'
-```
-
-如果我们想判断一个对象的正确类型，这时候可以考虑使用`instanceof`，因为内部机制是通过原型链来判断的
-
-```js
-const Person = function() {};
-const p1 = new Person();
-p1 instanceof Person; // true
-
-var str = 'hello world';
-str instanceof String; // false
-
-var str1 = new String('hello world');
-str1 instanceof String; // true
-```
-
-对于原始类型来说，你想直接通过 instanceof 来判断类型是不行的，当然我们还是有办法让 instanceof 判断原始类型的
-
-```js
-class PrimitiveString {
-  static [Symbol.hasInstance](x) {
-    return typeof x === 'string';
-  }
-}
-console.log('hello world' instanceof PrimitiveString); // true
-```
-
-你可能不知道`Symbol.hasInstance`是什么东西，其实就是一个能让我们自定义`instanceof`行为的东西，以上代码等同于`typeof 'hello world' === 'string'`，所以结果自然是`true`了。这其实也侧面反映了一个问题，`instanceof`也不是百分之百可信的。
-
-### 4、数组的方法
-
-1. some
+1. `some`
    此方法为参数传递的函数测试数组。如果有一个元素与测试元素匹配，则返回 true，否则返回 false
 
-```js
-const arr = ['a', 'b', 'c', 'd'];
-console.log(arr.some(test => test === 'd')); //true
-```
+   ```js
+   const arr = ['a', 'b', 'c', 'd'];
+   console.log(arr.some(test => test === 'd')); //true
+   ```
 
-2. reduce
+2. `reduce`
    此方法接收一个函数作为累加器。它为数组中的每个元素依次执行回调函数，不包括数组中被删除或者从未被赋值的元素。函数应用于累加器，数组中的每个值最后只返回一个值
    > reduce() 方法接受四个参数：初始值（上一次回调的返回值），当前元素值，当前索引，原数组
 
@@ -127,7 +176,7 @@ const arr1 = [1, 2, 3, 4, 5, 6];
 console.log(arr1.reduce((total, value) => total + value)); //21
 ```
 
-3. every
+3. `every`
    此方法是对数组中**每项**运行给定函数，如果数组的每个元素都与测试匹配，则返回 true，反之则返回 false
 
 ```js
@@ -135,7 +184,7 @@ const arr2 = ['a', 'b', 'c', 'd'];
 console.log(arr.every(test => test === 'd'));
 ```
 
-3. map
+3. `map`
    **该方法返回一个新数组**，数组中的元素为原始数组元素调用函数处理后的值。它按照原始数组元素顺序依次处理元素
 
 ```js
@@ -145,7 +194,7 @@ console.log(arr3.map(value => value * value)); //1,4,9,16,25,36
 
 > map() 不会对空数组进行检测；map() 不会改变原始数组
 
-5. flat
+5. `flat`
    **此方法创建一个新数组**，其中包含子数组上的 holden 元素，并将其平整到新数组中。请注意，此方法只能进行一个级别的深度
 
 ```js
@@ -156,7 +205,7 @@ const arr4 = [
 console.log(arr4.flat()); //[1,2,3,4]
 ```
 
-6. filter
+6. `filter`
    该方法接收一个函数作为参数。**并返回一个新数组**，该数组包含该数组的所有元素，作为参数传递的过滤函数对其返回 true
 
 ```js
@@ -166,7 +215,7 @@ console.log(arr5.filter(item => item > 3)); //[4,5]
 
 > filter（）方法是对数据中的元素进行过滤，也就是说是不能修改原数组中的数据，只能读取原数组中的数据，callback 需要返回布尔值；为 true 的时候，对应的元素留下来；为 false 的时候，对应的元素过滤掉
 
-7. forEach
+7. `forEach`
    此方法用于调用数组的每个元素。并将元素传递给回调函数
 
 ```js
@@ -177,10 +226,10 @@ arr5.forEach(item => {
 
 > forEach() 对于空数组是不会执行回调函数的
 
-8. findIndex
+8. `findIndex`
    返回传入一个测试条件（函数）符合条件的数组第一个元素位置。它为数组中的每个元素都调用一次函数执行，当数组中的元素在测试条件时返回 true 时, findIndex() 返回符合条件的元素的索引位置，之后的值不会再调用执行函数。如果没有符合条件的元素返回 -1
    > findIndex() 对于空数组，函数是不会执行的， findIndex() 并没有改变数组的原始值。
-9. find
+9. `find`
    返回通过测试（函数内判断）的数组的第一个元素的值。find() 方法为数组中的每个元素都调用一次函数执行：当数组中的元素在测试条件时回 true 时, find() 返回符合条件的元素，之后的值不会再调用执行函数。如果没有符合条件的元素返回 undefined
 
 ```js
@@ -192,7 +241,7 @@ const arr6 = [
 console.log(arr6.find(element => element.id === 4)); //{id: 3, name: "Mass"}
 ```
 
-10. sort
+10. `sort`
     此方法接收一个函数作为参数。它对数组的元素进行排序并返回它。也可以使用含有参数的 sort()方法进行排序
 
 ```js
@@ -201,43 +250,42 @@ console.log(arr7.sort((a, b) => a - b)); //[1,2,3,4,5]
 console.log(arr7.sort((a, b) => b - a)); //[5,4,3,2,1]
 ```
 
-11. concat
+11. `concat`
     此方法用于连接两个或多个数组/值，它不会改变现有的数组。而仅仅**返回被连接数组的一个新数组**
-12. fill
+12. `fill`
     此方法的作用是使用一个固定值来替换数组中的元素。该固定值可以是字母、数字、字符串、数组等等。它还有两个可选参数，表示填充起来的开始位置（默认为 0）与结束位置（默认为 array.length）
 
-```js
-//0是替换元素 1是开始位置，3是结束位置 【1,2,3)
-const arr7 = [5, 4, 3, 2, 1];
-console.log(arr7.fill(0, 1, 3));
-```
+    ```js
+    //0是替换元素 1是开始位置，3是结束位置 【1,2,3)
+    const arr7 = [5, 4, 3, 2, 1];
+    console.log(arr7.fill(0, 1, 3));
+    ```
 
-> fill() 方法用于将一个固定值替换数组的元素
+    > fill() 方法用于将一个固定值替换数组的元素
 
-13. includes
+13. `includes`
     此方法用于判断字符串是否包含指定的子字符串。如果找到匹配的字符串则返回 true，否则返回 false
 
-```js
-const arr8 = [1, 2, 3, 4, 5];
-arr8.includes(3); //true
-```
+    ```js
+    const arr8 = [1, 2, 3, 4, 5];
+    arr8.includes(3); //true
+    ```
 
-> includes() 方法区分大小写
+    > includes() 方法区分大小写
 
-14. reverse
+14. `reverse`
     此方法用于颠倒数组中元素的顺序。第一个元素成为最后一个，最后一个元素将成为第一个
-15. flatMap
+15. `flatMap`
     该方法将函数应用于数组的每个元素，然后将结果压缩为一个**新数组**。它在一个函数中结合了 flat（）和 map（）
 
-```js
-const arr9 = [[1], [2], [3], [4], [5]];
-arr9.flatMap(arr => arr * 10); //[10,20,30,40,50]
-```
+    ```js
+    const arr9 = [[1], [2], [3], [4], [5]];
+    arr9.flatMap(arr => arr * 10); //[10,20,30,40,50]
+    ```
 
-> 会生成新数组的方法
-> map,filter,flat,concat,flatMap
+> 会生成新数组的方法 `map`、`filter`、`flat`、`concat`、`flatMap`
 
-### 5、Object 的方法有哪些？
+### 4、Object 的方法有哪些？
 
 1. `startWidth`
    返回布尔值，表示是否找到了参数字符串。
@@ -253,7 +301,7 @@ arr9.flatMap(arr => arr * 10); //[10,20,30,40,50]
 6. `padEnd`
    用于尾部补全
 
-### 6、let 和 const 的区别？
+### 5、let/const 和 var 的区别？什么是暂时性死区？
 
 - let 声明的变量不会提升，var 声明的会提升
   ```js
@@ -267,8 +315,13 @@ arr9.flatMap(arr => arr * 10); //[10,20,30,40,50]
   ```
 - 在非严格模式下：var 声明的变量是挂在 window 上面的，let 不是挂在 window
 - let 不允许在相同作用域内，重复声明同一个变量
+- const 声明一个只读的常量,一旦声明，常量的值就不能改变。const 声明的变量不得改变值，这意味着，const 一旦声明变量，就必须立即初始化，不能留到以后赋值，但是对于引用类型来说，只要不改变栈内存的地址，里面的值是可以任意改变的。
 
-### 7、数组去重的各种方法?
+**暂时性死区**
+
+在代码块内，使用 let/const 命令声明变量之前，该变量都是不可用的。这在语法上，称为“暂时性死区”（temporal dead zone，简称 TDZ）。
+
+### 6、数组去重的各种方法?
 
 ```js
 //var arr=[1,2,3,4,3,3,6,5]
@@ -292,10 +345,30 @@ let set = new Set();
 arr.forEach(item => set.add(item));
 let a = Array.from(set);
 console.log(a);
+
 //4、两重for循环 时间复杂度0(n2)
+for (var i = 0; i < arr.length; i++) {
+  var cur = arr[i];
+  for (var j = i + 1; j < arr.length; j++) {
+    if (cur === arr[j]) {
+      arr.splice(j, 1);
+      j--;
+    }
+  }
+}
+
+//5. reduce去重
+let arr = [1, 2, 3, 4, 4, 1];
+let newArr = arr.reduce((prev, cur) => {
+  if (!prev.includes(cur)) {
+    return prev.concat(cur);
+  } else {
+    return prev;
+  }
+}, []);
 ```
 
-### 8、js 内置对象有哪些？
+### 7、js 内置对象有哪些？
 
 JS 内置对象分为**数据封装类对象**和**其他对象**
 
@@ -305,7 +378,7 @@ JS 内置对象分为**数据封装类对象**和**其他对象**
 
 `window`对象是一个虚拟的对象，你可以把它看作是你所使用的浏览器的窗口
 
-### 9、Object 对象内置方法
+### 8、Object 对象内置方法
 
 - `Object.create`
 
@@ -316,7 +389,7 @@ JS 内置对象分为**数据封装类对象**和**其他对象**
 - `Object.getOwnPropertyNames()`用于返回对象的自有属性，包括可枚举和不可枚举的
 - `Object.defineProperty(obj, prop, descriptor)`方法会直接在一个对象上定义一个新属性，或者修改一个对象的现有属性，并返回此对象
 
-### 10、数组和类数组的区别？
+### 9、数组和类数组的区别？
 
 所谓 `类数组对象`，即格式与数组结构类似，拥有 `length` 属性，可以通过索引来访问或设置里面的元素，但是不能使用数组的方法，就可以归类为类数组对象。
 
@@ -1000,8 +1073,27 @@ document.getElementById('main').getBoundingClientRect();
 
 ### 7、call、apply、bind 的区别？
 
+- 三者都可以改变函数的 this 对象指向
 - `call`和`apply`都是立即执行，`call`的参数是一个一个的传，`apply`的参数是一个数组
 - `bind`绑定`this`之后返回一个新数组,不管我们给函数 `bind` 几次，函数中的 `this` 永远由`第一次 bind`决定
+
+  ```js
+  let o = {
+    a: 1,
+  };
+  function fn(b, c) {
+    console.log(this.a + b + c);
+  }
+  let fn1 = fn.bind(o, 2, 3);
+  fn1();
+  console.dir(fn1);
+  ```
+
+  <img src='../../assets/interview/bounce.png'>
+
+  可以看到`fn1`并不是普通函数，而是绑定函数，所以当执行绑定函数时，`this`指向与形参在`bind`方法执行时已经确定了，无法再次改变
+
+- `bind` 是返回绑定 this 之后的函数，便于稍后调用；apply 、call 则是立即执行
 
 ### 8、map、reducer 和 filter 等高阶函数
 
@@ -1063,6 +1155,7 @@ let data = [
   78,
   8,
   8,
+  7,
 ];
 let arr = new Set();
 let i = 0;

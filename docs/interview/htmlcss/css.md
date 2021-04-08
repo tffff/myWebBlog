@@ -177,3 +177,22 @@ date: 2020-08-24 10:47:10
 
 - `display:none`,是不占据空间，操作这个会导致**重绘和回流(重排)**
 - `visibility:hidden`,占据空间只是隐藏起来了，操作这个会导致**重绘**
+
+重排比重绘更消耗性能
+
+## 7、盒模型概念，如何切换盒模型？
+
+1. 标准盒模型
+   元素的 width=内容的 width。
+
+2. IE 盒模型(怪异盒模型)
+   元素的 width=内容的 width+padding+border。
+
+3. 切换两种盒模型方法
+
+```css
+box-sizing: content-box; //标准盒模型（默认）
+box-sizing: border-box; //IE盒模型
+```
+
+## 8、实现 1px 边框？1px 线条？

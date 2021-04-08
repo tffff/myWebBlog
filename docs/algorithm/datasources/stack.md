@@ -14,10 +14,31 @@ date: 2020-09-01 11:37:10
 ## 栈的关键概念
 
 - 栈内元素只能通过列表的一端访问，这一端称为栈顶(反之栈底)
-- 栈被称为一种**后入先出**的数据结构
+- 栈被称为一种 **后入先出** 的数据结构
 - 插入新元素又称做进栈、入栈和压栈，删除栈元素叫出栈或退栈
 
 比如一个洗盘子和拿盘子的操作就是一个入栈和出栈的例子(LIFO)
+
+## 栈的简单代码理解
+
+```js
+var stack = [];
+stack.push('东北大板');
+stack.push('可爱多');
+stack.push('巧乐兹');
+stack.push('光明奶砖');
+console.log(stack);
+
+while (stack.length > 0) {
+  console.log('现在取出的是', stack[stack.length - 1]);
+  stack.pop();
+  console.log(stack);
+}
+```
+
+出现的结果如下图：
+
+<img src='../../assets/algorithm/stack.png'/>
 
 ## 栈的代码实现
 

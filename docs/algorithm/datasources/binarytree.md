@@ -25,6 +25,57 @@ date: 2020-09-01 16:37:10
 - 每个节点都有一个与之相关的值，该值有时被称为**键**
 - 一个父节点的两个子节点分别称为左节点和右节点，**\*二叉查找树**是一种特殊的二叉树，相对较小的值保存在左节点，较大的值保存在右节点，这一特性使得查找效率很高
 
+## 二叉树的遍历
+
+```js
+const root = {
+  val: 'A',
+  left: {
+    val: 'B',
+    left: {
+      val: 'D',
+    },
+    right: {
+      val: 'E',
+    },
+  },
+  right: {
+    val: 'C',
+    right: {
+      val: 'F',
+    },
+  },
+};
+
+//先序遍历
+function preorder(root) {
+  if (!root) return;
+  console.log('当前遍历的结点值是：', root.val);
+  preorder(root.left);
+  preorder(root.right);
+}
+//中序
+function preorder(root) {
+  if (!root) return;
+  preorder(root.left);
+  console.log('当前遍历的结点值是：', root.val);
+  preorder(root.right);
+}
+//后序
+function preorder(root) {
+  if (!root) return;
+  preorder(root.left);
+  preorder(root.right);
+  console.log('当前遍历的结点值是：', root.val);
+}
+
+preorder(root);
+
+//先序 ABDECF
+//中序 DBEACF
+//后序 DEBFCA
+```
+
 ## 二叉树的查找方法
 
 - 前序(深度优先)：根节点->左子树->右子树
