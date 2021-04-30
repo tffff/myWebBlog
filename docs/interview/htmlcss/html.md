@@ -7,15 +7,15 @@ date: 2020-08-24 10:47:10
 
 **html5 新特性：**
 
-- 1. 拖拽释放(Drag and drop) API
-- 2. 语义化更好的内容标签（header,nav,footer,aside,article,section）
-- 3. 音频、视频 API(audio,video)
-- 4. 画布(Canvas) API
-- 5. 地理(Geolocation) API
-- 6. 本地离线存储 localStorage 长期存储数据，浏览器关闭后数据不丢失；
-- 7. sessionStorage 的数据在浏览器关闭后自动删除
-- 8. 表单控件，calendar、date、time、email、url、search
-- 9. 新的技术 webworker, websocket, Geolocation
+1. 拖拽释放(Drag and drop) API
+2. 语义化更好的内容标签（`header,nav,footer,aside,article,section`）
+3. 音频、视频 API(audio,video)
+4. 画布(`Canvas`) API
+5. 地理(`Geolocation`) API
+6. 本地离线存储 `localStorage` 长期存储数据，浏览器关闭后数据不丢失；
+7. `sessionStorage` 的数据在浏览器关闭后自动删除
+8. 表单控件，`calendar、date、time、email、url、search`
+9. 新的技术 `webworker`, `websocket`, `Geolocation`
 
 > 语义化的理解(优点):
 
@@ -375,7 +375,7 @@ transform 实际上是用到了 GPU 加速，也就是说占用了内存，由�
 </html>
 ```
 
-### 绝对定位方法
+### 绝对定位方法(不知道宽高)
 
 不确定当前 `div` 的宽度和高度，采用 `transform: translate(-50%,-50%);`当前 `div` 的父级添加相对定位`（position: relative;）`
 
@@ -408,7 +408,7 @@ transform 实际上是用到了 GPU 加速，也就是说占用了内存，由�
 </html>
 ```
 
-### 绝对定位
+### 绝对定位(知道宽高)
 
 确定`div`的宽高
 

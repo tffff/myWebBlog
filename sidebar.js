@@ -57,13 +57,7 @@ const menus = {
     // { title: 'Vue', collapsable: true, children: ['vue/vuesource.md'] },
     {
       title: 'Webpack',
-      children: [
-        'myblog/webpack/webpack',
-        'myblog/webpack/optimize',
-        'myblog/webpack/01.md',
-        'myblog/webpack/02.md',
-        'myblog/webpack/03.md',
-      ],
+      children: ['myblog/webpack/00.md', 'myblog/webpack/01.md'],
     },
     {
       title: 'Linux',

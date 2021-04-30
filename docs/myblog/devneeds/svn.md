@@ -62,15 +62,157 @@ svn copy 主干SVN地址 /tags/2017
 
 mac 电脑默认安装 git，windows 需要下载对应的插件安装
 
-### 从 github 下载项目
+### 1、初始化本地 git 存储库
 
 ```bash
-git clone git地址
+git init
 ```
 
-### git 提交到服务器
+### 2、创建远程存储库的本地副本
 
 ```bash
+git clone [git服务地址]
+```
+
+### 3、检查状态
+
+```bash
+git status
+```
+
+### 4、将文件添加到暂存区
+
+```bash
+git add [file-name.txt]
+```
+
+### 5、将所有新文件和更改过的文件添加到登台区域
+
+```bash
+git add -A
+```
+
+### 6、提交更改
+
+```bash
+git commit -m "[commit message]"
+```
+
+### 7、删除文件
+
+```bash
+git rm -r [file-name.txt]
+```
+
+### 8、列出分支
+
+```bash
+git branch
+```
+
+### 9、创建一个新分支
+
+```bash
+git branch [branch name]
+```
+
+### 10、删除分支
+
+```bash
+git branch -d [branch name]
+```
+
+### 11、创建一个新分支并切换到该分支
+
+```bash
+git checkout -b [branch name]
+```
+
+### 12、克隆一个远程分支并切换到该分支
+
+```bash
+git checkout -b [branch name] origin/[branch name]
+```
+
+### 13、重命名本地分支
+
+```bash
+git branch -m [old branch name] [new branch name]
+```
+
+### 14、切换到分支
+
+```bash
+git checkout [branch name]
+```
+
+### 15、将一个分支合并到活动分支中
+
+```bash
+git merge [branch name]
+```
+
+### 16、将一个分支合并到一个目标分支
+
+```bash
+git merge [source branch] [target branch]
+```
+
+### 17、将更改存储在不合适的工作目录中
+
+```bash
+git stash
+```
+
+### 18、删除所有隐藏的条目
+
+```bash
+git stash clear
+```
+
+### 19、将分支推送到你的远程存储库
+
+```bash
+git push origin [branch name]
+```
+
+### 20、将更改推送到远程存储库
+
+```bash
+git push
+```
+
+### 21、将本地存储库更新为最新的提交
+
+```bash
+git pull
+```
+
+### 22、从远程存储库中提取更改
+
+```bash
+git pull origin [branch name]
+```
+
+### 23、添加一个远程存储库
+
+```bash
+git remote add origin ssh://git@github.com/[username]/[repository-name].git
+```
+
+### 24、查看更改
+
+```bash
+git log
+```
+
+### 24、合并前预览更改
+
+```bash
+git diff [source branch] [target branch]
+```
+
+<!-- ```bash
 // 查看项目文件状态
 git status
 
@@ -91,4 +233,15 @@ git push origin master
 
 //git 更新版本
 git pull origin master
-```
+
+//创建分支
+//git chechout -b aaa
+``` -->
+
+## nrm 切换源
+
+1. 下载 nrm `npm install -g nrm`
+2. 添加源 `nrm add 名字 私有npm地址`
+3. 使用某个源地址 `nrm use 名字`
+4. 查看 nrm 地址列表 `nrm ls`
+5. 删除源地址 `nrm del 名字`

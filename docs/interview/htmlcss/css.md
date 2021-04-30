@@ -196,3 +196,40 @@ box-sizing: border-box; //IE盒模型
 ```
 
 ## 8、实现 1px 边框？1px 线条？
+
+- `transform: scale(0.5)`方案 - 推荐: 很灵活
+  1. 设置`height: 1px`，根据媒体查询结合`transform`缩放为相应尺寸。
+  ```css
+  div {
+    height: 1px;
+    background: #000;
+    -webkit-transform: scaleY(0.5);
+    -webkit-transform-origin: 0 0;
+    overflow: hidden;
+  }
+  ```
+  2. 用`::after`和:`:before`,设置`border-bottom：1px solid #000`,然后在缩放`-webkit-transform: scaleY(0.5);`可以实现两根边线的需求
+  ```css
+  div::after {
+    content: '';
+    width: 100%;
+    border-bottom: 1px solid #000;
+    transform: scaleY(0.5);
+  }
+  ```
+  3. 用`::after`设置`border：1px solid #000; width:200%; height:200%`,然后再缩放`scaleY(0.5)`; 优点可以实现圆角，京东就是这么实现的，缺点是按钮添加 active 比较麻烦
+  ```css
+  .div::after {
+    content: '';
+    width: 200%;
+    height: 200%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid #bfbfbf;
+    border-radius: 4px;
+    -webkit-transform: scale(0.5, 0.5);
+    transform: scale(0.5, 0.5);
+    -webkit-transform-origin: top left;
+  }
+  ```

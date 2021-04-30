@@ -7,6 +7,8 @@ date: 2020-08-24 10:47:10
 
 ### 1、基本数据类型有哪些？基本数据类型和引用数据类型的区别？
 
+<img src='../../assets/interview/数据类型.png'>
+
 - 基本数据类型：`Number`、`String`、`Boolean`、`undefined`、`null`、`Symbol`、`bigInt`
 - 两者之间的区别：基本数据类型是存在`栈`中的简单的数据段，数据大小确定，内存空间大小可以分配，是直接按值存放的，所以可以直接按值访问。引用类型是同时存在`栈`和`堆`中的对象，变量保存的是在栈内存中的一个指针，该指针指向堆内存，也就是说变量是存在栈中的一个地址，地址是该引用数据在堆中的地址。通过这个地址可以找到保存在堆内存中的对象
 
@@ -78,7 +80,7 @@ typeof Symbol(); // symbol
 typeof bigInt; //bigint
 ```
 
-`typeof` 对于复杂类型来说，除了函数都会显示 `object`，所以说 `typeof` 并不能准确判断变量到底是什么类型
+`typeof` 对于复杂类型来说，除了`function`都会显示 `object`，所以说 `typeof` 并不能准确判断变量到底是什么类型
 
 ```js
 typeof []; // 'object'
@@ -113,14 +115,21 @@ console.log('hello world' instanceof PrimitiveString); // true
 
 你可能不知道`Symbol.hasInstance`是什么东西，其实就是一个能让我们自定义`instanceof`行为的东西，以上代码等同于`typeof 'hello world' === 'string'`，所以结果自然是`true`了。这其实也侧面反映了一个问题，`instanceof`也不是百分之百可信的。
 
+**Object.prototype.toString**
+
+`toString`是`object`的原型方法，调用该方法可以统一返回格式为`[object xxx]`的字符串，其中`xxx`就是对象的类型，对于对象，直接调用`toString`就能返回`[object object]`
+
 **判断数组的几种方法**
 
-- `Array.isArray`
+- `Array.isArray` (属于 ES6)
 
   ```js
   var a = [1, 2];
   console.log(Array.isArray(a)); //true
   ```
+
+- `Array.prototype.isPrototypeOf()`
+- `Object.getPrototypeOf(a) === Array.prototype`
 
 - `instanceof Array` 运算符用于检验构造函数的`prototype`属性是否出现在对象的原型链中的任何位置，返回一个布尔值，`instanceof` 只能用来判断对象类型，原始类型不可以
 
@@ -169,22 +178,23 @@ console.log('hello world' instanceof PrimitiveString); // true
 
 2. `reduce`
    此方法接收一个函数作为累加器。它为数组中的每个元素依次执行回调函数，不包括数组中被删除或者从未被赋值的元素。函数应用于累加器，数组中的每个值最后只返回一个值
+
    > reduce() 方法接受四个参数：初始值（上一次回调的返回值），当前元素值，当前索引，原数组
 
-```js
-const arr1 = [1, 2, 3, 4, 5, 6];
-console.log(arr1.reduce((total, value) => total + value)); //21
-```
+   ```js
+   const arr1 = [1, 2, 3, 4, 5, 6];
+   console.log(arr1.reduce((total, value) => total + value)); //21
+   ```
 
 3. `every`
    此方法是对数组中**每项**运行给定函数，如果数组的每个元素都与测试匹配，则返回 true，反之则返回 false
 
-```js
-const arr2 = ['a', 'b', 'c', 'd'];
-console.log(arr.every(test => test === 'd'));
-```
+   ```js
+   const arr2 = ['a', 'b', 'c', 'd'];
+   console.log(arr2.every(test => test === 'd'));
+   ```
 
-3. `map`
+4. `map`
    **该方法返回一个新数组**，数组中的元素为原始数组元素调用函数处理后的值。它按照原始数组元素顺序依次处理元素
 
 ```js
@@ -197,21 +207,21 @@ console.log(arr3.map(value => value * value)); //1,4,9,16,25,36
 5. `flat`
    **此方法创建一个新数组**，其中包含子数组上的 holden 元素，并将其平整到新数组中。请注意，此方法只能进行一个级别的深度
 
-```js
-const arr4 = [
-  [1, 2],
-  [3, 4],
-];
-console.log(arr4.flat()); //[1,2,3,4]
-```
+   ```js
+   const arr4 = [
+     [1, 2],
+     [3, 4],
+   ];
+   console.log(arr4.flat()); //[1,2,3,4]
+   ```
 
 6. `filter`
    该方法接收一个函数作为参数。**并返回一个新数组**，该数组包含该数组的所有元素，作为参数传递的过滤函数对其返回 true
 
-```js
-const arr5 = [1, 2, 3, 4, 5];
-console.log(arr5.filter(item => item > 3)); //[4,5]
-```
+   ```js
+   const arr5 = [1, 2, 3, 4, 5];
+   console.log(arr5.filter(item => item > 3)); //[4,5]
+   ```
 
 > filter（）方法是对数据中的元素进行过滤，也就是说是不能修改原数组中的数据，只能读取原数组中的数据，callback 需要返回布尔值；为 true 的时候，对应的元素留下来；为 false 的时候，对应的元素过滤掉
 
@@ -232,23 +242,23 @@ arr5.forEach(item => {
 9. `find`
    返回通过测试（函数内判断）的数组的第一个元素的值。find() 方法为数组中的每个元素都调用一次函数执行：当数组中的元素在测试条件时回 true 时, find() 返回符合条件的元素，之后的值不会再调用执行函数。如果没有符合条件的元素返回 undefined
 
-```js
-const arr6 = [
-  { id: 1, name: 'john' },
-  { id: 2, name: 'Ali' },
-  { id: 3, name: 'Mass' },
-];
-console.log(arr6.find(element => element.id === 4)); //{id: 3, name: "Mass"}
-```
+   ```js
+   const arr6 = [
+     { id: 1, name: 'john' },
+     { id: 2, name: 'Ali' },
+     { id: 3, name: 'Mass' },
+   ];
+   console.log(arr6.find(element => element.id === 4)); //{id: 3, name: "Mass"}
+   ```
 
 10. `sort`
     此方法接收一个函数作为参数。它对数组的元素进行排序并返回它。也可以使用含有参数的 sort()方法进行排序
 
-```js
-const arr7 = [5, 4, 3, 2, 1];
-console.log(arr7.sort((a, b) => a - b)); //[1,2,3,4,5]
-console.log(arr7.sort((a, b) => b - a)); //[5,4,3,2,1]
-```
+    ```js
+    const arr7 = [5, 4, 3, 2, 1];
+    console.log(arr7.sort((a, b) => a - b)); //[1,2,3,4,5]
+    console.log(arr7.sort((a, b) => b - a)); //[5,4,3,2,1]
+    ```
 
 11. `concat`
     此方法用于连接两个或多个数组/值，它不会改变现有的数组。而仅仅**返回被连接数组的一个新数组**
@@ -282,6 +292,43 @@ console.log(arr7.sort((a, b) => b - a)); //[5,4,3,2,1]
     const arr9 = [[1], [2], [3], [4], [5]];
     arr9.flatMap(arr => arr * 10); //[10,20,30,40,50]
     ```
+
+16. `Array.of`
+    用于将参数依次转化为数组中的一项，然后返回这个新数组
+
+```js
+Array.of(8.0, 5); // [8, 5]
+```
+
+17. `Array.from`
+    基于其他对象创建新数组，准确来说就是从一个类似数组的可迭代对象中创建一个新的数组实例，Array.from 就能把它变成一个数组（注意：是返回新的数组，不改变原对象）
+
+```js
+Array.from('abc'); // ["a", "b", "c"]
+Array.from(new Set(['abc', 'def'])); // ["abc", "def"]
+Array.from(
+  new Map([
+    [1, 'ab'],
+    [2, 'de'],
+  ]),
+);
+```
+
+18. `copyWithin`
+
+```js
+var array = [1, 2, 3, 4, 5];
+var array2 = array.copyWithin(0, 3);
+console.log(array === array2, array2); // true [4, 5, 3, 4, 5]
+```
+
+19. `fill`
+
+```js
+var array = [1, 2, 3, 4, 5];
+var array2 = array.fill(10, 0, 3);
+console.log(array === array2, array2); //true [10,10,10,4,5]
+```
 
 > 会生成新数组的方法 `map`、`filter`、`flat`、`concat`、`flatMap`
 
@@ -398,6 +445,24 @@ JS 内置对象分为**数据封装类对象**和**其他对象**
 常见的类数组对象有：`arguments`、`NodeList`
 
 将类数组转化为数组的方法：`Array.from()`、`Array.prototype.slice.call()`、`扩展运算符（…）`
+
+### 10、Set、WeakSet、Map、WeakMap 的区别？
+
+- `Set`
+  - 成员唯一、无序且不重复
+  - [value, value]，键值与键名是一致的（或者说只有键值，没有键名）
+  - 可以遍历，方法有：add、delete、has
+- `WeakSet`
+  - 成员都是对象
+  - 成员都是弱引用，可以被垃圾回收机制回收，可以用来保存 DOM 节点，不容易造成内存泄漏
+  - 不能遍历，方法有 add、delete、has
+- `Map`
+  - 本质上是键值对的集合，类似集合
+  - 可以遍历，方法很多可以跟各种数据格式转换
+- `WeakMap`
+  - 只接受对象作为键名（null 除外），不接受其他类型的值作为键名
+  - 键名是弱引用，键值可以是任意的，键名所指向的对象可以被垃圾回收，此时键名是无效的
+  - 不能遍历，方法有 get、set、has、delete
 
 ## 闭包
 

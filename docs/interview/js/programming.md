@@ -125,9 +125,63 @@ console.log(user);
 
 ## 5、手写一个 call、apply、bind
 
-## 6、手写 js 深拷贝（由浅入深多种解法）
+## 6、手写 js 浅拷贝、深拷贝（由浅入深多种解法）
+
+```js
+//浅拷贝
+const shallowClone = target => {
+  if (typeof target === 'object' && target !== null) {
+    const cloneTarget = Array.isArray(target) ? [] : {};
+    for (let key in target) {
+      //hasOwnProperty 判断对象是否包含特定的自身（非继承）属性
+      if (target.hasOwnProperty(key)) {
+        cloneTarget[key] = target[key];
+      }
+    }
+    return cloneTarget;
+  }
+  return target;
+};
+
+console.log(shallowClone({ a: 1, b: { c: 2 } }));
+
+//深拷贝--基础版
+const deepClone = obj => {
+  let cloneObj = Array.isArray(obj) ? [] : {};
+  for (let key in obj) {
+    if (typeof obj[key] === 'object' && obj[key] !== null) {
+      cloneObj[key] = deepClone(obj[key]);
+    } else {
+      cloneObj[key] = obj[key];
+    }
+  }
+  return cloneObj;
+};
+
+//深拷贝--加强版
+```
 
 ## 7、手写一个 instanceOf 原理
+
+因为`instanceOf`只能判断复杂类型，不能判断简单类型，所以只要左边都是简单类型都是`false`
+
+```js
+function myInstanceOf(left, right) {
+  //这里先用typeof来判断基本数据类型，如果是就返回false
+  if (typeof left !== 'object' || left === null) return false;
+  //getPrototypeOf是object对象自带的api,能够拿到参数的原型对象
+  let proto = Object.getPrototypeOf(left);
+  while (true) {
+    //循环向下寻找，直到找到相同的原型对象
+    if (proto === null) return false;
+    if (proto === right.prototype) return true; //找到相同的原型对象就返回 true
+    proto = Object.getPrototypeOf(proto);
+  }
+}
+
+console.log(myInstanceOf(new Number(123), Number)); //true
+console.log(myInstanceOf(123, Number)); //false
+```
 
 ## 8、手写 map 和 reduce
 
@@ -222,3 +276,38 @@ A();
 ```
 
 ## 15、用 promise 实现请求并发个数限制？
+
+## 16、手写用 es6 Proxy 如何实现 arr[-1]
+
+```js
+const negativeArray = els =>
+  new Proxy(els, {
+    get: (target, propKey, receiver) => {
+      console.log(target, propKey);
+      return Reflect.get(
+        target,
+        +propKey < 0 ? String(target.length + +propKey) : propKey,
+        receiver,
+      );
+    },
+  });
+const unicorn = negativeArray(['一', '二', '三', '四']);
+console.log(unicorn[-1]); //四
+```
+
+## 17、实现格式化输出，比如输出 999999999 转换成 999,999,999
+
+```js
+function changeNumber(number) {
+  let arr = [];
+  let str = number + '';
+  let count = str.length;
+  while (count >= 3) {
+    arr.unshift(str.slice(count - 3, count));
+    count = count - 3;
+  }
+  count % 3 !== 0 && arr.unshift(str.slice(0, count % 3));
+  return arr.toString();
+}
+console.log(changeNumber(12345678)); //12,345,678
+```

@@ -712,69 +712,69 @@ React 通过引入`Virtual DOM`的概念，极大的避免无效的 DOM 操作�
 
 1. `useMemo` 和 `React.mome` 的区别？
 
-`react hooks`提供的两个 API，用于缓存数据，优化性能
+   `react hooks`提供的两个 API，用于缓存数据，优化性能
 
-    - `React.mome`
+   - `React.mome`
 
-    使用 `React.mome` 来缓存组件，防止父组件state的改变影响子组件重新渲染
+     使用 `React.mome` 来缓存组件，防止父组件 state 的改变影响子组件重新渲染
 
-    - `useMemo`
+   - `useMemo`
 
-    用来缓存数据，当组件内部某一个渲染的数据，需要通过计算而来，这个计算是依赖与特定的`state、props`数据，我们就用`useMemo`来缓存这个数据，以至于我们在修改她们没有依赖的数据源的情况下，多次调用这个计算函数，浪费计算资源
+     用来缓存数据，当组件内部某一个渲染的数据，需要通过计算而来，这个计算是依赖与特定的`state、props`数据，我们就用`useMemo`来缓存这个数据，以至于我们在修改她们没有依赖的数据源的情况下，多次调用这个计算函数，浪费计算资源
 
-    也可以把`useMemo`替换成`useCallback`,使用`useCallback`就不用写`return`函数了
+     也可以把`useMemo`替换成`useCallback`,使用`useCallback`就不用写`return`函数了
 
-    ```js
-    import React, { useState, useMemo } from "react";
-    import "./style.css";
+     ```js
+     import React, { useState, useMemo } from 'react';
+     import './style.css';
 
-    //父组件的state改变的时候 子组件也会随着重新render,使用React.memo可以缓存组件
-    const ChildComponent = React.memo(() => {
-      console.log("这是子组件");
-      return <div>这是子组件</div>;
-    });
+     //父组件的state改变的时候 子组件也会随着重新render,使用React.memo可以缓存组件
+     const ChildComponent = React.memo(() => {
+       console.log('这是子组件');
+       return <div>这是子组件</div>;
+     });
 
-    export default function App() {
-      const [count, setCount] = useState(0);
-      const [val, setVal] = useState("");
-      //不使用useMemo的话，每次创建出来的是一个新的函数
-      //使用useMemo的话每次函数对象只创建一次，所以当count改变的时候，Child不会render
-      const sumFunction = useMemo(() => {
-        console.log("compute");
-        let sum = 0;
-        for (let i = 0; i < count * 10; i++) {
-          sum += i;
-        }
-        return sum;
-      }, [count]);
-      //等价于
-      // useCallback同理，当count改变时，代码执行到这里时，会再次创建一个新的sumFunction函数，所以Child组件也会再次render
-      const sumFunction = useCallback(() => {
-        console.log("compute");
-        let sum = 0;
-        for (let i = 0; i < count * 10; i++) {
-          sum += i;
-        }
-        return sum;
-      }, [count]);
-      return (
-        <div>
-          <div>
-            {count}-{val}-{sumFunction}
-          </div>
-          <button onClick={() => setCount(count + 1)}>点击+1</button>
-          <p>
-            <input value={val} onChange={e => setVal(e.target.value)} />
-          </p>
-          <ChildComponent />
-        </div>
-      );
-    }
-    ```
+     export default function App() {
+       const [count, setCount] = useState(0);
+       const [val, setVal] = useState('');
+       //不使用useMemo的话，每次创建出来的是一个新的函数
+       //使用useMemo的话每次函数对象只创建一次，所以当count改变的时候，Child不会render
+       const sumFunction = useMemo(() => {
+         console.log('compute');
+         let sum = 0;
+         for (let i = 0; i < count * 10; i++) {
+           sum += i;
+         }
+         return sum;
+       }, [count]);
+       //等价于
+       // useCallback同理，当count改变时，代码执行到这里时，会再次创建一个新的sumFunction函数，所以Child组件也会再次render
+       const sumFunction = useCallback(() => {
+         console.log('compute');
+         let sum = 0;
+         for (let i = 0; i < count * 10; i++) {
+           sum += i;
+         }
+         return sum;
+       }, [count]);
+       return (
+         <div>
+           <div>
+             {count}-{val}-{sumFunction}
+           </div>
+           <button onClick={() => setCount(count + 1)}>点击+1</button>
+           <p>
+             <input value={val} onChange={e => setVal(e.target.value)} />
+           </p>
+           <ChildComponent />
+         </div>
+       );
+     }
+     ```
 
-2. `useMemo` 和 `useCallback` 的区别及使用场景
+   2. `useMemo` 和 `useCallback` 的区别及使用场景
 
-   **共同作用：**
+      **共同作用：**
 
    `useMemo` 和 `useCallback` 接收的参数都是一样,第一个参数为回调 第二个参数为要依赖的数据
 
@@ -790,7 +790,7 @@ React 通过引入`Virtual DOM`的概念，极大的避免无效的 DOM 操作�
    - `useCallback`
      有一个父组件，其中包含子组件，子组件接收一个函数作为`props`；通常而言，如果父组件更新了，子组件也会执行更新；但是大多数场景下，更新是没有必要的，我们可以借助`useCallback`来返回函数，然后把这个函数作为`props`传递给子组件；这样，子组件就能避免不必要的更新
 
-3. `PureComponent`
+   3. `PureComponent`
 
    `React.PureComponent` 与 `React.Component` 几乎完全相同，但`React.PureComponent` 通过 props 和 state 的浅对比来实现 `shouldComponentUpate()`，如果定义了 `shouldComponentUpdate()`，无论组件是否是 `PureComponent`，它都会执行`shouldComponentUpdate`结果来判断是否 `update`。如果组件未实现 `shouldComponentUpdate()` ，则会判断该组件是否是 `PureComponent`，如果是的话，会对新旧`props、state` 进行 `shallowEqual` 比较，一旦新旧不一致，会触发 `update`
 
