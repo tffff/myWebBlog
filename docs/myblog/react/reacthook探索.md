@@ -1,7 +1,9 @@
 ---
-title: React Hooks
+title: React Hooks探索
 date: 2020-08-07 16:51:10
 ---
+
+# React Hooks 探索
 
 ## 为什么要使用 React hooks?
 
@@ -13,6 +15,8 @@ date: 2020-08-07 16:51:10
 - 生命周期不用学
 - `redux` `也不是必需品，mobx` 上手非常容易
 - 开发体验比较好，可以让函数组件维护内部状态 `state`
+
+> 同样逻辑的函数组件相比类组件而言，复杂度要低得多得多。
 
 ## react 为什么难上手？
 
@@ -114,6 +118,15 @@ function App() {
 
 export default App;
 ```
+
+> 首先需要说明，数组中的变量一般都是来源于组件本身的数据（props 或者 state）
+
+### useLayoutEffect
+
+`useEffect` 是异步的，要等到浏览器将所有变化渲染到屏幕后才会被执行，`useLayoutEffect` 是同步的,这是执行时机上的区别
+
+- `useEffect` 不会造成视觉阻塞
+- `useLayoutEffect` 会造成视觉阻塞
 
 ### useContext
 

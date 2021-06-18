@@ -11,6 +11,7 @@ const menus = {
         'myblog/devneeds/iosinstall',
         'myblog/devneeds/regular',
         'myblog/devneeds/vscode',
+        'myblog/devneeds/gitlab',
       ],
     },
     {
@@ -42,12 +43,12 @@ const menus = {
     {
       title: 'React',
       children: [
-        'myblog/react/virtualdom',
-        'myblog/react/hooks',
-        'myblog/react/redux',
+        'myblog/react/react探索',
+        'myblog/react/reacthook探索',
+        'myblog/react/redux初探',
         'myblog/react/ssr',
-        'myblog/react/reactcode',
-        'myblog/react/reacthooks.md',
+        'myblog/react/react源码解析',
+        'myblog/react/reacthook源码解析.md',
       ],
     },
     {

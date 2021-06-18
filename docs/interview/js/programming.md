@@ -311,3 +311,61 @@ function changeNumber(number) {
 }
 console.log(changeNumber(12345678)); //12,345,678
 ```
+
+## 18、手写发布订阅模式
+
+```js
+class myEventEmitter {
+  constructor() {
+    // eventMap 用来存储事件和监听函数之间的关系
+    this.eventMap = {};
+  }
+  // type 这里就代表事件的名称
+  on(type, handler) {
+    // hanlder 必须是一个函数，如果不是直接报错
+    if (!(handler instanceof Function)) {
+      throw new Error('哥 你错了 请传一个函数');
+    }
+    // 判断 type 事件对应的队列是否存在
+    if (!this.eventMap[type]) {
+      // 若不存在，新建该队列
+      this.eventMap[type] = [];
+    }
+    // 若存在，直接往队列里推入 handler
+    this.eventMap[type].push(handler);
+  }
+  // 别忘了我们前面说过触发时是可以携带数据的，params 就是数据的载体
+  emit(type, params) {
+    // 假设该事件是有订阅的（对应的事件队列存在）
+    if (this.eventMap[type]) {
+      // 将事件队列里的 handler 依次执行出队
+      this.eventMap[type].forEach((handler, index) => {
+        // 注意别忘了读取 params
+        handler(params);
+      });
+    }
+  }
+  off(type, handler) {
+    if (this.eventMap[type]) {
+      this.eventMap[type].splice(this.eventMap[type].indexOf(handler) >>> 0, 1);
+    }
+  }
+}
+
+const myEvent = new myEventEmitter();
+const testHandler = function(params) {
+  console.log(`test事件被触发了，testHandler 接收到的入参是${params}`);
+};
+const testHandler1 = function(params) {
+  console.log(`test事件被触发了，testHandler 接收到的入参是${params}`);
+};
+myEvent.on('test', testHandler);
+myEvent.emit('test', 'newState');
+
+myEvent.on('test1', testHandler1);
+myEvent.emit('test1', '111');
+```
+
+<Alert type='info'>
+>>> 是无符号按位右移运算符。考虑 indexOf 返回-1 的情况：splice方法喜欢把-1解读为当前数组的最后一个元素，这样子的话，在压根没有对应函数可以删的情况下，不管三七二十一就把最后一个元素给干掉了。而 >>> 符号对正整数没有影响，但对于-1来说它会把-1转换为一个巨大的数（你可以本地运行下试试看，应该是一个32位全是1的二进制数，折算成十进制就是 4294967295）。这个巨大的索引splice是找不到的，找不到就不删，于是一切保持原状，刚好符合我们的预期
+</Alert>
