@@ -44,11 +44,11 @@ const menus = {
       title: 'React',
       children: [
         'myblog/react/react探索',
-        'myblog/react/reacthook探索',
         'myblog/react/redux初探',
-        'myblog/react/ssr',
         'myblog/react/react源码解析',
-        'myblog/react/reacthook源码解析.md',
+        'myblog/react/reacthook探索',
+        'myblog/react/reacthook源码解析',
+        'myblog/react/ssr',
       ],
     },
     {
@@ -58,7 +58,11 @@ const menus = {
     // { title: 'Vue', collapsable: true, children: ['vue/vuesource.md'] },
     {
       title: 'Webpack',
-      children: ['myblog/webpack/00.md', 'myblog/webpack/01.md'],
+      children: ['myblog/webpack/00', 'myblog/webpack/01'],
+    },
+    {
+      title: 'TS',
+      children: ['myblog/ts/00'],
     },
     {
       title: 'Linux',

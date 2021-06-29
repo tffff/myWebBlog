@@ -145,7 +145,7 @@ console.log('hello world' instanceof PrimitiveString); // true
   a.constructor === Array; //true
   ```
 
-- `Object.prototype.String.call()`,这种方法对于所有基本的数据类型都能进行判断，即使是 `null` 和 `undefined`
+- `Object.prototype.toString.call()`,这种方法对于所有基本的数据类型都能进行判断，即使是 `null` 和 `undefined`
 
   ```js
   //检验是否为数组
@@ -334,19 +334,12 @@ console.log(array === array2, array2); //true [10,10,10,4,5]
 
 ### 4、Object 的方法有哪些？
 
-1. `startWidth`
-   返回布尔值，表示是否找到了参数字符串。
-
-2. `endsWith`
-   返回布尔值，表示参数字符串是否在源字符串的尾部
-3. `includes`
-   返回布尔值，表示是否找到了参数字符串。
-4. `repeat`
-   repeat 方法返回一个新字符串，表示将原字符串重复 n 次
-5. `padStart`
-   用于头部补全,如果某个字符串不够指定长度，会在头部补全
-6. `padEnd`
-   用于尾部补全
+1. `startWidth` 返回布尔值，表示是否找到了参数字符串。
+2. `endsWith` 返回布尔值，表示参数字符串是否在源字符串的尾部
+3. `includes` 返回布尔值，表示是否找到了参数字符串。
+4. `repeat` 方法返回一个新字符串，表示将原字符串重复 n 次
+5. `padStart` 用于头部补全,如果某个字符串不够指定长度，会在头部补全
+6. `padEnd` 用于尾部补全
 
 ### 5、let/const 和 var 的区别？什么是暂时性死区？
 
@@ -395,9 +388,8 @@ console.log(a);
 
 //4、两重for循环 时间复杂度0(n2)
 for (var i = 0; i < arr.length; i++) {
-  var cur = arr[i];
   for (var j = i + 1; j < arr.length; j++) {
-    if (cur === arr[j]) {
+    if (arr[i] === arr[j]) {
       arr.splice(j, 1);
       j--;
     }
@@ -462,7 +454,7 @@ JS 内置对象分为**数据封装类对象**和**其他对象**
 - `WeakMap`
   - 只接受对象作为键名（null 除外），不接受其他类型的值作为键名
   - 键名是弱引用，键值可以是任意的，键名所指向的对象可以被垃圾回收，此时键名是无效的
-  - 不能遍历，方法有 get、set、has、delete
+  - 不能遍历，方法有 `get`、`set`、`has`、`delete`
 
 ## 闭包
 
@@ -471,31 +463,32 @@ JS 内置对象分为**数据封装类对象**和**其他对象**
 1. 什么是闭包？
    函数内部返回结果是一个内部函数，并被外部变量所引用，如果内部函数持有被指向函数作用域的变量，就行成了闭包
 
-可以在内部函数访问外部函数作用域，使用闭包，一是可以读取函数中的变量，二是可以将函数中的变量存在内存中，保护变量不会被污染，而正因为闭包会把函数中的变量值存储在内存中，会对内存有消耗，所以不能滥用闭包，而则会造成网页性能，造成内存泄漏，当不需要使用闭包时，要及时释放内存可将内层函数对象的变量赋值成 `null`
+   可以在内部函数访问外部函数作用域，使用闭包，一是可以读取函数中的变量，二是可以将函数中的变量存在内存中，保护变量不会被污染，而正因为闭包会把函数中的变量值存储在内存中，会对内存有消耗，所以不能滥用闭包，而则会造成网页性能，造成内存泄漏，当不需要使用闭包时，要及时释放内存可将内层函数对象的变量赋值成 `null`
 
 2. 闭包原理
 
-函数执行分为两个阶段(预编译和执行阶段)
+   函数执行分为两个阶段(预编译和执行阶段)
 
-- 在预编译阶段，如果发现内部函数使用了外部函数的变量，则会在内存中创建一个“闭包”对象并保存对应变量值，如果已经存在“闭包”，则字需要增加对应属性值就行，
-- 执行完后，函数执行上下文会被销毁，函数对闭包对象的引用也会被销毁，但其内部函数还使用该闭包的引用，所以内部函数可以继续使用“外部函数”中的变量
-  利用了函数作用域链的特性，一个函数内部定义的函数讲话包含外部函数的活动对象添加到他的作用域链中，函数执行完毕，其执行作用域链销毁，但因内部的函数作用域连仍然在引用这个活动对象，所以其活动对象不会被销毁，直到内部函数被销毁后才被销毁，
+   - `在预编译阶段`，如果发现内部函数使用了外部函数的变量，则会在内存中创建一个“闭包”对象并保存对应变量值，如果已经存在“闭包”，则字需要增加对应属性值就行，
+   - `执行完后`，函数执行上下文会被销毁，函数对闭包对象的引用也会被销毁，但其内部函数还使用该闭包的引用，所以内部函数可以继续使用“外部函数”中的变量
+
+   利用了函数作用域链的特性，一个函数内部定义的函数讲话包含外部函数的活动对象添加到他的作用域链中，函数执行完毕，其执行作用域链销毁，但因内部的函数作用域连仍然在引用这个活动对象，所以其活动对象不会被销毁，直到内部函数被销毁后才被销毁，
 
 3. 优点
 
-- 可以从内部函数 fang 外部函数的作用域中的变量，且访问到的变量长期驻扎在内存中，可供之后使用
-- 避免污染全局
-- 把变量存在独立的作用域中，作为私有成员存在
+   - 可以从内部函数访问外部函数的作用域中的变量，且访问到的变量长期驻扎在内存中，可供之后使用
+   - 避免污染全局
+   - 把变量存在独立的作用域中，作为私有成员存在
 
 4. 缺点
 
-- 对内存的消耗有负面影响，因内部函数保存了对外部变量的引用，导致无法被垃圾回收，增大内存使用量，所以使用不当会导致内存泄漏
-- 对处理速度有负面影响，闭包的层级决定了引用的外部变量在查找时经过的作用域链长度
-- 可以获取到意外的值
+   - 对内存的消耗有负面影响，因内部函数保存了对外部变量的引用，导致无法被垃圾回收，增大内存使用量，所以使用不当会导致内存泄漏
+   - 对处理速度有负面影响，闭包的层级决定了引用的外部变量在查找时经过的作用域链长度
+   - 可以获取到意外的值
 
 5. 应用场景
 
-- 模块封装，在各模块规范出现之前，都使用这样的方式防止变量污染全局
+   - 模块封装，在各模块规范出现之前，都使用这样的方式防止变量污染全局
 
 ```js
 var foo = (function() {
@@ -618,7 +611,13 @@ var myObject = {
 myObject.func();
 ```
 
-因为是`myObject.func()`所以`func`函数里面的`this`指向`myObject`,所以第一行`console.log(this.foo)`的 this 执行`myObject`，因为`self=this`，所以第二行的`console.log(self.foo)`里面的 self 指向的也是`myObject`，但是下面一行`console.log(this.foo)`是在一个闭包里面，所以这个`this`指向 window,`console.log(self.foo)`里面的`self`指向的是上面获取的`self`,所以指向的是`myObject`
+因为是`myObject.func()`所以`func`函数里面的`this`指向`myObject`,所以第一行`console.log(this.foo)`的 this 执行`myObject`，
+
+因为`self=this`，所以第二行的`console.log(self.foo)`里面的 self 指向的也是`myObject`，
+
+但是下面一行`console.log(this.foo)`是在一个闭包里面，所以这个`this`指向 `window`
+
+`console.log(self.foo)`里面的`self`指向的是上面获取的`self`,所以指向的是`myObject`
 
 ### 5、写出下面代码结果？
 
@@ -695,7 +694,9 @@ const result = yideng.method.bind(null);
 result(fn, 1);
 ```
 
-结果是`0 2`,`fn()`执行的时候不依赖任何对象，所以`fn()`中的`this`指向的是`window`,`arguments[0]()`函数执行里面的`this`指向的`argument`对象,所以`arguments[0]()`的结果是 2
+结果是`0 2`,
+
+`fn()`执行的时候不依赖任何对象，所以`fn()`中的`this`指向的是`window`,`arguments[0]()`函数执行里面的`this`指向的`argument`对象,所以`arguments[0]()`的结果是 2
 
 ### 8、请写出下面代码的结果？
 
@@ -974,14 +975,14 @@ function throttle(func, wait, type) {
 
 ### 3、for、for in、 for of、forEach 有什么区别？
 
-- `for` 循环实际上是可以使用 break 和 continue 去终止循环的，但是 forEach 不行
+- `for` 循环实际上是可以使用 `break` 和 `continue` 去终止循环的，但是 `forEach` 不行
 
-  一般来说，for 多数时候都可以使用，当然一般我们需要知道循环次数；而 forEach 更适合于集合对象的遍历和操作
+  一般来说，for 多数时候都可以使用，当然一般我们需要知道循环次数；而 `forEach` 更适合于集合对象的遍历和操作
 
   for 循环在最开始执行循环的时候，会建立一个循环变量 i，之后每次循环都是操作这个变量，也就是说它是对一个循环变量在重复的赋值，因此 i 在最后只会存储一个值；而 forEach()虽然变量名没变，但是实际上每次循环都会创建一个独立不同的变量，而存储的数值自然也是不同的数值，因此相互之间不会影响
 
 - `for...in`可以直接遍历对象和数组(数组遍历的是下标)，可枚举属性，包括自有属性、继承自原型的属性，**for in 特别适合遍历对象**
-- `for...of`不能直接遍历对象，可以遍历数组，可以和 break、continue、和 return 配合使用
+- `for...of`不能直接遍历对象，可以遍历数组，可以和 `break`、`continue`、和 `return` 配合使用
 
 ```html
 <body>
@@ -1138,7 +1139,7 @@ document.getElementById('main').getBoundingClientRect();
 
 ### 7、call、apply、bind 的区别？
 
-- 三者都可以改变函数的 this 对象指向
+- 三者都可以改变函数的 `this` 对象指向
 - `call`和`apply`都是立即执行，`call`的参数是一个一个的传，`apply`的参数是一个数组
 - `bind`绑定`this`之后返回一个新数组,不管我们给函数 `bind` 几次，函数中的 `this` 永远由`第一次 bind`决定
 
@@ -1176,9 +1177,9 @@ Http Header 里的 Content-Type 一般有这三种：
 
 `form`的`enctype`属性为编码方式，常用有两种：application/x-www-form-urlencoded 和 multipart/form-data，默认为 application/x-www-form-urlencoded。
 
-当`action`为`get`时候，浏览器用 x-www-form-urlencoded 的编码方式把 form 数据转换成一个字串（name1=value1&name2=value2...），然后把这个字串追加到 url 后面，用?分割，加载这个新的 url。
+当`action`为`get`时候，浏览器用 `x-www-form-urlencoded`的编码方式把 `form` 数据转换成一个字串（name1=value1&name2=value2...），然后把这个字串追加到 `url` 后面，用?分割，加载这个新的 `url。`
 
-当`action`为`post`时候，浏览器把 form 数据封装到 http body 中，然后发送到 server。 如果没有 type=file 的控件，用默认的 application/x-www-form-urlencoded 就可以了。 但是如果有 type=file 的话，就要用到 multipart/form-data 了。
+当`action`为`post`时候，浏览器把 form 数据封装到 http `body` 中，然后发送到 `server`。 如果没有 `type=file` 的控件，用默认的 `application/x-www-form-urlencoded` 就可以了。 但是如果有 `type=file` 的话，就要用到 `multipart/form-data` 了。
 
 当`action`为`post`且`Content-Type`类型是`multipart/form-data`，浏览器会把整个表单以控件为单位分割，并为每个部分加上 Content-Disposition(form-data 或者 file),Content-Type(默认为 text/plain),name(控件 name)等信息，并加上分割符(boundary)
 

@@ -26,7 +26,7 @@ date: 2020-08-07 16:51:10
 - 高阶组件理解起来不容易，必须掌握
 - 优秀的解决方案，都在 `react` 社区
 
-## Hook 核心概念与应用
+## Hooks 核心概念与应用
 
 ### useState
 
@@ -150,18 +150,122 @@ useEffect(()=>{
 <input ref={refInput}/>
 ```
 
+### useRef 和 createRef 的区别？
+
+`useRef` 在 react hook 中的作用, 正如官网说的, 它像一个变量, 类似于 `this` , 它就像一个盒子, 你可以存放任何东西
+
+**createRef 每次渲染都会返回一个新的引用，而 useRef 每次都会返回相同的引用**
+
+例如下面的例子：
+
+```js
+import React, { useState, useRef, createRef } from 'react';
+
+const App1 = () => {
+  const [counter, setCounter] = useState(0);
+  const refFromUseRef = useRef();
+  const refFromCreateRef = createRef();
+  if (!refFromUseRef.current) {
+    refFromUseRef.current = counter;
+  }
+  if (!refFromCreateRef.current) {
+    refFromCreateRef.current = counter;
+  }
+  return (
+    <div>
+      <p>{counter}</p>
+      <p>refFromUseRef:{refFromUseRef.current}</p>
+      <p>refFromCreateRef:{refFromCreateRef.current}</p>
+      <button onClick={() => setCounter(prev => prev + 1)}>点击</button>
+    </div>
+  );
+};
+
+export default App1;
+```
+
+结果如下：
+
+<img src="../../assets/react/react-useref.png">
+
+总结：
+
+- `useRef` 不仅仅是用来管理 DOM ref 的，它还相当于 this , 可以存放任何变量.
+- `useRef` 可以很好的解决闭包带来的不方便性. 你可以在各种库中看到它的身影, 比如 react-use 中的 useInterval , usePrevious ……
+
+**值得注意的是** 当 `useRef` 的内容发生变化时,它不会通知您。更改.current 属性不会导致重新呈现。 因为他一直是一个引用
+
 ### useMemo&&useCallback
 
 - 相同点
 
-这两个都是性能优化的手段，类似于组件中的`shouldComponentUpdate`,在子组件中使用`shouldComponentUpdate`,判定该组件的`props`和`state`是否有变化，从而避免每次父组件`render`时都去重新渲染组件
+  这两个都是性能优化的手段，类似于组件中的`shouldComponentUpdate`,在子组件中使用`shouldComponentUpdate`,判定该组件的`props`和`state`是否有变化，从而避免每次父组件`render`时都去重新渲染组件
 
 - 不同点
 
   - `useMemo`返回的是一个值，用于避免在每次渲染时都进行高开销的计算
-  - `useCallback`返回的是一个函数，当把他返回的这个函数作为子组件使用时，可以避免每次父组件更新时重新渲染这个子组件
 
-**如果该函数和变量作为 props 传给组件，请一定要用，避免子组件的非必要渲染**
+    ```js
+    const Parent = () => {
+      const [count, setCount] = useState(0);
+      const [color, setColor] = useState('');
+      const [price, setPrice] = useState(10);
+      const handleClick = () => {
+        setCount(count + 1);
+      };
+      const getTotal = () => {
+        console.log('getTotal 执行了 ...'); // 该函数依赖于count和price，但color变化也会导致该函数的执行
+        return count * price;
+      };
+      //所以我们把getTotal函数修改一下
+      // 这样就只有count和price改变的时候，getTotal才会执行
+      const getTotal = useMemo(() => {
+        console.log('getTotal 执行了 ...');
+        return count * price;
+      }, [count.price]);
+      return (
+        <div>
+          <div>
+            {' '}
+            颜色: <input onChange={e => setColor(e.target.value)} />
+          </div>
+          <div>
+            {' '}
+            单价: <input
+              value={price}
+              onChange={e => setPrice(Number(e.target.value))}
+            />
+          </div>
+          <div>
+            {' '}
+            数量:{count} <button onClick={handleClick}>+1</button>
+          </div>
+          <div>总价:{getTotal()}</div>
+        </div>
+      );
+    };
+    ```
+
+  - `useCallback`返回的是一个函数，**用于缓存函数**,只有当依赖项改变时，函数才会重新执行返回新的函数，对于父组件中的函数作为 props 传递给子组件时，只要父组件数据改变，函数重新执行，作为 props 的函数也会产生新的实例，导致子组件的刷新
+
+  **useCallback 第二个参数依赖项什么情况下使用呢?**
+
+  ```js
+  const handleInputChange = useCallback(e => {
+    setText(e.target.value + count);
+  }, []);
+  //没有依赖项的时候，handleInputChange只在初始化的时候调用一次函数就被缓存起来
+
+  const handleInputChange = useCallback(
+    e => {
+      setText(e.target.value + count);
+    },
+    [count],
+  );
+  //有依赖项的时候，count加入到依赖项，count变化后重新生成新的函数，改变函数内部的count值
+  ```
+
+  **如果该函数和变量作为 props 传给组件，请一定要用，避免子组件的非必要渲染**
 
 ### 自定义 Hook
 
@@ -173,6 +277,20 @@ useEffect(()=>{
 
 - 抽离公共代码，每次调用都有一个独立的 `state`
 
+  ```js
+  //定义hook
+  const usePrevious = state => {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = state;
+    });
+    return ref.current;
+  };
+
+  //使用
+  const prev = usePrevious(counter);
+  ```
+
 ## hook 使用规则
 
 - 只能在最顶层使用 `hook`，不要再循环，嵌套函数中调用 `hook`
@@ -180,7 +298,7 @@ useEffect(()=>{
 
 ## hooks 的坑
 
-### capture value
+### capture value（意外的值）
 
 ```js
 const [age, setAge] = useState(20);

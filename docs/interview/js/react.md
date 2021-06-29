@@ -92,7 +92,7 @@ const fiber = {
 - react 内部运转分三层
   - `virtual dom`层，描述页面长什么样
   - `Reconciler`层，负责调用组件生命周期方法，运用 diff 算法
-  - `Renderer`层，根据不同的平台，渲染出对应的页面，比较常见的是 ReactDOM 和 ReactNative
+  - `Renderer`层，根据不同的平台，渲染出对应的页面，比较常见的是 `ReactDOM` 和 `ReactNative`
 - 为了实现不卡顿，就需要一个调度器(`Scheduler`) 来进行任务的分配，优先级高的任务（比如键盘输入）可以打断优先级低的任务（如`diff`）的执行，从而更快的生效，任务的优先级有六种：
   - `synchronous`，与之前的`Stack Reconciler`操作一样，同步执行
   - `task` ,在`next tick`之前执行
@@ -101,7 +101,7 @@ const fiber = {
   - `low`,稍微迟些也没关系
   - `offscreen`，下一次`render`时或`scroll`时才执行
 - `Fiber Reconciler(react)`执行阶段
-  - 阶段一，生成 Fiber 树，得出需要更新的节点信息，这一步是一个渐进的过程，可以被打断
+  - 阶段一，生成 `Fiber` 树，得出需要更新的节点信息，这一步是一个渐进的过程，可以被打断
   - 阶段二，将需要更新的节点一次批量更新，这个过程不能被打断
 - `Fiber`树：`Fiver Reconciler`在阶段一进行`diff`计算的时候，会基于`Virtual DOM`树生成一颗`Fiber`树，它的本质是链表
 - 从 `Stack Reconciler`到`FiberReconciler`，源码层面其实就是干了一件递归循环的事情
@@ -110,11 +110,11 @@ const fiber = {
 
 主要是涉及到开发过程中、上线之后的首屏、运行过程中的优化
 
-- 首屏优化一般涉及到的指标有 `FP、FCP、FMP`，要有一个良好的体验是尽可能的把 FCP 提前，需要做一些工程化的处理，去优化资源的加载方式以及分包策略，资源的减少是最有效的加快首屏打开的方式
-- 对于 `CSR` 的应用，FCP 的过程一般是首先加载 js 和 css,js 在本地执行完成，然后加载数据回来做内容渲染，所以 `CSR` 可以考虑骨架屏和预渲染(部分结构渲染)、`suspence` 与 `lazy` 做懒加载动态组件的方式
+- 首屏优化一般涉及到的指标有 `FP、FCP、FMP`，要有一个良好的体验是尽可能的把 `FCP` 提前，需要做一些工程化的处理，去优化资源的加载方式以及分包策略，资源的减少是最有效的加快首屏打开的方式
+- 对于 `CSR` 的应用，`FCP` 的过程一般是首先加载 js 和 css,js 在本地执行完成，然后加载数据回来做内容渲染，所以 `CSR` 可以考虑骨架屏和预渲染(部分结构渲染)、`suspence` 与 `lazy` 做懒加载动态组件的方式
 - 不管对于 `CSR` 或者 `SSR`、都建议配合使用 `Service worker` 来控制资源的调配及骨架屏秒开的体验
 - react 项目上线之后，首先保障的是可用性，所以通过 `React.Profiler` 分子组件的渲染次数及耗时的任务，但是 Profile 记录的是 commit 阶段的数据，所以对于 react 调和阶段就需要结合 performanceAPI 一起分析
-- 由于 React 父组件 props 改变之后，所有与 props 相关子组件在没有添加条件控制的情况下也会触发 render 渲染，这是没有必要的，可以结合 react 的 `PureComponent` 以及 React.memo 等浅比较处理，这中间涉及到不可变数据的处理，当然也可以结合 `shouldComponentUpdate` 做深比较处理
+- 由于 React 父组件 props 改变之后，所有与 props 相关子组件在没有添加条件控制的情况下也会触发 render 渲染，这是没有必要的，可以结合 react 的 `PureComponent` 以及 `React.memo` 等浅比较处理，这中间涉及到不可变数据的处理，当然也可以结合 `shouldComponentUpdate` 做深比较处理
 - 所以运行状态的优化，都减少不必要的 render,`React.useMemo` 和 `React.useCallback` 也可以做很多优化的地方
 - 保障应用的可用性，可以使用 `componentDidCatch` 处理
 
@@ -133,7 +133,7 @@ const fiber = {
 
 **原生实现**
 `createdocumentfragment()`方法创建了一虚拟的节点对象，节点对象包含所有属性和方法。
-当你想提取文档的一部分，改变，增加，或删除某些内容及插入到文档末尾可以使用 createDocumentFragment() 方法。
+当你想提取文档的一部分，改变，增加，或删除某些内容及插入到文档末尾可以使用 `createDocumentFragment()` 方法。
 你也可以使用文档的文档对象来执行这些变化，但要防止文件结构被破坏，createDocumentFragment() 方法可以更安全改变文档的结构及节点
 
 ```html
@@ -253,24 +253,24 @@ const fiber = {
 
 **虚拟 DOM 是什么？**
 
-本质上来说：虚拟 `DOM` 是一个 javascript 对象，通过对象的方式来表示 DOM 结构，将页面的状态抽象为 js 对象的形式，配合不同想渲染工具，是跨平台渲染成为可能。通过事务处理机制，将多次 DOM 修改的结果一次性更新到页面上，从而**有效的减少页面渲染的次数，减少修改 DOM 重绘和重排次数，提高渲染性能**
+本质上来说：虚拟 `DOM` 是一个 `javascript` 对象，通过对象的方式来表示 DOM 结构，将页面的状态抽象为 js 对象的形式，配合不同想渲染工具，是跨平台渲染成为可能。通过事务处理机制，将多次 DOM 修改的结果一次性更新到页面上，从而**有效的减少页面渲染的次数，减少修改 DOM 重绘和重排次数，提高渲染性能**
 
 **为什么要用虚拟 DOM？**
 
 - 保证性能下限，在不进行手动优化的情况下，提供过得去的性能
 
-为什么要使用虚拟 DOM?是因为快吗？，实际上不一定是快。首次渲染大量 DOM，由于多了一层虚拟 DOM 的计算，比 innerHtml 插入的慢，但是在真实 DOM 操作的时候进行针对性的优化时，还是更快的
+  为什么要使用虚拟 DOM?是因为快吗？，实际上不一定是快。首次渲染大量 DOM，由于多了一层虚拟 DOM 的计算，比 innerHtml 插入的慢，但是在真实 DOM 操作的时候进行针对性的优化时，还是更快的
 
 - 跨平台
 
-对于跨平台技术来说，重要的意义在于：
+  对于跨平台技术来说，重要的意义在于：
 
-虚拟 DOM 是 DOM 在内存中的一个轻量级的表达方式，是一种同意约定，可以通过不同的渲染引擎生成不同平台的的 UI
+  虚拟 DOM 是 DOM 在内存中的一个轻量级的表达方式，是一种同意约定，可以通过不同的渲染引擎生成不同平台的的 UI
 
-虚拟 DOM 的可移植性非常好，这意味着可以渲染到 DOM 以外的任何端，可以做很多事情
+  虚拟 DOM 的可移植性非常好，这意味着可以渲染到 DOM 以外的任何端，可以做很多事情
 
-> 注意
-> 虚拟 DOM 真正的价值从来都不是性能，而是不管数据怎么变化都可以用最小的代价来更新 DOM，而且掩盖了底层的 DOM 操作，让你用声明式的方式来描述你的目的，从来让来待更容易维护
+  > 注意
+  > 虚拟 DOM 真正的价值从来都不是性能，而是不管数据怎么变化都可以用最小的代价来更新 DOM，而且掩盖了底层的 DOM 操作，让你用声明式的方式来描述你的目的，从来让来待更容易维护
 
 ## 6、哪些方法会触发 react 重新渲染？
 
@@ -281,7 +281,7 @@ const fiber = {
 
 **重新渲染做了什么**
 
-- 会对比新旧 Vnode 进行对比，也就是我们所说的 DOMdiff
+- 会对比新旧 `Vnode` 进行对比，也就是我们所说的 `DOMdiff`
 - 对新旧两棵树进行一个深度优先遍历，这样每一个节点都会有一个标记，在遍历的时候，每遍历一个节点，就会对比这个节点树，如果有差异就放到这个对象里面
 - 遍历差异对象，根据差异的类型，根据对应规则更新 VNode
 
@@ -301,7 +301,7 @@ react 的处理 render 的基本思想就是每一次有变动就会重新渲染
   在函数组件中没有`shouldComponentUpdate`生命周期，可以使用高阶组件来达到这个效果
 
 - `React.useMemo`
-  用来缓存组件的渲染，避免不必要的更新，其实也就是一个高阶组件，与 PureComponent 类似，但是 React.useMemo 只用于函数组件
+  用来缓存组件的渲染，避免不必要的更新，其实也就是一个高阶组件，与 `PureComponent` 类似，但是 `React.useMemo` 只用于函数组件
 - 合理拆分组件
   以更轻，更小的粒度来纵向拆分组件
 
@@ -355,11 +355,11 @@ react 的处理 render 的基本思想就是每一次有变动就会重新渲染
 
     上面的代码，当点击第二个按钮之后立马点击第一个按钮，虽然执行加一的操作，但是 3 秒后打印的还是 0，为什么呢？为什么不是 1 呢？这是因为第一个函数执行的是 counter 是 0，`add1`执行的时候 counter 是 0，虽然是 3 秒后执行的，但是初始的值已经保存在这个闭包里面了，
 
-    这个问题 class component 不会先，因为 class component 的属性和方法都存在不变的`instance`上取值，所以不存在引用是旧的问题
+    这个问题 class component 不会有，因为 class component 的属性和方法都存在不变的`instance`上取值，所以不存在引用是旧的问题
 
     **解决方法**
 
-    解决这个 hooks 的问题就是参照类的 instance,用 useRef 返回的 immutable RefObject(current 属性是可变的)来保存 state
+    解决这个 hooks 的问题就是参照类的 instance,用 `useRef` 返回的 immutable RefObject(`current` 属性是可变的)来保存 state
 
     ```js
     import React, { useState, useRef, useEffect } from 'react';
@@ -395,7 +395,7 @@ react 的处理 render 的基本思想就是每一次有变动就会重新渲染
 
 ## 9、高阶组件和普通组件有什么区别？适用什么场景？
 
-> 高阶组件(HOC)是 React 中复用组件逻辑的一种高级技巧，HOC 自身不是 React API 的一部分，它是一种基于 React 的组合特性而形成的设计模式
+> `高阶组件(HOC)`是 React 中复用组件逻辑的一种高级技巧，HOC 自身不是 React API 的一部分，它是一种基于 React 的组合特性而形成的设计模式
 
 高阶组件就是一个函数，他是接受一个组件作为参数，返回一个新的组件，他只是一种组件的设计模式，这种设计模式是由 react 自身的组合性质必然产生的，我们将他们称为纯组件，因为他们接受任何动态提供的子组件，但是他们不会修改和复制其输入组件的任何行为
 
@@ -502,45 +502,45 @@ view 发出 action 之后不是修改原来的 state,而是返回了一个新的
 
 1. 相似之处
 
-- 都将注意力集中保持在核心库，其他功能如路由，全局状态管理则交给相关的库
-- 都有自己的构建工具，能得到一个最佳的项目模板
-- 都是用了虚拟 DOM 提高重绘性能
-- 都有 props 允许组件数据传递
-- 都鼓励拆分组件成一个个功能明确的小组件
+   - 都将注意力集中保持在核心库，其他功能如路由，全局状态管理则交给相关的库
+   - 都有自己的构建工具，能得到一个最佳的项目模板
+   - 都是用了虚拟 DOM 提高重绘性能
+   - 都有 props 允许组件数据传递
+   - 都鼓励拆分组件成一个个功能明确的小组件
 
 2. 不同之处
 
-- **数据流** vue 默认是双向绑定，react 是单向数据流
-- **虚拟 DOM**
-  vue 宣称可以更快的计算出虚拟 DOM 的差异，这是由于他在渲染过程中，会跟踪每个组件的依赖关系，不需要重新渲染整个 DOM 树
+   - **数据流** vue 默认是双向绑定，react 是单向数据流
+   - **虚拟 DOM**
+     vue 宣称可以更快的计算出虚拟 DOM 的差异，这是由于他在渲染过程中，会跟踪每个组件的依赖关系，不需要重新渲染整个 DOM 树
 
-  react 则不是，只要有状态改变，全部的子组件都会重新渲染，当然这是可以通过`shouldComponentUpdate`和`PureComponent`来控制
+     react 则不是，只要有状态改变，全部的子组件都会重新渲染，当然这是可以通过`shouldComponentUpdate`和`PureComponent`来控制
 
-- **组件化**
-  vue 是类似 html 的模板，写起来和 H5 差不多，
+   - **组件化**
+     vue 是类似 html 的模板，写起来和 H5 差不多，
 
-  react 是 jsx 的写法
+     react 是 jsx 的写法
 
-  具体来说，vue 引用组件`import`之后还需要在`componets`注册,但是 react 是可以直接引用的
+     具体来说，vue 引用组件`import`之后还需要在`componets`注册,但是 react 是可以直接引用的
 
-- **监听原理不同**
-  vue 通过`getter/setter`以及一些函数的劫持，能精确知道数据变化，不需要特别的优化就能达到很好的性能
+   - **监听原理不同**
+     vue2 通过`getter/setter`以及一些函数的劫持，能精确知道数据变化，不需要特别的优化就能达到很好的性能,vue3 是通过`proxy`来监听的
 
-  react 默认是通过比较引用的方式进行的，如果不优化就会导致大量的不必要的 VDOM 渲染，造成性能不好
+     react 默认是通过比较引用的方式进行的，如果不优化就会导致大量的不必要的 VDOM 渲染，造成性能不好
 
-- **高阶组件**
-  `react` 可以使用高阶组件来扩展，`vue` 则是通过 `mixins` 来扩展
-- **构建工具**
+   - **高阶组件**
+     `react` 可以使用高阶组件来扩展，`vue` 则是通过 `mixins` 来扩展
+   - **构建工具**
 
-  react => create-react-app
+     react => create-react-app
 
-  vue => vue-cli
+     vue => vue-cli
 
-- **跨平台**
+   - **跨平台**
 
-  React => React Native
+     React => React Native
 
-  Vue => weex
+     Vue => weex
 
 ## 13、react key 是干嘛用的，主要解决什么问题
 
@@ -712,97 +712,97 @@ React 通过引入`Virtual DOM`的概念，极大的避免无效的 DOM 操作�
 
 ## 19、如何避免组件的重新渲染？memo/useMemo/useCallback、PureComponent？
 
-1. `useMemo` 和 `React.mome` 的区别？
+1.  `useMemo` 和 `React.mome` 的区别？
 
-   `react hooks`提供的两个 API，用于缓存数据，优化性能
+    `react hooks`提供的两个 API，用于缓存数据，优化性能
 
-   - `React.mome`
+    - `React.mome`
 
-     使用 `React.mome` 来缓存组件，防止父组件 state 的改变影响子组件重新渲染
+      使用 `React.mome` 来缓存组件，防止父组件 state 的改变影响子组件重新渲染
 
-   - `useMemo`
+    - `useMemo`
 
-     用来缓存数据，当组件内部某一个渲染的数据，需要通过计算而来，这个计算是依赖与特定的`state、props`数据，我们就用`useMemo`来缓存这个数据，以至于我们在修改她们没有依赖的数据源的情况下，多次调用这个计算函数，浪费计算资源
+      用来缓存数据，当组件内部某一个渲染的数据，需要通过计算而来，这个计算是依赖与特定的`state、props`数据，我们就用`useMemo`来缓存这个数据，以至于我们在修改她们没有依赖的数据源的情况下，多次调用这个计算函数，浪费计算资源
 
-     也可以把`useMemo`替换成`useCallback`,使用`useCallback`就不用写`return`函数了
+      也可以把`useMemo`替换成`useCallback`,使用`useCallback`就不用写`return`函数了
 
-     ```js
-     import React, { useState, useMemo } from 'react';
-     import './style.css';
+      ```js
+      import React, { useState, useMemo } from 'react';
+      import './style.css';
 
-     //父组件的state改变的时候 子组件也会随着重新render,使用React.memo可以缓存组件
-     const ChildComponent = React.memo(() => {
-       console.log('这是子组件');
-       return <div>这是子组件</div>;
-     });
+      //父组件的state改变的时候 子组件也会随着重新render,使用React.memo可以缓存组件
+      const ChildComponent = React.memo(() => {
+        console.log('这是子组件');
+        return <div>这是子组件</div>;
+      });
 
-     export default function App() {
-       const [count, setCount] = useState(0);
-       const [val, setVal] = useState('');
-       //不使用useMemo的话，每次创建出来的是一个新的函数
-       //使用useMemo的话每次函数对象只创建一次，所以当count改变的时候，Child不会render
-       const sumFunction = useMemo(() => {
-         console.log('compute');
-         let sum = 0;
-         for (let i = 0; i < count * 10; i++) {
-           sum += i;
-         }
-         return sum;
-       }, [count]);
-       //等价于
-       // useCallback同理，当count改变时，代码执行到这里时，会再次创建一个新的sumFunction函数，所以Child组件也会再次render
-       const sumFunction = useCallback(() => {
-         console.log('compute');
-         let sum = 0;
-         for (let i = 0; i < count * 10; i++) {
-           sum += i;
-         }
-         return sum;
-       }, [count]);
-       return (
-         <div>
-           <div>
-             {count}-{val}-{sumFunction}
-           </div>
-           <button onClick={() => setCount(count + 1)}>点击+1</button>
-           <p>
-             <input value={val} onChange={e => setVal(e.target.value)} />
-           </p>
-           <ChildComponent />
-         </div>
-       );
-     }
-     ```
+      export default function App() {
+        const [count, setCount] = useState(0);
+        const [val, setVal] = useState('');
+        //不使用useMemo的话，每次创建出来的是一个新的函数
+        //使用useMemo的话每次函数对象只创建一次，所以当count改变的时候，Child不会render
+        const sumFunction = useMemo(() => {
+          console.log('compute');
+          let sum = 0;
+          for (let i = 0; i < count * 10; i++) {
+            sum += i;
+          }
+          return sum;
+        }, [count]);
+        //等价于
+        // useCallback同理，当count改变时，代码执行到这里时，会再次创建一个新的sumFunction函数，所以Child组件也会再次render
+        const sumFunction = useCallback(() => {
+          console.log('compute');
+          let sum = 0;
+          for (let i = 0; i < count * 10; i++) {
+            sum += i;
+          }
+          return sum;
+        }, [count]);
+        return (
+          <div>
+            <div>
+              {count}-{val}-{sumFunction}
+            </div>
+            <button onClick={() => setCount(count + 1)}>点击+1</button>
+            <p>
+              <input value={val} onChange={e => setVal(e.target.value)} />
+            </p>
+            <ChildComponent />
+          </div>
+        );
+      }
+      ```
 
-   2. `useMemo` 和 `useCallback` 的区别及使用场景
+    2. `useMemo` 和 `useCallback` 的区别及使用场景
 
-      **共同作用：**
+       **共同作用：**
 
-   `useMemo` 和 `useCallback` 接收的参数都是一样,第一个参数为回调 第二个参数为要依赖的数据
+       `useMemo` 和 `useCallback` 接收的参数都是一样,第一个参数为回调 第二个参数为要依赖的数据
 
-   **两者区别：**
+       **两者区别：**
 
-   - `useMemo` 返回结果是 `return` 回来的值, 主要用于缓存计算结果的值 ，应用场景如： 需要计算的状态（防止计算函数执行多次）
-   - `useCallback` 返回结果是函数, 主要用于缓存函数的引用，应用场景如: 需要缓存的函数，因为函数式组件每次任何一个 `state` 的变化整个组件都会被重新刷新，一些函数是没有必要被重新刷新的，此时就应该缓存起来，提高性能，和减少资源浪费
+       - `useMemo` 返回结果是 `return` 回来的值, 主要用于缓存计算结果的值 ，应用场景如： 需要计算的状态（防止计算函数执行多次）
+       - `useCallback` 返回结果是函数, 主要用于缓存函数的引用，应用场景如: 需要缓存的函数，因为函数式组件每次任何一个 `state` 的变化整个组件都会被重新刷新，一些函数是没有必要被重新刷新的，此时就应该缓存起来，提高性能，和减少资源浪费
 
-   **使用场景**
+       **使用场景**
 
-   - `useMemo`
-     上述代码中维护了两个`state`，可以看到`sumFunction`的计算仅仅跟`count`有关，但是现在无论是`count`还是`val`变化，都会导致`sumFunction`重新计算，所以这里我们希望`val`修改的时候，不需要再次计算，这种情况下我们可以使用`useMemo`
-   - `useCallback`
-     有一个父组件，其中包含子组件，子组件接收一个函数作为`props`；通常而言，如果父组件更新了，子组件也会执行更新；但是大多数场景下，更新是没有必要的，我们可以借助`useCallback`来返回函数，然后把这个函数作为`props`传递给子组件；这样，子组件就能避免不必要的更新
+       - `useMemo`
+         上述代码中维护了两个`state`，可以看到`sumFunction`的计算仅仅跟`count`有关，但是现在无论是`count`还是`val`变化，都会导致`sumFunction`重新计算，所以这里我们希望`val`修改的时候，不需要再次计算，这种情况下我们可以使用`useMemo`
+       - `useCallback`
+         有一个父组件，其中包含子组件，子组件接收一个函数作为`props`；通常而言，如果父组件更新了，子组件也会执行更新；但是大多数场景下，更新是没有必要的，我们可以借助`useCallback`来返回函数，然后把这个函数作为`props`传递给子组件；这样，子组件就能避免不必要的更新
 
-   3. `PureComponent`
+    3. `PureComponent`
 
-   `React.PureComponent` 与 `React.Component` 几乎完全相同，但`React.PureComponent` 通过 props 和 state 的浅对比来实现 `shouldComponentUpate()`，如果定义了 `shouldComponentUpdate()`，无论组件是否是 `PureComponent`，它都会执行`shouldComponentUpdate`结果来判断是否 `update`。如果组件未实现 `shouldComponentUpdate()` ，则会判断该组件是否是 `PureComponent`，如果是的话，会对新旧`props、state` 进行 `shallowEqual` 比较，一旦新旧不一致，会触发 `update`
+    `React.PureComponent` 与 `React.Component` 几乎完全相同，但`React.PureComponent` 通过 `props` 和 `state` 的浅对比来实现 `shouldComponentUpate()`，如果定义了 `shouldComponentUpdate()`，无论组件是否是 `PureComponent`，它都会执行`shouldComponentUpdate`结果来判断是否 `update`。如果组件未实现 `shouldComponentUpdate()` ，则会判断该组件是否是 `PureComponent`，如果是的话，会对新旧`props、state` 进行 `shallowEqual` 比较，一旦新旧不一致，会触发 `update`
 
-   **优点**
+    **优点**
 
-   不需要开发者自己实现`shouldComponentUpdate`，就可以进行简单的判断来提升性能
+         不需要开发者自己实现`shouldComponentUpdate`，就可以进行简单的判断来提升性能
 
-   **缺点**
+    **缺点**
 
-   可能会因深层的数据不一致而产生错误的否定判断，从而`shouldComponentUpdate`结果返回`false`，界面得不到更新
+         可能会因深层的数据不一致而产生错误的否定判断，从而`shouldComponentUpdate`结果返回`false`，界面得不到更新
 
 ## 20、react 中的 refs 是干嘛用的？
 

@@ -27,14 +27,16 @@ date: 2020-08-24 10:47:10
 **如何区分 html 和 html5**
 
 1. 文档类型声明
-   html 声明：`<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">`
 
-html5：`<!doctype html>`
+   - `html` 声明：`<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">`
+
+   - `html5`：`<!doctype html>`
 
 2. 结构语义
-   html:没有体现结构语义化的标签，通常是用`<div id="header"></div>`来表示头部
 
-html5:在语义上有很大优势，提供了一些新的 html5 标签，比如：`article、footer、header、nav、section`
+   - `html`:没有体现结构语义化的标签，通常是用`<div id="header"></div>`来表示头部
+
+   - `html5`:在语义上有很大优势，提供了一些新的 html5 标签，比如：`article、footer、header、nav、section`
 
 ## 2、外边距重叠
 
@@ -263,7 +265,7 @@ html5:在语义上有很大优势，提供了一些新的 html5 标签，比如�
 
 ## 5、居中为什么要用 `transfrom`,而不是使用 `marginLeft、marginTop`?
 
-因为 `margin` 会导致页面重排和重绘，但是 `transfrom` 却不是，tranfrom 是创建一个独立的层。
+因为 `margin` 会导致页面重排和重绘，但是 `transfrom` 却不是，`tranfrom` 是创建一个独立的层。
 
 **浏览器渲染过程**
 
@@ -280,11 +282,11 @@ html5:在语义上有很大优势，提供了一些新的 html5 标签，比如�
 
 **tansform 的原理**
 
-transform 是通过创建一个 RenderLayers(渲染)合成层，拥有独立的 GraphicsLayers(绘图层),每一个 GraphicsLayers 都有一个 Graphics Context，其对应的 RenderLayers 会 Paint 进 Graphics Context 中，合成器(Compositor)最终负责将 Graphics Context 输出的位图合并成最终屏幕展示的图案
+transform 是通过创建一个 `RenderLayers`(渲染)合成层，拥有独立的 `GraphicsLayers`(绘图层),每一个 GraphicsLayers 都有一个 Graphics Context，其对应的 RenderLayers 会 Paint 进 Graphics Context 中，合成器(Compositor)最终负责将 Graphics Context 输出的位图合并成最终屏幕展示的图案
 
 **margin**
 
-margin：外边距，定义元素周围的空间；简言之，可以改变元素的位移，在浏览器页面渲染的时候，margin 可以控制元素的位置，也就是说，改变 margin，就会改变 render tree 的结构，必定会引起页面 layout 的回流和 repaint 的重绘
+margin：外边距，定义元素周围的空间；简言之，可以改变元素的位移，在浏览器页面渲染的时候，margin 可以控制元素的位置，也就是说，改变 margin，就会改变 render tree 的结构，必定会引起页面 layout 的`重排`和 repaint 的`重绘`
 
 **transform 的局限性**
 
@@ -292,12 +294,12 @@ transform 实际上是用到了 GPU 加速，也就是说占用了内存，由�
 
 **独立的合成层**
 
-- 有 3D 或者 perspective transform 的 css 属性
-- video 元素的层
-- canvas 元素的层
-- flash
+- 有 `3D` 或者 perspective transform 的 css 属性
+- `video` 元素的层
+- `canvas` 元素的层
+- `flash`
 - 对 opacity 和 transform 应用了 css 动画的层
-- 使用了 css 滤镜(filtters)
+- 使用了 css `滤镜`(filtters)
 - 有合成后代的层
 - 同合成层重叠，且在该合成层上面(z-index)的渲染
 
