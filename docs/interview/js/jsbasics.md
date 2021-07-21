@@ -1264,3 +1264,46 @@ console.log(moneySwitch(45.9853, 2, 3)); //46
 `mouseenter`不会冒泡 。
 
 就是当设定了多个`div`的嵌套时；即建立了父子关系，当父`div`与子`div`共同加入了`onclick`事件时，当触发了子`div`的`onclick`事件后，子`div`进行相应的`js`操作。但是父`div`的`onclick`事件同样会被触发。这就造成了事件的多层并发，导致了页面混乱。这就是冒泡事件
+
+### 13、Promise 的几种类型
+
+- `Promise.all`
+  `Promise.all`可以将多个`Promise`实例包装成一个新的 Promise 实例。同时，成功和失败的返回值是不同的，成功的时候返回的是一个结果数组，而失败的时候则返回最先被 reject 失败状态的值
+
+  具体代码如下：
+
+  ```js
+  let p1 = new Promise((resolve, reject) => {
+    resolve('成功了');
+  });
+
+  let p2 = new Promise((resolve, reject) => {
+    resolve('success');
+  });
+
+  let p3 = Promse.reject('失败');
+
+  Promise.all([p1, p2])
+    .then(result => {
+      console.log(result); //['成功了', 'success']
+    })
+    .catch(error => {
+      console.log(error);
+    });
+
+  Promise.all([p1, p3, p2])
+    .then(result => {
+      console.log(result);
+    })
+    .catch(error => {
+      console.log(error); // 失败了，打出 '失败'
+    });
+  ```
+
+  `Promse.all`在处理多个异步处理时非常有用，比如说一个页面上需要等两个或多个 ajax 的数据回来以后才正常显示，在此之前只显示 loading 图标
+
+  **特别注意**：Promise.all 获得的成功结果的数组里面的数据顺序和 Promise.all 接收到的数组顺序是一致的，即 p1 的结果在前，即便 p1 的结果获取的比 p2 要晚。这带来了一个绝大的好处：在前端开发请求数据的过程中，偶尔会遇到发送多个请求并根据请求顺序获取和使用数据的场景，使用 Promise.all 毫无疑问可以解决这个问题
+
+- `Promise.race`
+
+  `Promse.race`就是赛跑的意思，意思就是说，Promise.race([p1, p2, p3])里面哪个结果获得的快，就返回那个结果，不管结果本身是成功状态还是失败状态

@@ -52,10 +52,13 @@ const menus = {
       ],
     },
     {
+      title: 'Vue',
+      children: ['myblog/vue/00'],
+    },
+    {
       title: '微信小程序',
       children: ['myblog/wechat/index'],
     },
-    // { title: 'Vue', collapsable: true, children: ['vue/vuesource.md'] },
     {
       title: 'Webpack',
       children: ['myblog/webpack/00', 'myblog/webpack/01'],
