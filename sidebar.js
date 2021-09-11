@@ -53,7 +53,7 @@ const menus = {
     },
     {
       title: 'Vue',
-      children: ['myblog/vue/00'],
+      children: ['myblog/vue/00', 'myblog/vue/01', 'myblog/vue/02'],
     },
     {
       title: '微信小程序',

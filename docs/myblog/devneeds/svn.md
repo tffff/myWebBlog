@@ -83,7 +83,10 @@ git status
 ### 4、将文件添加到暂存区
 
 ```bash
+# 添加单个文件
 git add [file-name.txt]
+# 添加所有修改的文件
+git add .
 ```
 
 ### 5、将所有新文件和更改过的文件添加到登台区域
@@ -131,7 +134,7 @@ git checkout -b [branch name]
 ### 12、克隆一个远程分支并切换到该分支
 
 ```bash
-git checkout -b [branch name] origin/[branch name]
+git checkout -b [本地分支名] origin/[远程分支名]
 ```
 
 ### 13、重命名本地分支
@@ -212,31 +215,34 @@ git log
 git diff [source branch] [target branch]
 ```
 
-<!-- ```bash
-// 查看项目文件状态
-git status
+## git 多分支开发
 
-//
+```bash
+# 创建自己的分子并把远程分支的代码拉到本地
+
+# 创建本地分支 注意：该分支只在本地出现，还没有提交到远程服务上
+# 例如 git checkout -b test
+git checkout -b [本地分支]
+# 拉取远程分支到本地分支
+git pull origin [远程分支]
+# 修改新创建的本地分支的代码，并提交到远程服务器，会创建一个
+# 例如 git push origin test  远程分支就会有一个test分支（
+# 注意：本地分支推送的时候不能改名，意思就是本地分支是什么名字线上就是什么名字
+git push origin [需要推送代码的分支]
+
+# 分支合并
+
+# 第一步  在自己的开发分支
 git add .
-
-//添加更新说明
-git commit -m 'first'
-
-//上面两步合成一步
-git commit -a -m 'first'
-
-//提交忽略eslint检测
-git commit --no-verify -m "commit"
-
-//添加到某个分支 或者主干
-git push origin master
-
-//git 更新版本
-git pull origin master
-
-//创建分支
-//git chechout -b aaa
-``` -->
+git commit -m '提交内容'
+git push
+# 第二步 主分支(需要合并的分支)
+git checkout [目标分支]
+#拉取最新的代码
+git pull
+# 把自己的开发分支合到活动分支
+git merge [自己的开发分支]
+```
 
 ## nrm 切换源
 

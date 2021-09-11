@@ -166,6 +166,8 @@ console.log('hello world' instanceof PrimitiveString); // true
   Object.prototype.toString.call(undefined); // "[object Undefined]"
   ```
 
+- `Reflect.has(Array,'concat')` es6 反射
+
 ### 3、数组的方法
 
 1. `some`
