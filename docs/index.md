@@ -1,7 +1,7 @@
 ---
 hero:
   title: Tffff的博客
-  desc: 积少成多 水滴石穿1
+  desc: 积少成多 水滴石穿
   image: /public/banner.png
   actions:
     - text: 开始探索
@@ -19,4 +19,3 @@ features:
     desc: 分享是一种美德
 footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by Tffff
 ---
-

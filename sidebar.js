@@ -80,10 +80,10 @@ const menus = {
     {
       title: '前端工程化',
       children: [
-        'myblog/engineering/continuous',
-        'myblog/engineering/sonar',
-        'myblog/engineering/writecli',
-        'myblog/engineering/jenkins',
+        'myblog/cicd/continuous',
+        'myblog/cicd/sonar',
+        'myblog/cicd/writecli',
+        'myblog/cicd/jenkins',
       ],
     },
     {
