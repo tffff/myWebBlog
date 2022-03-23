@@ -1,7 +1,7 @@
 ---
 hero:
   title: Tffff的博客
-  desc: 积少成多 水滴石穿
+  desc: 积少成多 水滴石穿1
   image: /public/banner.png
   actions:
     - text: 开始探索
