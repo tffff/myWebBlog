@@ -12,6 +12,8 @@ const menus = {
         'myblog/devneeds/regular',
         'myblog/devneeds/vscode',
         'myblog/devneeds/gitlab',
+        'myblog/devneeds/nginx',
+        'myblog/devneeds/docker',
       ],
     },
     {

@@ -26,3 +26,41 @@ source /etc/profile
 # 查看JAVA_HOME变量
 echo $JAVA_HOME
 ```
+
+## 离线 java 环境
+
+> 注意：不要用 yum 命令下载安装，因为安装的版本不一样
+
+1.  MacOs 安装 JDK
+
+直接下载 dmg 安装(注意版本不是 1.8，而是 14.0.1)
+
+2. Linux 安装 JDK
+
+先从[java 官网](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)下载 jdk 文件，因为这个文件不能用 wget 直接在服务器端下载，所以我选择从本机电脑上下载之后上传到服务器安装
+Linux 系统选择 rmp 后缀的文件夹下载
+
+<!-- ![jdk下载](/engineering/java_download.png) -->
+<img src='../../assets/engineering/java_download.png'>
+
+使用 sftp 上传到服务器（还有其他两种方式 ftp,scp）,参考<router-link to='/myblog/node/loginserver'>远程传输文件到服务器</router-link>
+
+3. 安装 jdk
+
+```bash
+[root@localhost]# rpm -ivh 文件名
+```
+
+检查 java 环境是否安装好
+
+```bash
+[root@localhost]# java -version
+```
+
+出现如下结果就是安装完成！
+
+```javascript
+java version "14.0.1" 2020-04-14
+Java(TM) SE Runtime Environment (build 14.0.1+7)
+Java HotSpot(TM) 64-Bit Server VM (build 14.0.1+7, mixed mode, sharing)
+```
