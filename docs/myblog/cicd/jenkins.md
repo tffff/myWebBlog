@@ -3,7 +3,9 @@ title: JenKins配置
 date: 2020-07-10 10:21:38
 ---
 
-## jenkins 是什么
+## jenkins 配置
+
+### jenkins 是什么
 
 `Jenkins` 是一个开源的、提供友好操作界面的持续集成(CI)工具，起源于 Hudson（Hudson 是商用的），主要用于持续、自动的构建/测试软件项目、监控外部任务的运行(这个比较抽象，暂且写上，不做解释)Jenkins 用 Java 语言编写，可在 Tomcat 等流行的 servlet 容器中运行,也可独立运行。通常与版本管理工具(SCM)、构建工具结合使用。常用的版本控制工具有 SVN、GIT，构建工具有 Maven、Ant、Gradle
 ,国内用 `jenkins` 用的多，[官网链接](https://www.jenkins.io/)。
@@ -12,18 +14,18 @@ date: 2020-07-10 10:21:38
 
 <Alert type="warning"> **下载的时候下载长期支持版本**(不要使用 war 的方法安装 jenkins),jenkins 安装之后自动集成服务，所以如果是 Mac 上安装的话需要取消开机自启，毕竟还是挺消耗内存的。</Alert>
 
-## 安装 jenkins 的前置条件
+### 安装 jenkins 的前置条件
 
 1. 选择 `centos` 系统安装
 2. 256 MB 内存，建议大于 512 MB
 3. 10 GB 的硬盘空间（用于 Jenkins 和 Docker 镜像）
 4. Java 8+ ( JRE 或者 JDK 都可以)，[安装教程](/myblog/cicd/java)
 
-## 在线安装 jenkins
+### 在线安装 jenkins
 
 1. 查看[jenkins 官网](https://pkg.jenkins.io/redhat-stable/),按照上面的步骤安装 jenkins 和 java openjdk
 
-## 离线安装 jenkins
+### 离线安装 jenkins
 
 2. 把下载的文件传到服务器上，然后解压，具体实现方法参考[上传文件到服务器](/myblog/linux/loginserver)、
 3. 在 linux 上安装文件
@@ -33,7 +35,7 @@ date: 2020-07-10 10:21:38
 [root@localhost opt]# rpm -ivh jenkins-2.235.2-1.1.noarch.rpm
 ```
 
-## 需要注意的地方
+### 需要注意的地方
 
 使用 root 账号登录 linux 系统
 
@@ -57,7 +59,7 @@ date: 2020-07-10 10:21:38
 :wq
 ```
 
-## 启动服务
+### 启动服务
 
 使用命令 `service jenkins` 进行启动管理
 
@@ -78,7 +80,7 @@ Starting jenkins (via systemctl):                          [  OK  ]
 
 如果同一环境 JDK 版本过高就删除 14 安装 11 的版本
 
-## 报错
+### 报错信息
 
 在浏览器上输入`服务器IP:8088`，打开看到了报错
 
@@ -115,7 +117,7 @@ yum install fontconfig
 
 这样就设置完成了，可以开始使用了。
 
-## 更换插件下载源
+### 更换插件下载源
 
 管理 kenkins > 系统配置 > 管理插件 #高级->升级站点 替换掉源[代码](/myblog/engineering/jenkins.html#插件过慢的解决方法)
 
@@ -127,13 +129,13 @@ yum install fontconfig
 
 清华源：[https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json](https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json)
 
-## 准备关机
+### 准备关机
 
 Jenkins 在任务处理的时候是一个事物，如果停止了可能会出现一些问题。防止在关闭服务器的时候，必须等任务结束才能执行这个操作，并且关机之后不会创建新的任务
 
 保证数据安全性的一套机制
 
-## 插件过慢的解决方法
+### 插件过慢的解决方法
 
 清华源替换地址:[https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json](https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json)
 
@@ -142,3 +144,30 @@ Jenkins 在任务处理的时候是一个事物，如果停止了可能会出现
 ```bash
 [root@localhost updates]# sed -i 's/http:\/\/updates.jenkins-ci.org\/download/https:\/\/mirrors.tuna.tsinghua.edu.cn\/jenkins/g' default.json && sed -i 's/http:\/\/www.google.com/https:\/\/www.baidu.com/g' default.json
 ```
+
+## jenkins 创建项目
+
+<img src='../../assets/engineering/jenkins配置1.png'>
+<img src='../../assets/engineering/jenkins配置2.png'>
+<img src='../../assets/engineering/jenkins配置Maven.png'>
+<img src='../../assets/engineering/jenkins配置node.png'>
+
+### 1.jenkins 拉取 github 的项目
+
+先创建项目
+<img src='../../assets/engineering/jenkins创建项目.png'>
+<img src='../../assets/engineering/jenkins配置git.png'>
+<img src='../../assets/engineering/jenkins创建项目1.png'>
+<img src='../../assets/engineering/jenkins创建项目2.png'>
+这个地方主要是填写 github 的用户名和密码来授权
+<img src='../../assets/engineering/jenkins创建项目5.png'>
+<img src='../../assets/engineering/jenkins创建项目3.png'>
+<img src='../../assets/engineering/jenkins创建项目4.png'>
+下面就是构建完成之后的结果
+<img src='../../assets/engineering/jenkins创建项目6.png'>
+
+`jenkins` 构建之后的地址是在
+
+## 参考资料
+
+[jenkins 安装](https://blog.csdn.net/lisongyue123/article/details/115479216)
