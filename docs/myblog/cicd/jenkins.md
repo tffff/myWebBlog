@@ -166,7 +166,10 @@ Jenkins 在任务处理的时候是一个事物，如果停止了可能会出现
 下面就是构建完成之后的结果
 <img src='../../assets/engineering/jenkins创建项目6.png'>
 
-`jenkins` 构建之后的地址是在
+`jenkins` 构建之后的地址是在`/var/lib/jenkins/workspace/`里面
+
+项目打包，执行命令
+<img src='../../assets/engineering/jenkins创建项目7.png'>
 
 ## 参考资料
 
