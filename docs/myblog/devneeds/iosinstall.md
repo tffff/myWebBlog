@@ -15,7 +15,7 @@ date: 2020-11-06 16:14
 2. 安装好 itools 之后 打开，使用数据线链接电脑和手机，如果是 mac 电脑的就会显示该页面
 
 <!-- ![itools手机界面](/devneeds/itools2.png) -->
-<img src='../../assets/devneeds/itools2.png'/>
+<img src='../../assets/devneeds/itools3.png'/>
 
 点击更多找到**设备标识**，复制**设备标识**
 
