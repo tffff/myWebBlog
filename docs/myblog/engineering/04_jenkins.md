@@ -23,7 +23,7 @@ date: 2020-07-10 10:21:38
 
 ### 在线安装 jenkins
 
-1. 查看[jenkins 官网](https://pkg.jenkins.io/redhat-stable/),按照上面的步骤安装 jenkins 和 java openjdk
+1. 查看[jenkins 官网](https://pkg.jenkins.io/redhat-stable/),按照上面的步骤安装 `jenkins` 和 `java openjdk11`
 
 ### 离线安装 jenkins
 
@@ -80,11 +80,26 @@ Starting jenkins (via systemctl):                          [  OK  ]
 
 如果同一环境 JDK 版本过高就删除 14 安装 11 的版本
 
-### 报错信息
+## 出现的问题
 
-在浏览器上输入`服务器IP:8088`，打开看到了报错
+### 1.下面的报错信息
 
-<!-- ![jenkins报错](/engineering/jenkins报错.png) -->
+<img src='../../assets/engineering/jenkins错误.png'>
+
+<img src='../../assets/engineering/jenkins错误1.png'>
+
+出现上图的问题就是防火墙没有打开，执行下面的命令
+
+```bash
+# 查看jenkins报错信息
+systemctl status jenkins.service
+# 关闭防火墙
+systemctl stop firewalld
+systemctl disable firewalld
+```
+
+### 2.在浏览器上输入`服务器IP:8088`，打开看到了报错
+
 <img src='../../assets/engineering/jenkins报错.png'>
 
 **解决方法：**
@@ -145,7 +160,7 @@ Jenkins 在任务处理的时候是一个事物，如果停止了可能会出现
 [root@localhost updates]# sed -i 's/http:\/\/updates.jenkins-ci.org\/download/https:\/\/mirrors.tuna.tsinghua.edu.cn\/jenkins/g' default.json && sed -i 's/http:\/\/www.google.com/https:\/\/www.baidu.com/g' default.json
 ```
 
-## jenkins 创建项目
+## jenkins 创建自由项目
 
 <img src='../../assets/engineering/jenkins配置1.png'>
 <img src='../../assets/engineering/jenkins配置2.png'>
@@ -170,6 +185,74 @@ Jenkins 在任务处理的时候是一个事物，如果停止了可能会出现
 
 项目打包，执行命令
 <img src='../../assets/engineering/jenkins创建项目7.png'>
+
+## jenkins 创建流水线项目
+
+- 自由风格项目弊端
+  - 任务的完成需要在 Jenkins 端维护大量的配置
+  - 没法做版本控制
+  - 可读性、可移植性很差，不够优雅
+- 流水线的好处
+  - Pipeline 的实现方式是一套 Groovy DSL（ 领域专用语言 ），所有的发布流程都可以表述为一段 Groovy 脚本
+  - 帮助 jenkins 实现持续集成 CI（Continue Integration）和持续部署 CD（Continue Deliver）的重要手段
+
+`pipeline` 流水线操作不用过多关于自由风格项目的图形设置与步骤，只需将相关的操作，生成对应的 DSL 语言，并按自己的需求进行一步一步执行即可，同时该代码的移植性更强；并且在流水线语法中，可自动生成我们需要的代码，便于维护
+
+<img src='../../assets/engineering/jenkins流水线项目.png'>
+<img src='../../assets/engineering/jenkins流水线项目1.png'>
+
+`Jenkinsfile`的代码示例
+
+每个 step 里面的代码可以根据流水线语法来生成
+
+```bash
+pipeline {
+    agent any
+    tools {nodejs "NodeJS"}  //这一步是因为是在jenkins里面安装包的node ,所以全局获取不到，但是加了这一句就可以
+    stages {
+        stage('下载') {
+            steps {
+                git credentialsId: '99e3266e-1b57-45f4-8b29-a8866431ad2f', url: 'https://github.com/tffff/XXX.git'
+            }
+        }
+        stage('打包') {
+            steps {
+                sh "node -v"
+                println '开始下载'
+                sh 'npm install'
+                println '下载完成'
+                sh 'npm run build'
+                println '打包完成'
+            }
+        }
+        stage('发布部署') {
+            steps {
+                script{
+                    //通过withCredentials调用Jenkins凭据中已保存的凭据，credentialsId需要填写，其他保持默认即可
+                    withCredentials([usernamePassword(credentialsId: 'ba2811c7-ea14-4a64-8277-6a2b05bace5d', passwordVariable: 'PWD', usernameVariable: 'USER')]) {
+                        def remote = [:]
+                        remote.name = 'ssh-deploy'
+                        remote.host = '124.221.101.9'
+                        remote.port = 22
+                        remote.allowAnyHosts = true
+                        remote.user = USER
+                        remote.password = PWD
+                        //执行ssh
+                        println '将文件压缩'
+                        sshCommand remote: remote,command: "cd /var/lib/jenkins/workspace/流水线demo/dist && tar czvf blog.tar dist"
+将                      println '文件压缩结束'
+                    }
+                    echo '部署'
+                }
+
+            }
+        }
+    }
+}
+
+
+
+```
 
 ## 参考资料
 

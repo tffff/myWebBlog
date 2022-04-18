@@ -1,7 +1,7 @@
 const menus = {
   '/myblog': [
     {
-      title: '开发需要',
+      title: '开发基础',
       children: [
         'myblog/devneeds/jquerymodule',
         'myblog/devneeds/svn',
@@ -43,64 +43,60 @@ const menus = {
       ],
     },
     {
-      title: 'React',
+      title: '前端框架类',
       children: [
-        'myblog/react/react探索',
-        'myblog/react/redux初探',
-        'myblog/react/react源码解析',
-        'myblog/react/reacthook探索',
-        'myblog/react/reacthook源码解析',
-        'myblog/react/ssr',
+        'myblog/frame/react探索',
+        'myblog/frame/react_redux初探',
+        'myblog/frame/react源码解析',
+        'myblog/frame/reacthook探索',
+        'myblog/frame/reacthook源码解析',
+        'myblog/frame/react_ssr',
+        'myblog/frame/vue_00',
+        'myblog/frame/vue_01',
+        'myblog/frame/vue_02',
+        'myblog/frame/applet_01',
+        'myblog/frame/ts_00',
       ],
     },
-    {
-      title: 'Vue',
-      children: ['myblog/vue/00', 'myblog/vue/01', 'myblog/vue/02'],
-    },
-    {
-      title: '微信小程序',
-      children: ['myblog/wechat/index'],
-    },
-    {
-      title: 'Webpack',
-      children: ['myblog/webpack/00', 'myblog/webpack/01'],
-    },
-    {
-      title: 'TS',
-      children: ['myblog/ts/00'],
-    },
-    {
-      title: 'Linux',
-      children: [
-        'myblog/linux/linuxcommand',
-        'myblog/linux/linux',
-        'myblog/linux/loginserver',
-      ],
-    },
-    { title: 'Node', children: ['myblog/node/node'] },
-    { title: 'http', children: ['myblog/http/http'] },
     {
       title: '前端工程化',
       children: [
-        'myblog/cicd/continuous',
-        'myblog/cicd/sonar',
-        'myblog/cicd/writecli',
-        'myblog/cicd/jenkins',
+        'myblog/engineering/01_webpack',
+        'myblog/engineering/02_webpack',
+        'myblog/engineering/parcel',
+        'myblog/engineering/rollup',
+        'myblog/engineering/03_continuous',
+        'myblog/engineering/04_jenkins',
+        'myblog/engineering/05_sonar',
+        'myblog/engineering/06_writecli',
       ],
     },
     {
       title: '性能优化',
       children: [
-        'myblog/optimization/performance',
-        'myblog/optimization/fp',
-        'myblog/optimization/chromebrower',
-        'myblog/optimization/nodeperformance',
+        'myblog/performance/performance',
+        'myblog/performance/fp',
+        'myblog/performance/chromebrower',
+        'myblog/performance/nodeperformance',
       ],
     },
-    { title: '关于测试', children: ['myblog/testcode/test'] },
     {
-      title: '图形学',
-      children: ['myblog/webgl/webgl', 'myblog/webgl/threejs'],
+      title: '服务器知识',
+      children: [
+        'myblog/server/linuxcommand',
+        'myblog/server/linux',
+        'myblog/server/loginserver',
+        'myblog/server/http',
+        'myblog/server/node',
+      ],
+    },
+    {
+      title: '其他',
+      children: [
+        'myblog/other/test',
+        'myblog/other/webgl',
+        'myblog/other/threejs',
+      ],
     },
   ],
   '/algorithm': [
