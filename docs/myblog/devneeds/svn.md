@@ -1,5 +1,5 @@
 ---
-title: Svn和Git安装和使用
+title: SVN和Git安装和使用
 date: 2020-07-29 15:10:11
 ---
 

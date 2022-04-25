@@ -1,36 +1,5 @@
 # java 环境安装
 
-## yum 在线下载安装 java
-
-一般是安装 `java 8` 、 `java 11`、`java 1.8` 版本
-
-下面是安装 java11 的执行命令过程
-
-```bash
-# 查找java相关的列表
-yum -y list java*
-# 安装jdk
-yum install java-1.8.0-openjdk.x86_64
-# 安装完之后验证
-java -version
-# 通过yum安装的默认路径为：/usr/lib/jvm
-
-# 将jdk的安装路径加入到JAVA_HOME
-cat /etc/profile
-# 编辑profile文件
-vi /etc/profile
-# 在profile文件里面加入下面的代码（路径根据自己设置的来）
-export JAVA_HOME=/usr/java/jdk-11.0.14/bin/java
-export PATH=$JAVA_HOME/bin:$PATH
-export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
-
-# 让profile文件生效
-source /etc/profile
-
-# 查看JAVA_HOME变量
-echo $JAVA_HOME
-```
-
 ## 离线 java 环境
 
 > 注意：不要用 `yum` 命令下载安装，因为安装的版本不一样
@@ -53,7 +22,7 @@ echo $JAVA_HOME
 
 ```bash
 # 1、安装java
-rpm -ivh 文件名
+rpm -ivh jdk-8u321-linux-x64.rpm
 
 # 2、编辑/etc/profile 步骤同上
 vi /etc/profile
@@ -66,4 +35,35 @@ java -version
 #Java(TM) SE Runtime Environment 18.9 (build 11.0.14+8-LTS-263)
 #Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.14+8-LTS-263, mixed mode)
 
+```
+
+## yum 在线下载安装 java
+
+一般是安装 `java 8` 、 `java 11`、`java 1.8` 版本
+
+下面是安装 `java8` 的执行命令过程
+
+```bash
+# 查找java相关的列表
+yum -y list java*
+# 安装jdk
+yum install java-1.8.0-openjdk.x86_64
+# 安装完之后验证
+java -version
+# 通过yum安装的默认路径为：/usr/lib/jvm
+
+# 将jdk的安装路径加入到JAVA_HOME
+cat /etc/profile
+# 编辑profile文件
+vi /etc/profile
+# 在profile文件里面加入下面的代码（路径根据自己设置的来）
+export JAVA_HOME=/usr/java/jdk-1.8.0/bin/java
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+
+# 让profile文件生效
+source /etc/profile
+
+# 查看JAVA_HOME变量
+echo $JAVA_HOME
 ```

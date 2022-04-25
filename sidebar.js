@@ -12,7 +12,6 @@ const menus = {
         'myblog/devneeds/regular',
         'myblog/devneeds/vscode',
         'myblog/devneeds/gitlab',
-        'myblog/devneeds/nginx',
         'myblog/devneeds/docker',
       ],
     },
@@ -83,9 +82,7 @@ const menus = {
     {
       title: '服务器知识',
       children: [
-        'myblog/server/linuxcommand',
         'myblog/server/linux',
-        'myblog/server/loginserver',
         'myblog/server/http',
         'myblog/server/node',
       ],

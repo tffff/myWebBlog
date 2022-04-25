@@ -1,8 +1,8 @@
 # sonar 代码检测
 
-## sonar 是什么？为什么要使用？
+## 1、sonar 是什么？为什么要使用？
 
-## 安装 sonar 的 准备条件
+## 2、安装 sonar 的 准备条件
 
 - `mysql 5.6 or 5.7`[mysql 教程](https://www.cnblogs.com/jj123/p/15740668.html)
 - `java jdk 11`
@@ -91,7 +91,7 @@ service mysql restart
 #8、登录mysql，修改密码(密码为步骤4生成的临时密码)
 mysql -u root -p
 #使用以下命令修改密码
-set password for root@localhost = password('123456');
+mysql>set password for root@localhost = password('123456');
 
 #9、开放远程连接
 mysql>use mysql;
@@ -106,9 +106,13 @@ mysql>flush privileges;
 CREATE DATABASE sonar DEFAULT CHARACTER SET utf8;
 ```
 
-## sonar 安装
+## 3、sonar 安装
 
 [Sonar 包](https://www.sonarqube.org/)官网下载
+
+<Alert>
+有些点需要注意：例如SonarQube 7.9之后数据库就不再支持MySQL了。所以按照本文安装要先看下你要安装SonarQube对应版本的要求。这个也是我一开始，安装最新版本SonarQube，数据库配置了MySQL，所以服务一直没有起来的原因,Sonar 7.9及更高版本需要JAVA 11
+</Alert>
 
 ```bash
 # 安装解压软件
@@ -162,7 +166,33 @@ ss -ntpl | grep 9000
 <!-- ![sonar界面](/engineering/汉化.png) -->
 <img src='../../assets/engineering/汉化.png'>
 
-### sonar 创建项目
+## 4、安装问题
+
+### 1、没有权限的时候报错
+
+<img src='../../assets/engineering/sonar无执行权限.png'>
+
+给整个文件夹权限就可以了
+
+```bash
+chmod 777 -R  sonarqube-9.4/
+```
+
+### 2、 找不到或无法加载主类
+
+<img src='../../assets/engineering/sonar报错1.png'>
+
+这个就是 `java` 版本不对。需要仔细查看 `sonar` 文档对应的 `java` 版本和`数据库`的版本
+
+### 3、 找不到或无法加载主类
+
+<img src='../../assets/engineering/sonar报错2.png'>
+
+这个就是删除对应的路径下面的文件夹就行，把 `temp` 删除掉
+
+启动的时候由于 sonar 是依赖 es 的，这里会有一个 es 会有一个默认的端口 9001 如果这个端口被占用了 sonar 也是起不来的
+
+## 5、sonar 创建项目
 
 <img src='../../assets/engineering/创建项目.png'>
 <img src='../../assets/engineering/create_project.png'>
@@ -188,7 +218,7 @@ sonar-scanner -v
 
 能查看到版本号就是完成了配置。下面就是实战项目
 
-### 实战
+## 实战
 
 如果我们要建一个某一个项目的代码，那就在该项目的根目录下面新建`sonar-project.properties`,填入在 sonar 上面创建项目的最后一步的代码
 
@@ -211,19 +241,3 @@ sonar-scanner \
 # 时间有点长 耐心等待结果
 zsh sonar-project.properties
 ```
-
-## 问题
-
-### 1、没有权限的时候报错
-
-<img src='../../assets/engineering/sonar无执行权限.png'>
-
-给整个文件夹权限就可以了
-
-```bash
-chmod 777 -R  sonarqube-9.4/
-```
-
-### 2、 找不到或无法加载主类
-
-<img src='../../assets/engineering/sonar报错1.png'>

@@ -276,3 +276,62 @@ LogLevel INFO
 ### 免密登录功能的本地配置文件
 
 编辑自己 `home` 目录的`cd .ssh/` 路径下的 `config` 文件,没有就新建一个 `config`
+
+## linux 常用命令
+
+```bash
+## 解压文件
+[root@localhost] # tar 文件名
+
+## 安装软件
+[root@localhost] # rpm -ivh
+```
+
+## linux 下安装 nginx
+
+[nginx 地址](http://nginx.org/en/download.html)
+
+[菜鸟安装](https://www.runoob.com/linux/nginx-install-setup.html)
+
+## scp 传输方式
+
+```bash
+#复制一个文件
+scp 本地文件路径  root@IP:/路径
+
+#复制多个文件
+scp ./*.zip root@IP:/路径
+
+#从服务器下载文件
+scp root@IP:/路径  本地文件路径
+
+#从一个服务器到另一个服务器
+scp [[user@]host1:]file1  [[user@]host2:]file2
+
+```
+
+## 本地传输文件到远程服务器
+
+### ftp 传输方式
+
+```bash
+# 登录服务器
+ftp user@xxx.com port
+```
+
+### sftp 传输方式
+
+```bash
+#sftp登录
+[root@localhost]# sftp 用户名@IP
+
+#将本地的文件上传到服务器
+[root@localhost]# put [本地文件的地址] [服务器上文件存储的位置]
+例如： [root@localhost]# put /root/java/sonarqube-8.4.0.35506.zip /opt
+
+#将服务器的文件下载到本地
+[root@localhost]# get [服务器上文件存储的位置] [本地要存储的位置]
+
+#退出
+[root@localhost]# exit或quit
+```
