@@ -7,12 +7,12 @@ const menus = {
         'myblog/devneeds/svn',
         'myblog/devneeds/macinstall',
         'myblog/devneeds/ios',
-        'myblog/devneeds/reactnativepit',
         'myblog/devneeds/iosinstall',
         'myblog/devneeds/regular',
         'myblog/devneeds/vscode',
         'myblog/devneeds/gitlab',
         'myblog/devneeds/docker',
+        'myblog/devneeds/reactnative',
       ],
     },
     {

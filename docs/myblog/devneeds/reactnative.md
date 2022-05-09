@@ -90,7 +90,7 @@ export default class App extends Component {
 
 直接对上述的文件进行搜索替换，然后进入`android`目录执行`./gradlew clean` 清除缓存
 
-把`android/app/src/main/java/com/PROJECT_NAME/MainActivity.java`和  
+把`android/app/src/main/java/com/PROJECT_NAME/MainActivity.java`和
 `/MainApplication.java`两个文件移入新创建的目录,新创建的目录要和包名相对应
 
 ## 4、react native 启动页的尺寸
