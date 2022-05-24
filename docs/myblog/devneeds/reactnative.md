@@ -1,6 +1,6 @@
 ---
 title: react native的坑
-date: 2020-11-09 16:14
+date: 2022-01-09 16:14
 ---
 
 # react native 的坑

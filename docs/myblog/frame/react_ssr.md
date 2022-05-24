@@ -1,6 +1,6 @@
 ---
 title: 从0到1使用react构建SSR
-date: 2020-08-31 16:20:10
+date: 2022-01-31 16:20:10
 ---
 
 ## 客户端渲染介绍
@@ -316,7 +316,7 @@ router.get('/', (ctx, next) => {
     <title>Document</title>
   </head>
   <body>
-    <div id='root'>${html}</div> 
+    <div id='root'>${html}</div>
     <script src="bundle.js"></script>
   </body>
   </html>`;
