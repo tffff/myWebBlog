@@ -7,6 +7,9 @@
 # 查看所以服务启动状态
 [root@localhost] docker ps
 
+# 导入镜像
+[root@localhost] docker load -i [镜像名]
+
 # 启动 停止 重启某个服务
 [root@localhost] docker start/stop/restart  [容器id]
 
@@ -29,5 +32,25 @@
 # 查看某个服务日志
 # --tail :仅列出最新N条容器日志
 # -f : 跟踪日志输出
-[root@localhost] docker logs -f [容器id]
+[root@localhost] docker logs -f --tail=100 [容器id]
+
+# 修改docker镜像的默认存储位置
+# 1.先安装 vim /etc/docker/daemon.json,添加下面的代码
+{
+ "exec-opts": [
+    "native.cgroupdriver=systemd"
+  ],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2",
+  "registry-mirrors": [
+    "https://ot2k4d59.mirror.aliyuncs.com/"
+  ],
+  "data-root": "/workspace/docker", //添加这一行
+  "insecure-registries": ["10.10.102.75"]
+}
+# 2.然后重启docker，就可以看到docker挂载的路径变了
+
 ```

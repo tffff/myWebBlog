@@ -16,5 +16,4 @@ export default defineConfig({
     '@s-menu-width': ' 260px',
     '@s-site-menu-width': '280px',
   },
-  lastUpdated: '上次更新时间',
 });

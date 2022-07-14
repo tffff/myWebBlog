@@ -244,10 +244,42 @@ git pull
 git merge [自己的开发分支]
 ```
 
+## git 撤销 pull 操作
+
+```bash
+#查看提交记录
+git reflog
+
+#撤销操作
+git reset --hard 对应前面的数字
+```
+
+## git 修改分支名称
+
+```bash
+# 1、本地分支重命名(还没有推送到远程)
+git branch -m oldName newName
+# 2、重命名远程分支对应的本地分支
+git branch -m oldName newName
+# 3、删除远程分支
+git push --delete origin oldName
+# 4、上传新命名的本地分支
+git push origin newName
+# 5、把修改后的本地分支与远程分支关联
+git branch --set-upstream-to origin/newName
+```
+
 ## nrm 切换源
 
-1. 下载 nrm `npm install -g nrm`
-2. 添加源 `nrm add 名字 私有npm地址`
-3. 使用某个源地址 `nrm use 名字`
-4. 查看 nrm 地址列表 `nrm ls`
-5. 删除源地址 `nrm del 名字`
+```bash
+# 1. 下载 nrm
+npm install -g nrm
+# 2. 添加源
+nrm add 名字 私有npm地址
+# 3、使用某个源地址
+nrm use 名字
+# 4. 查看 nrm 地址列表
+nrm ls
+# 5. 删除源地址
+nrm del 名字
+```

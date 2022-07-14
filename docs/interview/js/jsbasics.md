@@ -334,6 +334,25 @@ console.log(array === array2, array2); //true [10,10,10,4,5]
 
 > 会生成新数组的方法 `map`、`filter`、`flat`、`concat`、`flatMap`
 
+20. `at`
+    更方便地提取数组下标 value
+
+```js
+//`.`或者`[]`方式
+const array1 = res.data?.priceList || [];
+//获取最后一项价格
+const lastItemIndex = array1.length - 1;
+console.log(array1[lastItemIndex]);
+
+//at方式
+const array1 = res.data?.priceList || [];
+//获取最后一项价格
+console.log(array1.at(-1));
+```
+
+21. `Array.group`
+    可以对数组进行分组，不需要自己写判断逻辑，目前浏览器还不支持
+
 ### 4、Object 的方法有哪些？
 
 1. `startWidth` 返回布尔值，表示是否找到了参数字符串。

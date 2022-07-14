@@ -3,52 +3,135 @@ title: Linux知识点
 date: 2022-01-13 20:20:31
 ---
 
-## 主机远程连接服务器
+## 1、linux 安装
 
-> 服务器用户
-> root :当前登录⽤用户
+1. windows 安装[Vmware pro](https://www.vmware.com/cn.html),登录之后才能看到下载页面,centos 系统选择国内镜像安装
+2. 使用腾讯云服务器比较好
+3. 服务器一般选择 `CentOs`（redhat 有商业用途）
+4. 严格遵守大小写
+5. 可以在 windows 上模拟 linux 命令的软件[cygwin](http://www.cygwin.com/)
 
-`localhost` :主机名~ 当前⼯工作⽬目录,默认是当前⽤用户的家⽬目录，
+   ### linux 系统目录功能概述
 
-root 就是/root,
+   <img src='../../assets/node/linux.png'>
 
-普通⽤用户是: /home/⽤用户名
+   - `etc` 配置文件（系统和程序的配置文件）
+   - `boot` 不同版本的内核文件
+   - `sbin` 环境变量存的位置
+   - `mnt` 接移动硬盘这类
+   - `srv` 是服务程序
+   - `usr` 是用户的命令
+   - `boot`(不要操作，存放 `linux` 内核，启动的配置文件)
+   - `opt` 自己装的软件
+   - `var` 是经常要用的(logs,系统日志)
+   - `dev` 设备文件
+   - `sys` 系统文件
+   - `sbin` 可执行文件
+   - `tmp` 临时文件(关闭之后会清空)
 
-提示符: 超级⽤用户是 #,普通⽤用户是\$
+   <img src='../../assets/node/linux-etc.png'>
 
-连接命令
+   -r 可读 ，-w 可写，-x 可执行
+
+## 2、创建普通用户
 
 ```bash
-ssh 用户名@IP(ip是服务器公网ip)
+useradd [name]
+passwd [name]
 ```
 
-出现`[root@localhost]`就是登录成功
+## 3、基础知识汇总
 
-## 创建普通用户
+默认进服务器是 `root` 用户目录
 
-每个用户都有一个 home 目录
+```bash
+# 主机名~ 当前⼯工作⽬目录,默认是当前⽤用户的家⽬目录，使用whoami可以查看当前是哪个用户目录
+# 超级管理员 权限是最大的
+[root@localhost ~]$ whoami
 
-1、首先是进入 home
+# 显示$是超级用户
+[root@localhost ~]#
 
-<!-- ![linux](/node/linux.png) -->
-<img src='../../assets/node/linux.png'>
+# 显示#是普通用户
+[root@localhost ~]$
 
-mnt 接移动硬盘这类 ，srv 是服务程序 ，usr 是用户的命令，boot(不要操作，存放 linux 内核，启动的配置文件)，opt 自己装的软件，var 是经常要用的(logs,系统日志) ,dev 设备文件，sys 系统文件 ,sbin 可执行文件，tmp 临时文件(关闭之后会清空)
+# pwd 查看当前在那个用户目录下
+[user1@VM-16-14-centos ~]$ pwd
+# 这样显示是普通用户
+/home/user1
+# 这样显示是超级用户
+/home
 
-2、ect 是配置文件
+# linux 不分磁盘分区
 
-网络配置文件（/etc/sysconfig/network-scripts）
+# linux网络的配置文件在/etc/sysconfig/network-scripts/[ifcfg-eht0],不一定是0可能是其他的数字
+# 该文件内容如下：
+# 默认是dhcp,表示动态获取地址 ,静态地址：none static
+BOOTPROTO=dhcp
+DEVICE=eth0
+HWADDR=52:54:00:99:5b:3b
+#  开机自动开启网卡，访问不到机器的时候 是因为网卡没有激活，所以必须是yes
+ONBOOT=yes
+PERSISTENT_DHCLIENT=yes
+TYPE=Ethernet
+USERCTL=no
 
-本地回环地址 ifcfg-lo
+# ifdown 关闭网卡 ifup 开启网卡，不要在远程连接上做这个操作
 
-<!-- ![linux-etc](/node/linux-etc.png) -->
-<img src='../../assets/node/linux-etc.png'>
+# ifcfg-lo 本地回环地址 一般不动
 
--r 可读 ，-w 可写，-x 可执行
+# netstat -an  查看哪些端口被打开 netstat -an -p 多了一行pid，可以判断是哪一个进程用了这个端口
 
-## nginx 安装
+# kill pid 杀掉进程
+[root@localhost ~]$ kill [pid]
 
-参考[菜鸟教程](https://www.runoob.com/linux/nginx-install-setup.html)
+# 连接服务器 出现`[root@localhost]`就是登录成功
+[root@localhost ~]$ ssh 用户名@IP(ip是服务器公网ip)
+```
+
+## 4、linux 常用命令
+
+```bash
+# 查看隐藏文件 文件名前面带.的是隐藏文件
+[root@localhost]  ls -a
+
+# 创建文件夹
+[root@localhost]  mkdir  a
+
+# 创建文件
+[root@localhost]  touch  a.txt
+
+# 复制文件到指定目录(例如：复制a.txt文件到a目录下面)
+[root@localhost]  cp  a.txt a
+# 复制文件到指定目录并且重命名(例如：复制a.txt文件到a目录下面)
+[root@localhost]  cp  a.txt a/b.txt
+# 复制文件夹aaa并改名为ddd
+[root@localhost]  cp -r aaa ddd
+
+# 移动文件到指定目录(例如：复制a.txt文件到a目录下面),mv也有重命名的功能
+[root@localhost]  mv  a.txt a
+
+# 查看当前路径 /root/workspace/aaa
+[root@localhost]  pwd
+
+# 删除文件夹aaa   删除文件a.txt
+[root@localhost]  rm -r aaa / rm -r a.txt
+
+## 解压文件
+[root@localhost]  tar -xf 文件名
+
+# 查看磁盘空间
+[root@localhost]  df -h
+
+## 安装软件 rpm -ivh apache-1.3.6.i386.rpm
+[root@localhost]  rpm -ivh
+```
+
+## 5、linux 下安装 nginx
+
+[nginx 地址](http://nginx.org/en/download.html)
+
+[菜鸟安装](https://www.runoob.com/linux/nginx-install-setup.html)
 
 配置 nginx.conf，`/usr/local/webserver/nginx/conf/nginx.conf`
 
@@ -182,7 +265,7 @@ http {
 <!-- ![nginx](/node/nginx.png) -->
 <img src='../../assets/node/nginx.png'>
 
-## nginx 启动停止命令
+### nginx 启动停止命令
 
 ```bash
 /usr/local/webserver/nginx/sbin/nginx                      # 启动
@@ -191,7 +274,7 @@ http {
 /usr/local/webserver/nginx/sbin/nginx -s stop              # 停止 Nginx
 ```
 
-## 进程、线程、协程
+## 6、进程、线程、协程
 
 - 进程的目的就是担当分配系统资源（cpu 时间，内存）的实体
 - 线程是操作系统能够进行运算调度的最小单位
@@ -201,7 +284,7 @@ http {
 - 调度和切换的时间：进程>线程>协程
 - 内核是一个特殊的进程，是操作系统被启用的第一个程序
 
-## Liunx 免密登录
+## 7、Liunx 免密登录
 
 ### 生成秘钥对
 
@@ -277,23 +360,9 @@ LogLevel INFO
 
 编辑自己 `home` 目录的`cd .ssh/` 路径下的 `config` 文件,没有就新建一个 `config`
 
-## linux 常用命令
+## 8、本地传输文件到远程服务器
 
-```bash
-## 解压文件
-[root@localhost] # tar 文件名
-
-## 安装软件
-[root@localhost] # rpm -ivh
-```
-
-## linux 下安装 nginx
-
-[nginx 地址](http://nginx.org/en/download.html)
-
-[菜鸟安装](https://www.runoob.com/linux/nginx-install-setup.html)
-
-## scp 传输方式
+### scp 传输方式
 
 ```bash
 #复制一个文件
@@ -309,8 +378,6 @@ scp root@IP:/路径  本地文件路径
 scp [[user@]host1:]file1  [[user@]host2:]file2
 
 ```
-
-## 本地传输文件到远程服务器
 
 ### ftp 传输方式
 
