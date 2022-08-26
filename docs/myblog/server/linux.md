@@ -98,6 +98,9 @@ USERCTL=no
 # 创建文件夹
 [root@localhost]  mkdir  a
 
+# 删除文件夹
+[root@localhost]  rm -rf [文件夹命名]
+
 # 创建文件
 [root@localhost]  touch  a.txt
 

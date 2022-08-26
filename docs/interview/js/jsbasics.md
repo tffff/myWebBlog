@@ -115,7 +115,7 @@ console.log('hello world' instanceof PrimitiveString); // true
 
 你可能不知道`Symbol.hasInstance`是什么东西，其实就是一个能让我们自定义`instanceof`行为的东西，以上代码等同于`typeof 'hello world' === 'string'`，所以结果自然是`true`了。这其实也侧面反映了一个问题，`instanceof`也不是百分之百可信的。
 
-**Object.prototype.toString**
+**Object.prototype.toString.call**
 
 `toString`是`object`的原型方法，调用该方法可以统一返回格式为`[object xxx]`的字符串，其中`xxx`就是对象的类型，对于对象，直接调用`toString`就能返回`[object object]`
 
@@ -166,8 +166,6 @@ console.log('hello world' instanceof PrimitiveString); // true
   Object.prototype.toString.call(undefined); // "[object Undefined]"
   ```
 
-- `Reflect.has(Array,'concat')` es6 反射
-
 ### 3、数组的方法
 
 1. `some`
@@ -199,12 +197,12 @@ console.log('hello world' instanceof PrimitiveString); // true
 4. `map`
    **该方法返回一个新数组**，数组中的元素为原始数组元素调用函数处理后的值。它按照原始数组元素顺序依次处理元素
 
-```js
-const arr3 = [1, 2, 3, 4, 5, 6];
-console.log(arr3.map(value => value * value)); //1,4,9,16,25,36
-```
+   ```js
+   const arr3 = [1, 2, 3, 4, 5, 6];
+   console.log(arr3.map(value => value * value)); //1,4,9,16,25,36
+   ```
 
-> map() 不会对空数组进行检测；map() 不会改变原始数组
+   > map() 不会对空数组进行检测；map() 不会改变原始数组
 
 5. `flat`
    **此方法创建一个新数组**，其中包含子数组上的 holden 元素，并将其平整到新数组中。请注意，此方法只能进行一个级别的深度
@@ -225,18 +223,18 @@ console.log(arr3.map(value => value * value)); //1,4,9,16,25,36
    console.log(arr5.filter(item => item > 3)); //[4,5]
    ```
 
-> filter（）方法是对数据中的元素进行过滤，也就是说是不能修改原数组中的数据，只能读取原数组中的数据，callback 需要返回布尔值；为 true 的时候，对应的元素留下来；为 false 的时候，对应的元素过滤掉
+   > filter（）方法是对数据中的元素进行过滤，也就是说是不能修改原数组中的数据，只能读取原数组中的数据，callback 需要返回布尔值；为 true 的时候，对应的元素留下来；为 false 的时候，对应的元素过滤掉
 
 7. `forEach`
    此方法用于调用数组的每个元素。并将元素传递给回调函数
 
-```js
-arr5.forEach(item => {
-  console.log(item);
-});
-```
+   ```js
+   arr5.forEach(item => {
+     console.log(item);
+   });
+   ```
 
-> forEach() 对于空数组是不会执行回调函数的
+   > forEach() 对于空数组是不会执行回调函数的
 
 8. `findIndex`
    返回传入一个测试条件（函数）符合条件的数组第一个元素位置。它为数组中的每个元素都调用一次函数执行，当数组中的元素在测试条件时返回 true 时, findIndex() 返回符合条件的元素的索引位置，之后的值不会再调用执行函数。如果没有符合条件的元素返回 -1
@@ -298,60 +296,58 @@ arr5.forEach(item => {
 16. `Array.of`
     用于将参数依次转化为数组中的一项，然后返回这个新数组
 
-```js
-Array.of(8.0, 5); // [8, 5]
-```
+    ```js
+    Array.of(8.0, 5); // [8, 5]
+    ```
 
 17. `Array.from`
     基于其他对象创建新数组，准确来说就是从一个类似数组的可迭代对象中创建一个新的数组实例，Array.from 就能把它变成一个数组（注意：是返回新的数组，不改变原对象）
 
-```js
-Array.from('abc'); // ["a", "b", "c"]
-Array.from(new Set(['abc', 'def'])); // ["abc", "def"]
-Array.from(
-  new Map([
-    [1, 'ab'],
-    [2, 'de'],
-  ]),
-);
-```
+    ```js
+    Array.from('abc'); // ["a", "b", "c"]
+    Array.from(new Set(['abc', 'def'])); // ["abc", "def"]
+    Array.from(
+      new Map([
+        [1, 'ab'],
+        [2, 'de'],
+      ]),
+    );
+    ```
 
-18. `copyWithin`
+18. `copyWithin`从数组的指定位置拷贝元素到数组的另一个指定位置中
 
-```js
-var array = [1, 2, 3, 4, 5];
-var array2 = array.copyWithin(0, 3);
-console.log(array === array2, array2); // true [4, 5, 3, 4, 5]
-```
+    ```js
+    var array = [1, 2, 3, 4, 5];
+    var array2 = array.copyWithin(0, 3);
+    console.log(array === array2, array2); // true [4, 5, 3, 4, 5]
+    ```
 
 19. `fill`
 
-```js
-var array = [1, 2, 3, 4, 5];
-var array2 = array.fill(10, 0, 3);
-console.log(array === array2, array2); //true [10,10,10,4,5]
-```
+    ```js
+    var array = [1, 2, 3, 4, 5];
+    var array2 = array.fill(10, 0, 3);
+    console.log(array === array2, array2); //true [10,10,10,4,5]
+    ```
 
-> 会生成新数组的方法 `map`、`filter`、`flat`、`concat`、`flatMap`
+    > 会生成新数组的方法 `map`、`filter`、`flat`、`concat`、`flatMap`
 
-20. `at`
-    更方便地提取数组下标 value
+20. `at`更方便地提取数组下标 value
 
-```js
-//`.`或者`[]`方式
-const array1 = res.data?.priceList || [];
-//获取最后一项价格
-const lastItemIndex = array1.length - 1;
-console.log(array1[lastItemIndex]);
+    ```js
+    //`.`或者`[]`方式
+    const array1 = res.data?.priceList || [];
+    //获取最后一项价格
+    const lastItemIndex = array1.length - 1;
+    console.log(array1[lastItemIndex]);
 
-//at方式
-const array1 = res.data?.priceList || [];
-//获取最后一项价格
-console.log(array1.at(-1));
-```
+    //at方式
+    const array1 = res.data?.priceList || [];
+    //获取最后一项价格
+    console.log(array1.at(-1));
+    ```
 
-21. `Array.group`
-    可以对数组进行分组，不需要自己写判断逻辑，目前浏览器还不支持
+21. `Array.group` 可以对数组进行分组，不需要自己写判断逻辑，目前浏览器还不支持
 
 ### 4、Object 的方法有哪些？
 
@@ -585,9 +581,31 @@ for (var i = 1; i <= 5; i++) {
     i,
   );
 }
+
+// 如果期望代码的输出变成 0 -> 1 -> 2 -> 3 -> 4 -> 5，则该怎么改呢？
+
+var promise = Promise.resolve();
+const output = i => {
+  promise = promise.then(() => {
+    return new Promise(resolve => {
+      window.setTimeout(() => {
+        console.log(i);
+        resolve();
+      }, 1000);
+    });
+  });
+};
+for (var i = 0; i < 5; i++) {
+  output(i);
+}
 ```
 
 ## this、作用域
+
+- 由`new`调用：绑定到新创建的对象
+- 由`call`或`apply`、`bind`调用：绑定到指定的对象
+- 由上下文对象调用：绑定到上下文对象
+- 默认：全局对象
 
 ### 1、请写出下面如下代码的结果？
 
@@ -620,13 +638,11 @@ var myObject = {
   func: function() {
     var self = this;
     console.log(this.foo); //bar
-    console.log(self.foo)(
-      //bar
-      (function() {
-        console.log(this.foo); //undefined
-        console.log(self.foo); //bar
-      })(),
-    );
+    console.log(self.foo); //bar
+    (function() {
+      console.log(this.foo); //undefined
+      console.log(self.foo); //bar
+    })();
   },
 };
 myObject.func();
