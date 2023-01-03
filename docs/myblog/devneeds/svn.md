@@ -244,14 +244,22 @@ git pull
 git merge [自己的开发分支]
 ```
 
-## git 撤销 pull 操作
+## git 撤销 pull 或者 commit 操作
 
 ```bash
-#查看提交记录
+# 可以显示当前分支所有提交过的版本信息，不包括已经被删除的 commit 记录和reset的操作
+git log
+
+# git reflog命令中保留了从clone仓库开始，用户所有在本地库中的操作，所有引起HEAD指针变动的操作，都会被记录在git reflog命令中
 git reflog
+
+# 一行显示 简介的看
+git log --pretty=oneline
 
 #撤销操作
 git reset --hard 对应前面的数字
+
+# 两者的区别就是：reflog可以买后悔药，log不能买后悔药
 ```
 
 ## git 修改分支名称
