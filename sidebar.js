@@ -3,12 +3,11 @@ const menus = {
     {
       title: '开发基础',
       children: [
-        'myblog/devneeds/jquerymodule',
         'myblog/devneeds/svn',
         'myblog/devneeds/macinstall',
         'myblog/devneeds/ios',
         'myblog/devneeds/iosinstall',
-        'myblog/devneeds/regular',
+        'myblog/devneeds/jsutils',
         'myblog/devneeds/vscode',
         'myblog/devneeds/gitlab',
         'myblog/devneeds/docker',
