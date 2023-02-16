@@ -187,6 +187,10 @@ const handleAddAge = () => {
 
 当 `watch` 监听的是一个响应式对象时，会隐式地创建一个深层侦听器，即该响应式对象里面的任何属性发生变化，都会触发监听函数中的回调函数。即当 `watch` 监听的是一个响应式对象时，默认开启 `deep：true`
 
+- 可以监听某个 `ref` 对象。此时 `watch` 的第一个参数可以直接是 `ref`
+- 可以监听某个 `reactive` 对象。此时 `watch` 的第一个参数必须是一个函数
+- 对于 `props` 对象。我们进行监听的时候也必须采用函数的形式，哪怕监听的是 `props` 中某个对象的属性。
+
 ```js
   <template>
     <p>价格：<a-input v-model:value="price" /></p>
@@ -493,4 +497,221 @@ v-model 改动还是不少的，我们都知道，`v-model` 是 `props` 和 `emi
     color: #888;
   }
   </style>
+```
+
+## 12、Teleport 传送组件
+
+## 13、自定义 hooks
+
+我们都知道在 `vue2` 中有个东西叫 `mixins`，他可以将多个组件中相同的逻辑抽离出来，实现一次写代码，多组件受益的效果。
+但是 `mixins` 的副作用就是引用的多了变量的来源就不清晰了，而且还会有变量来源不明确,不利于阅读，容易使代码变得难以维护。
+
+- `Vue3` 的 `hook函数` 相当于 `vue2` 的 `mixin`, 不同的是 `hooks` 是函数
+- `Vue3` 的 `hook函数` 可以帮助我们提高代码的复用性, 让我们能在不同的组件中都利用 `hooks` 函数
+
+```js
+//useWindowResize.ts
+import { onMounted, onUnmounted, ref } from 'vue';
+
+function useWindowResize() {
+  const width = ref(0);
+  const height = ref(0);
+  function onResize() {
+    width.value = window.innerWidth;
+    height.value = window.innerHeight;
+  }
+  onMounted(() => {
+    window.addEventListener('resize', onResize);
+    onResize();
+  });
+  onUnmounted(() => {
+    window.removeEventListener('resize', onResize);
+  });
+  return {
+    width,
+    height,
+  };
+}
+
+export default useWindowResize;
+
+//使用
+<template>
+  <h3>屏幕尺寸</h3>
+  <div>宽度：{{ width }}</div>
+  <div>高度：{{ height }}</div>
+</template>
+
+<script setup lang="ts">
+import useWindowResize from "./hooks/useWindowResize.ts";
+const { width, height } = useWindowResize();
+</script>
+```
+
+## 14、自定义指令
+
+在 `<script setup>` 中，任何以`v`开头的驼峰式命名的变量都可以被用作一个自定义指令。在上面的例子中，`vFocus` 即可以在模板中以 `v-focus` 的形式使用。
+
+在没有使用 `<script setup>` 的情况下，自定义指令需要通过 `directives` 选项注册：
+
+**自定义指令的生命周期**
+
+- `created` 元素初始化的时候
+- `beforeMount` 指令绑定到元素后调用 只调用一次
+- `mounted` 元素插入父级 `dom` 调用
+- `beforeUpdate` 元素被更新之前调用
+- `update` 这个周期方法被移除 改用`updated`
+- `beforeUnmount` 在元素被移除前调用
+- `unmounted` 指令被移除后调用 只调用一次
+
+```js
+<template>
+  <div v-move class="box">
+    <div class="header"></div>
+    <div>内容</div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { Directive } from "vue";
+const vMove: Directive = {
+  mounted(el: HTMLElement) {
+    let moveEl = el.firstElementChild as HTMLElement;
+    const mouseDown = (e: MouseEvent) => {
+      //鼠标点击物体那一刻相对于物体左侧边框的距离=点击时的位置相对于浏览器最左边的距离-物体左边框相对于浏览器最左边的距离
+      console.log(e.clientX, e.clientY, "起始位置", el.offsetLeft);
+      let X = e.clientX - el.offsetLeft;
+      let Y = e.clientY - el.offsetTop;
+      const move = (e: MouseEvent) => {
+        el.style.left = e.clientX - X + "px";
+        el.style.top = e.clientY - Y + "px";
+        console.log(e.clientX, e.clientY, "位置改变");
+      };
+      document.addEventListener("mousemove", move);
+      document.addEventListener("mouseup", () => {
+        document.removeEventListener("mousemove", move);
+      });
+    };
+    moveEl.addEventListener("mousedown", mouseDown);
+  },
+};
+
+</script>
+
+<style>
+.box {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  border: 1px solid #ccc;
+}
+
+.header {
+  height: 20px;
+  background: black;
+  cursor: move;
+}
+</style>
+
+```
+
+全局注册
+
+```js
+// 使 v-focus 在所有组件中都可用
+app.directive('focus', {
+  /* ... */
+});
+```
+
+> 只有当所需功能只能通过直接的 `DOM` 操作来实现时，才应该使用自定义指令。其他情况下应该尽可能地使用 `v-bind` 这样的内置指令来声明式地使用模板，这样更高效，也对服务端渲染更友好。
+
+## 15、style v-bind CSS 变量注入
+
+```js
+<template>
+  <span> style v-bind CSS变量注入</span>
+</template>
+<script lang="ts" setup>
+  import { ref } from 'vue'
+  const color = ref('f00')
+</script>
+<style scoped>
+  span {
+    /* 使用v-bind绑定组件中定义的变量 */
+    color: v-bind('color');
+  }
+</style>
+```
+
+## 在使用 vue3 的时候接触的 ts 的知识点
+
+### type 和 interface 的区别
+
+`type`(类型别名)会给一个类型起个新名字。 `type` 有时和 `interface` 很像，但是可以作用于原始值（基本类型），联合类型，元组以及其它任何你需要手写的类型。起别名不会新建一个类型 - 它创建了一个新名字来引用那个类型。给基本类型起别名通常没什么用，尽管可以做为文档的一种形式使用。
+
+**相同点**
+
+- 接口和类型别名都可以用来描述对象或函数的类型，只是语法不同
+
+  ```js
+  type MyTYpe = {
+    name: string,
+    say(): void,
+  };
+
+  interface MyInterface {
+    name: string;
+    say(): void;
+  }
+  ```
+
+- 都允许扩展,`interface` 用 `extends` 来实现扩展,`type` 使用 `&` 实现扩展
+
+  ```js
+  //interface的使用
+  interface MyInterface {
+    name: string;
+    say(): void;
+  }
+
+  interface MyInterface2 extends MyInterface {
+    sex: string;
+  }
+
+  let person: MyInterface2 = {
+    name: '树哥',
+    sex: '男',
+    say(): void {
+      console.log('hello 啊，树哥！');
+    },
+  };
+
+  //type的使用
+  type MyType = {
+    name: string,
+    say(): void,
+  };
+  type MyType2 = MyType & {
+    sex: string,
+  };
+  let value: MyType2 = {
+    name: '树哥',
+    sex: '男',
+    say(): void {
+      console.log('hello 啊，树哥！');
+    },
+  };
+  ```
+
+**不同点**
+
+- `type` 可以声明基本数据类型别名/联合类型/元组等，而 `interface` 不行
+- `interface` 能够合并声明，而 `type` 不行
+
+```
+
 ```
