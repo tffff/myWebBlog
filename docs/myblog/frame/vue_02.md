@@ -424,7 +424,7 @@ const handleAddAge = () => {
   import { ref, provide } from 'vue'
   import Children from "./Children.vue"
 
-  const msg = ref('hello 啊，树哥')
+  const msg = ref('hello,小李')
 
   provide('msg', msg)
   </script>
@@ -683,13 +683,13 @@ app.directive('focus', {
   }
 
   let person: MyInterface2 = {
-    name: '树哥',
+    name: '小李',
     sex: '男',
     say(): void {
-      console.log('hello 啊，树哥！');
+      console.log('hello,小李！');
     },
   };
-
+  小李;
   //type的使用
   type MyType = {
     name: string,
@@ -699,10 +699,10 @@ app.directive('focus', {
     sex: string,
   };
   let value: MyType2 = {
-    name: '树哥',
+    name: '小李',
     sex: '男',
     say(): void {
-      console.log('hello 啊，树哥！');
+      console.log('hello 啊，小李！');
     },
   };
   ```
