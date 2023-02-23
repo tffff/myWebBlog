@@ -204,10 +204,20 @@ const handleAddAge = () => {
   const price: Ref<string> = ref("");
   const num: Ref<string> = ref("");
   let total: Ref<number> = ref(0);
+  let list=ref([])
+  //1、当用watch监听一个ref对象时
+  watch(price, (val) => {
+
+  });
+  //2、当用watch监听多个ref对象时
   //右边的属性必须转换成左边的属性，要不然ts就会报红色警告
   watch([price, num], (val) => {
     total.value = +val[0] * +val[1];
   });
+  //3、当用watch监听reactive对象时（强制开启深度监听，并且旧的值无法获取）
+  //4、当用watch监听reactive对象里的某一个普通属性时，要以箭头函数返回值的方式告知
+  //5、当用watch监听reactive对象里的多个普通属性时，第一个参数用数组
+  //6、当用watch监听reactive对象里的某一个对象属性时，我们需要手动开启深度监听才可以
   </script>
   <style scoped>
   .read-the-docs {
@@ -218,8 +228,17 @@ const handleAddAge = () => {
 
 ## 5、WatchEffect
 
-会立即执行传入的一个函数，同时响应式追踪其依赖，并在其依赖变更时重新运行该函数。（有点像计算属性）
-如果用到 a 就只会监听 a, 就是用到几个监听几个 而且是非惰性,会默认调用一次
+它会监听引用数据类型的所有属性，不需要具体到某个属性，一旦运行就会立即监听，组件卸载的时候会停止监听。它不像`watch`需要使用`immediate:true`才会立即执行，它是会默认执行一次的
+
+```ts
+const msg: Ref<string> = ref('111');
+const handleClick = () => {
+  msg.value = `${Math.random()}`;
+};
+watchEffect(() => {
+  console.log('值改变', msg.value); //必须到value,才会看到每一次改变
+});
+```
 
 - 停止监听
   当 `watchEffect` 在组件的 `setup()` 函数或生命周期钩子被调用时，侦听器会被链接到该组件的生命周期，并在组件卸载时自动停止。但是我们采用异步(例如在`setTimeout`里面)的方式创建了一个监听器，这个时候监听器没有与当前组件绑定，所以即使组件销毁了，监听器依然存在。
@@ -247,21 +266,26 @@ const handleAddAge = () => {
   `watchEffect` 的第一个参数——`effect` 函数——可以接收一个参数：叫 `onInvalidate`，也是一个函数，用于清除 `effect` 产生的副作用就是在触发监听之前会调用一个函数可以处理你的逻辑，例如防抖
 
   ```js
-  import { ref, watchEffect } from 'vue';
-  let num = ref(0);
-
-  //3s后改变值
-  setTimeout(() => {
-    num.value++;
-  }, 3000);
-
+  //1、可以用作定时器
   watchEffect(onInvalidate => {
-    console.log(num.value);
+    const timer = setInterval(() => {
+      console.log('定时器');
+    }, 1000);
+    onInvalidate(() => clearInterval(timer));
+    console.log('新的值:', msg, number.value.count);
+  });
+  //2、利用watchEffect作一个防抖节流（如取消请求）
+  const id = ref(13);
+  watchEffect(onInvalidate => {
+    // 异步请求
+    const token = performAsyncOperation(id.value);
+    // 如果id频繁改变，会触发失效函数，取消之前的接口请求
     onInvalidate(() => {
-      console.log('执行');
+      // id has changed or watcher is stopped.
+      // invalidate previously pending async operation
+      token.cancel();
     });
   });
-  //执行顺序0 执行 1
   ```
 
 - 配置选项
