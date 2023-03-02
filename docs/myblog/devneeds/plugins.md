@@ -2,6 +2,7 @@
 
 ## 基础通用插件
 
+- [nodejs 版本下载](https://nodejs.org/dist/v16.10.0/)
 - [Mock.js](http://mockjs.com/) 模拟数据插件
 - [Echarts](https://echarts.apache.org/zh/index.html) `echarts` 图表
 - [Echart 炫酷效果一览表](https://www.muzimuzi.com/#/chart/search)
