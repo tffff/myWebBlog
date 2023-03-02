@@ -3,6 +3,7 @@ const menus = {
     {
       title: '开发基础',
       children: [
+        'myblog/devneeds/plugins',
         'myblog/devneeds/svn',
         'myblog/devneeds/macinstall',
         'myblog/devneeds/ios',
