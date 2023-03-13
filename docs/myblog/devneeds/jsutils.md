@@ -50,6 +50,20 @@ location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => (params[k] = v));
 console.log(params);
 ```
 
+## 数字格式化成金额
+
+```js
+/**
+ * 10000 => "10,000"
+ * @param {number} num
+ */
+export function toThousandFilter(num) {
+  return (Number(num) || 0)
+    .toString()
+    .replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','));
+}
+```
+
 ## 下载文件
 
 ```js
@@ -185,4 +199,18 @@ export const scrollToTop = () => {
     window.scrollTo(0, height - height / 8);
   }
 };
+```
+
+## new Date()使用
+
+```js
+var date = new Date();
+console.log('今天是 ', date.getMonth() + 1, date.getDate());
+//0是不存在的一天，date.setDate(0)之后，这一天不存在，或者说设置的是1号的前一天。那么，1号的前一天，自然就是前一个月的最后一天
+date.setDate(0);
+console.log('上个月最后一天是 ', date.getMonth() + 1, date.getDate());
+//我们要得到的是这个月最后一天
+date.setMonth(date.getMonth() + 1);
+date.setDate(0);
+console.log('当前月份最后一天是 ', date.getMonth() + 1, date.getDate());
 ```
