@@ -480,47 +480,94 @@ v-model 改动还是不少的，我们都知道，`v-model` 是 `props` 和 `emi
 - 新增：开发者可以自定义 `v-model` 修饰符
 - `v-bind` 的 `.sync` 修饰符和组件的 `model` 选项已移除
 
+`v-model:value`的双向绑定
+
 ```js
 //父组件
-  <template>
-    <HelloWorld v-model="msg" v-model:msg="msg1"> </HelloWorld>
-    拿到最新的数据:{{ msg }} {{ msg1 }}
-  </template>
-  <script setup lang="ts">
-  import { ref, Ref, onMounted, reactive, provide } from "vue";
-  import HelloWorld from "./components/HelloWorld.vue";
+<script setup lang="ts">
+import { ref, Ref } from 'vue';
+import HelloWorld from './components/HelloWorld.vue';
+const test = ref('1');
+</script>
 
-  const msg: Ref<string> = ref("11");
-  const msg1: Ref<string> = ref("222");
-  </script>
+<template>
+  <div>
+    {{ test }}
+    <HelloWorld v-model="test" />
+  </div>
+</template>
+
 //子组件
-  <template>
-    <div>
-      {{ msg }} {{ modelValue }}
-      <a-button @click="handleAdd">点击</a-button>
-      <slot name="content" msg="hello!"></slot>
-    </div>
-  </template>
-  <script setup lang="ts">
-  import { ref, Ref, inject, reactive } from "vue";
+<template>
+  <a-input v-model:value="val" @change="handleChange" />
+</template>
+<script setup lang="ts">
+import { ref } from 'vue';
 
-  type Props = {
-    modelValue: string;
-    msg: string;
-  };
-  defineProps<Props>();
+//获取参数
+const props = defineProps({
+  modelValue: String,
+});
+const val = ref(props.modelValue | '');
+const emit = defineEmits(['update:modelValue']);
+const handleChange = (e) => {
+  console.log('e.target.value', e.target.value);
+  emit('update:modelValue', e.target.value);
+};
+</script>
 
-  const emit = defineEmits(["update:modelValue", "update:msg"]);
-  const handleAdd = () => {
-    emit("update:modelValue", "qqqqq");
-    emit("update:msg", "123");
-  };
-  </script>
-  <style scoped>
-  .read-the-docs {
-    color: #888;
-  }
-  </style>
+
+```
+
+多个 v-model 的双向绑定
+
+```js
+//父组件
+<script setup lang="ts">
+import { ref, Ref } from 'vue';
+import HelloWorld from './components/HelloWorld.vue';
+const test = ref('1');
+const num = ref('2');
+</script>
+
+<template>
+  <div>
+    {{ test }} {{ num }}
+    <HelloWorld v-model="test" v-model:newValue="num" />
+  </div>
+</template>
+//子组件
+<template>
+  <a-input v-model:value="val" @change="handleChange" />
+  <a-input v-model:value="newVal" @change="handleChange1" />
+</template>
+<script setup lang="ts">
+import { ref } from 'vue';
+
+//获取参数
+const props = defineProps({
+  modelValue: String,
+  newValue: String,
+});
+const val = ref(props.modelValue | '');
+const newVal = ref(props.newValue | '');
+const emit = defineEmits(['update:modelValue', 'update:newValue']);
+const handleChange = (e) => {
+  emit('update:modelValue', e.target.value);
+};
+const handleChange1 = (e) => {
+  emit('update:newValue', e.target.value);
+};
+
+//使用计算属性也可以
+const newVal = computed({
+  get: () => props.newValue,
+  set: (value) => {
+    console.log(value);
+    emit('update:newValue', value);
+  },
+});
+</script>
 ```
 
 ## 12、Teleport 传送组件
