@@ -439,3 +439,187 @@ transform 实际上是用到了 GPU 加速，也就是说占用了内存，由�
   margin-top: -50px;
 }
 ```
+
+## 8、flex 布局的三个属性的理解？
+
+我们先来了解一下 `flex-grow`、`flex-shrink`、`flex-basis` 这三个元素是个啥？
+
+- `flex-grow`：`grow` 的中文意思是扩大，用来分配父元素剩余空间的相对比例。默认值为 0
+
+  ```html
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Document</title>
+      <style>
+        .flex-box {
+          display: flex;
+          width: 300px;
+          height: 300px;
+          margin: 0 auto;
+          background: #f00;
+        }
+        .left {
+          flex-grow: 2;
+          width: 100px;
+          background-color: orange;
+        }
+        .right {
+          flex-grow: 1;
+          width: 100px;
+          background-color: cyan;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="flex-box">
+        <div class="left"></div>
+        <div class="right"></div>
+      </div>
+    </body>
+  </html>
+  ```
+
+  效果如图：
+  <img src="../../assets/interview/flex1.png"/>
+
+  > 结论就是：当子元素的宽度之和小于父元素的宽度的时候，两个盒子根据设置的`flex-grow`来根据比例分剩下的空间，如上例就是根据比例来分剩余的 100px
+
+  - `flex-shrink`：`shrink`的中文意思是收缩，用来指定`flex`元素的收缩规则，默认值为 1
+
+  ```html
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Document</title>
+      <style>
+        .flex-box {
+          display: flex;
+          width: 300px;
+          height: 300px;
+          margin: 0 auto;
+          background: #f00;
+        }
+        .left {
+          flex-shrink: 2;
+          width: 200px;
+          background-color: orange;
+        }
+        .right {
+          flex-shrink: 1;
+          width: 200px;
+          background-color: cyan;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="flex-box">
+        <div class="left"></div>
+        <div class="right"></div>
+      </div>
+    </body>
+  </html>
+  ```
+
+  效果如图：
+
+  <img src="../../assets/interview/flex2.png"/>
+
+  > 结论就是：当子元素的宽度之和大于父元素的宽度的时候，两个盒子根据设置的`flex-shrink`来收缩，比如上例所说就是`flex-shrink`参数越大收缩的越多
+
+- `flex-basis`：`basis` 的中文意思是基准，用来指定子元素内容盒尺寸大小。默认值为 `auto`
+
+  ```html
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Document</title>
+      <style>
+        .flex-box {
+          display: flex;
+          width: 300px;
+          height: 300px;
+          margin: 0 auto;
+          background: #f00;
+        }
+        .left {
+          flex-basis: 100px;
+          width: 100px;
+          background-color: orange;
+        }
+        .right {
+          /* flex-basis: 1; */
+          width: 100px;
+          background-color: cyan;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="flex-box">
+        <div class="left"></div>
+        <div class="right"></div>
+      </div>
+    </body>
+  </html>
+  ```
+
+  效果如图：
+
+  <img src="../../assets/interview/flex3.png"/>
+
+  > 结论就是：`flex-basis`只是根据设置的宽度来显示
+
+**综上所述**
+`flex-grow`：值大于 `0`，主要是解决父元素宽度大于所有子元素宽度之和时，子元素合理分配父元素剩余空间。值为 `0` 时，子元素盒子空间不做扩大处理。
+`flex-shrink`：值大于 `0`，主要是解决父元素宽度小于所有子元素宽度之和时，子元素缩小宽度以适应父元素宽度，值为 `0` 时，子元素盒子空间不做缩小处理。
+`flex-basis`：其实也可以理解为在 `flex` 布局下，一个高优先级的宽度
+
+### 一道 flex 面试题
+
+看下面的代码，说出`left`和`right`的宽度分别是多少?
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .flex-box {
+        display: flex;
+        width: 300px;
+        height: 300px;
+        margin: 0 auto;
+        background: #f00;
+      }
+      .left {
+        flex: 3 2 100px;
+        background-color: orange;
+      }
+      .right {
+        flex: 2 1 250px;
+        background-color: cyan;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="flex-box">
+      <div class="left"></div>
+      <div class="right"></div>
+    </div>
+  </body>
+</html>
+```
+
+> 答案：首先看最后一项，两者相加之和大于父元素的宽度说明需要收缩，所以超出部分 50px 就根据`flex-shrink`设置的值来分,left 收缩的宽度为：`100px-50px*(100px*2/(100px*2+250px*1))=77.78px`，right 收缩的宽度为`250px-50px*(250px*1/(100px*2+250px*1))=222.23px`

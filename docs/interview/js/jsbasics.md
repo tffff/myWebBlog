@@ -35,7 +35,7 @@ date: 2022-01-24 10:47:10
 
   - 隐藏性：`for···in`，`object.keys()` 不能访问,但是也有能够访问的方法：`Object.getOwnPropertySymbols`
 
-- `BigInt`: BigInt 数据类型提供了一种方法来表示大于 2^53-1 的整数。BigInt 可以表示任意大的整数
+- `BigInt`: `BigInt` 数据类型提供了一种方法来表示大于 `2^53-1` 的整数。`BigInt` 可以表示任意大的整数
 
   Number 类型只能安全的支持-9007199254740991(-(2^53-1)) 和 9007199254740991(2^53-1)之间的整数，任何超过这个范围的数值都会失去精度；而 BigInt 可以解决这个问题
 
@@ -51,7 +51,7 @@ date: 2022-01-24 10:47:10
 
   **注意事项**
 
-  - BigInt 除了不能使用一元加号运算符外，其他的运算符都可以使用
+  - `BigInt` 除了不能使用一元加号运算符外，其他的运算符都可以使用
 
   ```js
   console.log(+1n); // Uncaught TypeError: Cannot convert a BigInt value to a number
