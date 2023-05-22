@@ -30,6 +30,8 @@ vue-dev
 
 `v-model` 实现双向绑定的语法糖，常用于表单与组件之间的数据双向绑定.
 
+> `v-model` 就是`@input` 和 `v-on` 的的语法糖
+
 ### 表单实现双向绑定
 
 1. 原理 分两步骤 `v-bind`绑定一个`value`属性,`v-on`指令给当前元素绑定`input`事件 可看出`v-model`绑定在表单上时，`v-model`其实就是`v-bind`绑定`value`和`v-on`监听`input`事件的结合体
