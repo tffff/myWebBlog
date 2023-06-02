@@ -18,14 +18,18 @@
 - [vue 无缝滚动插件](https://chenxuan1993.gitee.io/component-document/index_prod#/component/seamless-default)
 - [vue-codemirror](https://github.surmon.me/vue-codemirror)
 - [codemirror](https://codemirror.net/examples/)
-- [v-code-diff 代码对比](https://github.com/Shimada666/v-code-diff)
+- [甘特图](https://docs.dhtmlx.com/gantt/samples/?sample=%2701_initialization/01_basic_init.html%27&filter=%27%27)
 
 ## vue3 插件
 
+- [框架搭建参考](https://github.com/un-pany/v3-admin-vite)
 - [vue3 文档](https://cn.vuejs.org/)
 - [cron 插件](https://github.com/sugdove/vue3-cron) [demo](https://www.githubs.cloud/vue3-cron/)
-- [markdown](https://imzbf.github.io/md-editor-v3/en-US/index) [github](https://github.com/imzbf/md-editor-v3)
-- [markdown](https://blog.csdn.net/m0_51969330/article/details/119758924)
+- [markdown 编辑器](https://imzbf.github.io/md-editor-v3/en-US/index) [github](https://github.com/imzbf/md-editor-v3)
+- [markdown 编辑器](https://blog.csdn.net/m0_51969330/article/details/119758924)
+- [v-code-diff 代码对比](https://github.com/Shimada666/v-code-diff) [demo](https://shimada666.github.io/v-code-diff/)
+- [vue-quill 富文本编辑器](https://blog.csdn.net/moanuan/article/details/128240291)
+- [tinymce-vue3 富文本编辑器](https://cooj.github.io/tinymce-vue3/#/)
 
 ## android
 
