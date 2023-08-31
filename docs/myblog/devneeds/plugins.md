@@ -19,6 +19,7 @@
 - [vue-codemirror](https://github.surmon.me/vue-codemirror)
 - [codemirror](https://codemirror.net/examples/)
 - [甘特图](https://docs.dhtmlx.com/gantt/samples/?sample=%2701_initialization/01_basic_init.html%27&filter=%27%27)
+- [vue 拖拽排序](https://david-desmaisons.github.io/draggable-example/)
 
 ## vue3 插件
 
