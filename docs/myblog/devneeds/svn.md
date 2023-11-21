@@ -275,6 +275,18 @@ git push --delete origin oldName
 git push origin newName
 # 5、把修改后的本地分支与远程分支关联
 git branch --set-upstream-to origin/newName
+
+```
+
+## git 基于某个分支的 commit 拉分支
+
+```bash
+# 1、查看commitid
+git log
+# 2、从某一个commit 切出来一个新分支 test
+git checkout <commitid> -b test
+# 3、推送 test 分支到远程仓库
+git push origin test
 ```
 
 ## nrm 切换源
