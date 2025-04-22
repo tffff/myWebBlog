@@ -161,7 +161,7 @@ git merge [branch name]
 git merge [source branch] [target branch]
 ```
 
-### 17、将更改存储在不合适的工作目录中
+### 17、将更改存储在隐藏的工作目录中
 
 ```bash
 git stash
@@ -260,6 +260,13 @@ git log --pretty=oneline
 git reset --hard 对应前面的数字
 
 # 两者的区别就是：reflog可以买后悔药，log不能买后悔药
+
+# push失败之后怎么把commit 更改弄回到本地目录，这个命令会将你的更改移回到暂存区（stage），但不会改变工作目录中的文件。这意味着你的更改仍然存在，但是它们不再被标记为已提交
+git reset --soft HEAD~1
+
+#这个命令会丢弃工作目录中的所有更改，并将HEAD指针移动到前一个提交。注意：这会丢失所有未提交的更改，所以请确保你真的想要这么做
+git reset --hard HEAD~1
+
 ```
 
 ## git 修改分支名称
