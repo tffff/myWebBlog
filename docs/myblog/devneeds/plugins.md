@@ -18,12 +18,13 @@
 - [vue 无缝滚动插件](https://chenxuan1993.gitee.io/component-document/index_prod#/component/seamless-default)
 - [vue-codemirror](https://github.surmon.me/vue-codemirror)
 - [codemirror](https://codemirror.net/examples/)
-- [甘特图](https://docs.dhtmlx.com/gantt/samples/?sample=%2701_initialization/01_basic_init.html%27&filter=%27%27)
+- [dhtmlx-gantt 甘特图](https://docs.dhtmlx.com/gantt/samples/?sample=%2701_initialization/01_basic_init.html%27&filter=%27%27)
 - [vue 拖拽排序](https://david-desmaisons.github.io/draggable-example/)
 - [vue-quill-editor 富文本编辑器](https://blog.csdn.net/qq_44760955/article/details/130752410)
 - [office 预览插件](https://501351981.github.io/vue-office/examples/dist/#/docx)
 - [relation-graph 图谱插件](http://www.relation-graph.com/#/docs/start)
 - [markdown 编辑器 v2v3 通用](http://ckang1229.gitee.io/vue-markdown-editor/zh/examples/base-editor.html#%E5%BC%95%E5%85%A5)
+- [vue-easy-print 调用系统打印功能](https://github.com/pcloth/vue-easy-print)
 
 ## vue3 插件
 
